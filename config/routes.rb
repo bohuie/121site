@@ -1,4 +1,5 @@
 First_Website::Application.routes.draw do
+  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
 devise_for :users
 resource :questions
 resource :search, :controller => :search
