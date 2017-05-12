@@ -14,7 +14,7 @@ RailsAdmin.config do |config|
       if current_user.nil?
         redirect_to main_app.root_path
       else
-        redirect_to main_app.root_path unless current_user.has_role? :admin
+        redirect_to main_app.root_path unless current_user.has_role? :instructor
       end
      end
    end

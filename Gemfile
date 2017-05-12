@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 #ruby-gemset=railstutorial_rails_4_0
 gem 'rails_admin', '~> 1.1.1'
+gem "rolify"
 gem 'rails', '4.2.0'
 gem 'bootstrap-sass'
 gem 'bcrypt'
