@@ -1,18 +1,18 @@
 source 'https://rubygems.org'
 #ruby-gemset=railstutorial_rails_4_0
-
+gem 'rails_admin', '~> 1.1.1'
 gem 'rails', '4.2.0'
-gem 'bootstrap-sass', '2.3.2.0'
-gem 'bcrypt-ruby', '3.0.1'
-gem 'faker', '1.1.2'
-gem 'will_paginate', '3.0.4'
-gem 'bootstrap-will_paginate', '0.0.9'
+gem 'bootstrap-sass'
+gem 'bcrypt'
+gem 'faker'
+gem 'will_paginate'
+gem 'bootstrap-will_paginate'
 #gem 'paperclip'
 gem 'devise'
 gem 'simple_form'
 #gem 'carrierwave'
 gem 'rails3-jquery-autocomplete', git: 'https://github.com/francisd/rails3-jquery-autocomplete'
-gem "jquery-rails", "~> 2.3.0"
+gem "jquery-rails"
 gem "therubyracer"
 gem "less-rails"
 gem "twitter-bootstrap-rails"
