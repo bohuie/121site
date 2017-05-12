@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140118073948) do
+ActiveRecord::Schema.define(version: 20170512203525) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,6 +66,17 @@ ActiveRecord::Schema.define(version: 20140118073948) do
     t.string "lab"
   end
 
+  create_table "roles", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "resource_id"
+    t.string   "resource_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "roles", ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id", using: :btree
+  add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
+
   create_table "topics", force: :cascade do |t|
     t.string  "name"
     t.integer "topic_id", default: 0, null: false
@@ -79,7 +90,6 @@ ActiveRecord::Schema.define(version: 20140118073948) do
     t.boolean  "instructor",             default: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "password_digest"
     t.string   "remember_token"
     t.string   "encrypted_password",     default: "",    null: false
     t.string   "reset_password_token"
@@ -95,5 +105,12 @@ ActiveRecord::Schema.define(version: 20140118073948) do
     t.string   "lab"
     t.integer  "studentnumber"
   end
+
+  create_table "users_roles", id: false, force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "role_id"
+  end
+
+  add_index "users_roles", ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id", using: :btree
 
 end
