@@ -13,7 +13,10 @@
 
 ActiveRecord::Schema.define(version: 20140118073948) do
 
-  create_table "games", force: true do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "games", force: :cascade do |t|
     t.integer "game_id",  default: 0, null: false
     t.integer "user_id",  default: 0, null: false
     t.integer "topic_id", default: 0, null: false
@@ -22,7 +25,7 @@ ActiveRecord::Schema.define(version: 20140118073948) do
     t.string  "name"
   end
 
-  create_table "practices", force: true do |t|
+  create_table "practices", force: :cascade do |t|
     t.integer  "game_id",     default: 0,     null: false
     t.integer  "practice_id", default: 0,     null: false
     t.integer  "user_id",     default: 0,     null: false
@@ -36,21 +39,21 @@ ActiveRecord::Schema.define(version: 20140118073948) do
     t.integer  "totaltime"
   end
 
-  create_table "questions", force: true do |t|
-    t.text     "qtext",          limit: 255
-    t.text     "a1text",         limit: 255
-    t.text     "a2text",         limit: 255
-    t.text     "a3text",         limit: 255
-    t.text     "a4text",         limit: 255
-    t.text     "a5text",         limit: 255
+  create_table "questions", force: :cascade do |t|
+    t.text     "qtext"
+    t.text     "a1text"
+    t.text     "a2text"
+    t.text     "a3text"
+    t.text     "a4text"
+    t.text     "a5text"
     t.integer  "answer"
-    t.integer  "user_id",                    default: 0,     null: false
-    t.integer  "question_id",                default: 0,     null: false
-    t.integer  "topic_id",                   default: 0,     null: false
-    t.boolean  "submitted",                  default: false, null: false
-    t.text     "grade",          limit: 255, default: "",    null: false
-    t.boolean  "visible",                    default: true,  null: false
-    t.boolean  "exam",                       default: false, null: false
+    t.integer  "user_id",        default: 0,     null: false
+    t.integer  "question_id",    default: 0,     null: false
+    t.integer  "topic_id",       default: 0,     null: false
+    t.boolean  "submitted",      default: false, null: false
+    t.text     "grade",          default: "",    null: false
+    t.boolean  "visible",        default: true,  null: false
+    t.boolean  "exam",           default: false, null: false
     t.string   "lab"
     t.datetime "date_submitted"
     t.string   "fname"
@@ -58,17 +61,17 @@ ActiveRecord::Schema.define(version: 20140118073948) do
     t.integer  "studentnumber"
   end
 
-  create_table "results", force: true do |t|
+  create_table "results", force: :cascade do |t|
     t.string "name"
     t.string "lab"
   end
 
-  create_table "topics", force: true do |t|
+  create_table "topics", force: :cascade do |t|
     t.string  "name"
     t.integer "topic_id", default: 0, null: false
   end
 
-  create_table "users", force: true do |t|
+  create_table "users", force: :cascade do |t|
     t.string   "username"
     t.integer  "user_id",                default: 0,     null: false
     t.string   "email",                  default: "",    null: false
