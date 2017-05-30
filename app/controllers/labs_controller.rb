@@ -28,6 +28,7 @@ class LabsController < ApplicationController
     else
         @courses = @user.courses
     end
+    @topics = Topic.where(course_id: @lab.course_id)
   	@created = Question.where(course_id: @lab.course.id, lab_id: @lab.id).count
     @submitted = Question.where(submitted: true, course_id:  @lab.course.id, lab_id: @lab.id).count
   end
