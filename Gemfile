@@ -23,14 +23,13 @@ gem 'pg'
 # Figaro gem - security purposes
 gem 'figaro'
 
-
-
 group :development, :test do
   gem 'rspec-rails'
   gem 'guard-rspec'
   gem 'spork-rails'
   gem 'guard-spork'
   gem 'childprocess'
+  gem 'byebug'
 end
 
 group :test do
