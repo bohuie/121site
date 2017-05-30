@@ -39,9 +39,6 @@
   <div>
   <%= f.input :courses, :label => "Course", :required => false, :collection => @courses%></div>
 
-  <div>
-  <%= f.input :lab, :label => "Lab Section", :required => false, :collection => @labs%></div>
-
   <div><%= f.label "Student Number" %><br />
   <%= f.text_field :studentnumber, :onkeyup => "CheckMaxlength(this);", :maxlength => 8%></div>
 
