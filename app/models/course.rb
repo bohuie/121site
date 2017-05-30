@@ -11,4 +11,6 @@ class Course < ActiveRecord::Base
 
 	#Questions belonging to the course
 	has_many :questions
+
+	has_many :labs
 end
