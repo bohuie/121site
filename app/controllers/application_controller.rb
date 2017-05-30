@@ -7,8 +7,9 @@ class ApplicationController < ActionController::Base
 
     def configure_permitted_parameters
       @labs = ["L01", "L02", "L03", "L04", "L05", "L06"]
+      @courses = Course.all
       devise_parameter_sanitizer.permit(:sign_up) do |u|
-        u.permit :username, :email, :password, :password_confirmation, :fname, :lname, :lab, :studentnumber
+        u.permit :username, :email, :password, :password_confirmation, :fname, :lname, :courses, :lab, :studentnumber
       end
     end
   

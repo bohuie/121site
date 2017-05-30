@@ -3,6 +3,13 @@ class StaticPagesController < ApplicationController
   def home
     if user_signed_in?
       @user = current_user
+      if @user.instructor
+        @courses = Course.where(instructor_id: @user.id)
+      elsif @user.assistant
+        @courses = @user.courses
+      else
+        @courses = @user.courses
+      end
       @games = Game.where(:user_id => @user.user_id)
       @count = @games.count
       @number = 0

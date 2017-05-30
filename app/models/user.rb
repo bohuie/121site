@@ -2,6 +2,9 @@ class User < ActiveRecord::Base
   rolify
 
   has_many :questions
+  has_many :teach_courses, class_name: "Course", foreign_key: "instructor_id"
+  has_many :student_courses
+  has_many :courses, through: :student_courses
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable

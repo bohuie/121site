@@ -1,4 +1,6 @@
 First_Website::Application.routes.draw do
+  get 'courses/show'
+
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
 devise_for :users
 resource :questions
@@ -45,6 +47,8 @@ match '/flagtime', to: 'questions#time', via: 'get'
 match '/flaggrade', to: 'questions#grade', via: 'get'
 match '/flagexam', to: 'questions#flagged', via: 'get'
 match '/wronganswer', to: 'practices#incorrect', via: 'get'
+
+get 'courses/:id' => 'courses#show', as: :show_course
 
 
 mount Ckeditor::Engine => '/ckeditor'

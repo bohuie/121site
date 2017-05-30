@@ -11,18 +11,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170512203525) do
+ActiveRecord::Schema.define(version: 20170525184532) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "courses", force: :cascade do |t|
+    t.string   "title"
+    t.string   "subject"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.integer  "instructor_id"
+  end
+
   create_table "games", force: :cascade do |t|
-    t.integer "game_id",  default: 0, null: false
-    t.integer "user_id",  default: 0, null: false
-    t.integer "topic_id", default: 0, null: false
-    t.integer "number",   default: 0, null: false
-    t.integer "correct",  default: 0, null: false
+    t.integer "game_id",   default: 0, null: false
+    t.integer "user_id",   default: 0, null: false
+    t.integer "topic_id",  default: 0, null: false
+    t.integer "number",    default: 0, null: false
+    t.integer "correct",   default: 0, null: false
     t.string  "name"
+    t.integer "course_id"
   end
 
   create_table "practices", force: :cascade do |t|
@@ -37,6 +46,7 @@ ActiveRecord::Schema.define(version: 20170512203525) do
     t.datetime "starttime"
     t.datetime "endtime"
     t.integer  "totaltime"
+    t.integer  "course_id"
   end
 
   create_table "questions", force: :cascade do |t|
@@ -59,6 +69,7 @@ ActiveRecord::Schema.define(version: 20170512203525) do
     t.string   "fname"
     t.string   "lname"
     t.integer  "studentnumber"
+    t.integer  "course_id"
   end
 
   create_table "results", force: :cascade do |t|
@@ -77,9 +88,17 @@ ActiveRecord::Schema.define(version: 20170512203525) do
   add_index "roles", ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id", using: :btree
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
 
+  create_table "student_courses", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "course_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "topics", force: :cascade do |t|
     t.string  "name"
-    t.integer "topic_id", default: 0, null: false
+    t.integer "topic_id",  default: 0, null: false
+    t.integer "course_id"
   end
 
   create_table "users", force: :cascade do |t|
