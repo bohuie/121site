@@ -1,4 +1,23 @@
 class CoursesController < ApplicationController
+
+  before_action :check_instructor  , only: [:new]
+
+  def new
+    @user = current_user
+    @course = Course.new
+  end
+
+  def create
+    @user = current_user
+    @course = Course.new(course_params)
+    if @course.save
+      redirect_to course_path(@course)
+    else
+      flash.now[:warning] = "There was an error creating your course."
+      render 'new'
+    end
+  end
+
   def show
   	if user_signed_in?
       @user = current_user
@@ -30,5 +49,18 @@ class CoursesController < ApplicationController
     @topics = Topic.where(course_id: params[:id])
     @created = Question.where(course_id: params[:id]).count
     @submitted = Question.where(submitted: true, course_id: params[:id]).count
+  end
+
+  private
+
+  def course_params # Restricts parameters
+    params.require(:course).permit(:title, :subject)
+  end
+
+  def check_instructor # Checks current user is an instructor
+    if !current_user.has_role? :instructor
+      flash[:danger] = 'Instructors only.'
+      redirect_to root_path
+    end
   end
 end

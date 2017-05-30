@@ -48,7 +48,9 @@ match '/flaggrade', to: 'questions#grade', via: 'get'
 match '/flagexam', to: 'questions#flagged', via: 'get'
 match '/wronganswer', to: 'practices#incorrect', via: 'get'
 
+get 'courses/new' => 'courses#new', as: :new_course
 get 'courses/:id' => 'courses#show', as: :show_course
+post 'courses' => 'courses#create'
 
 
 mount Ckeditor::Engine => '/ckeditor'
