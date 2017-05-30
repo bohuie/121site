@@ -1,5 +1,4 @@
 First_Website::Application.routes.draw do
-  get 'courses/show'
 
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
 devise_for :users
@@ -52,6 +51,9 @@ get 'courses/new' => 'courses#new', as: :new_course
 get 'courses/:id' => 'courses#show', as: :show_course
 post 'courses' => 'courses#create'
 
+get 'labs/new/:course_id' => 'labs#new', as: :new_lab
+get 'lab/:id' => 'labs#show', as: :show_lab
+post 'labs' => 'labs#create'
 
 mount Ckeditor::Engine => '/ckeditor'
 

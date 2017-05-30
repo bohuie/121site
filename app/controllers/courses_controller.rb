@@ -1,6 +1,6 @@
 class CoursesController < ApplicationController
 
-  before_action :check_instructor  , only: [:new]
+  before_action :check_instructor  , only: [:new, :create]
 
   def new
     @user = current_user
@@ -10,8 +10,9 @@ class CoursesController < ApplicationController
   def create
     @user = current_user
     @course = Course.new(course_params)
+    @course.instructor = current_user
     if @course.save
-      redirect_to course_path(@course)
+      redirect_to show_course_path(@course)
     else
       flash.now[:warning] = "There was an error creating your course."
       render 'new'
@@ -22,7 +23,7 @@ class CoursesController < ApplicationController
   	if user_signed_in?
       @user = current_user
       if @user.instructor
-        @courses = Course.where(instructor_id: @user.id)
+        @courses = Course.where(instructor_id: @user.id).order(year: :desc)
       elsif @user.assistant
       	@courses = @user.courses
       else
@@ -54,7 +55,7 @@ class CoursesController < ApplicationController
   private
 
   def course_params # Restricts parameters
-    params.require(:course).permit(:title, :subject)
+    params.require(:course).permit(:title, :subject, :year, :instructor_id)
   end
 
   def check_instructor # Checks current user is an instructor

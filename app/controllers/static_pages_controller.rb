@@ -4,7 +4,7 @@ class StaticPagesController < ApplicationController
     if user_signed_in?
       @user = current_user
       if @user.instructor
-        @courses = Course.where(instructor_id: @user.id)
+        @courses = Course.where(instructor_id: @user.id).order(year: :desc)
       elsif @user.assistant
         @courses = @user.courses
       else
