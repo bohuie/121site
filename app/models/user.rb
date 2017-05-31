@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
   has_many :student_courses
   has_many :courses, through: :student_courses
   has_many :student_labs
-  has_many :labs, through: :student_lab
+  has_many :labs, through: :student_labs
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
