@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
  
   validates :username, uniqueness: true
 
-  validates :username, :fname, :lname, :lab, :studentnumber,  presence:  true
+  validates :username, :fname, :lname, :studentnumber,  presence:  true
   validates_inclusion_of  :instructor, :in => [true, false]
   validates_inclusion_of  :assistant, :in => [true, false]
   

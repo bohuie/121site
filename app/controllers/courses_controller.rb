@@ -22,12 +22,15 @@ class CoursesController < ApplicationController
   def show
   	if user_signed_in?
       @user = current_user
+      @course = Course.find(params[:id])
       if @user.instructor
         @courses = Course.where(instructor_id: @user.id).order(year: :desc)
       elsif @user.assistant
       	@courses = @user.courses
+        @lab = @course.labs.includes(:student_labs).where("student_labs.user_id = ?",@user.id).references(:student_labs).first
       else
         @courses = @user.courses
+        @lab = @course.labs.includes(:student_labs).where("student_labs.user_id = ?",@user.id).references(:student_labs).first
       end
       @games = Game.where(:user_id => @user.user_id, course_id: params[:id])
       @count = @games.count
@@ -46,7 +49,6 @@ class CoursesController < ApplicationController
         end
       end
     end
-    @course = Course.find(params[:id])
     @topics = Topic.where(course_id: params[:id])
     @created = Question.where(course_id: params[:id]).count
     @submitted = Question.where(submitted: true, course_id: params[:id]).count

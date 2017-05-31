@@ -57,7 +57,11 @@
 				<% @courses.each do |course| %>
 					<p><%= link_to course.title + " - " + course.year, show_course_path(course) %></p>
 				<% end %>
-				<p><%= link_to 'Add New Course', new_course_path %></p>
+				<% if @user.has_role? :instructor %>
+					<p><%= link_to 'Add New Course', new_course_path %></p>
+				<% else %>
+					<p>Register for Another Course</p>
+				<% end %>
 			</div>
 			<div class = "col-md-9">
 				<% if @user.assistant || @user.instructor %>

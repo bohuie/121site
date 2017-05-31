@@ -57,16 +57,28 @@
 					<% if params[:id].to_i == course.id %>
 						<p><b><%= link_to course.title + " - " + course.year, show_course_path(course) %></b></p>
 						<ul>
-							<% course.labs.each do |lab| %>
-								<li><%= link_to lab.name, show_lab_path(lab) %></li>
+							<% if @user.has_role? :instructor %>
+								<% course.labs.each do |lab| %>
+									<li><%= link_to lab.name, show_lab_path(lab) %></li>
+								<% end %>
+								<li><%= link_to 'Add New Lab', new_lab_path(course) %></li>
+							<% else %>
+								<% if @lab.nil? %>
+									<li>Register for a Lab</li>
+								<% else %>
+									<li><%= link_to @lab.name, show_lab_path(@lab) %></li>
+								<% end %>
 							<% end %>
-							<li><%= link_to 'Add New Lab', new_lab_path(course) %></li>
 						</ul>
 					<% else %>
 						<p><%= link_to course.title + " - " + course.year, show_course_path(course) %></p>
 					<% end %>
 				<% end %>
-				<p><%= link_to 'Add New Course', new_course_path %></p>
+				<% if @user.has_role? :instructor %>
+					<p><%= link_to 'Add New Course', new_course_path %></p>
+				<% else %>
+					<p>Register for Another Course</p>
+				<% end %>
 			</div>
 			<div class = "col-md-9">
 				<% if @user.assistant || @user.instructor %>
@@ -197,7 +209,7 @@
 					</div>
 					<div class = "row" style = "padding: 5px; margin-bottom: 5px;">
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= All %> </p>
+							<p> All</p>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
 							<p> Overall </p>
