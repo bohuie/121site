@@ -1,5 +1,6 @@
 class LabsController < ApplicationController
 
+  before_action :authenticate_user!
   before_action :check_instructor, only: [:new, :create]
   before_action :check_owner, only: [:new]
   def new

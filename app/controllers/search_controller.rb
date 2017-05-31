@@ -1,5 +1,7 @@
 class SearchController < ApplicationController
 
+	before_action :authenticate_user!
+
 	def find_questions
 		@user = current_user
 		@result = Result.new

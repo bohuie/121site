@@ -1,5 +1,7 @@
 class QuestionsController < ApplicationController
 
+  before_action :authenticate_user!
+
   def correct
     @user = current_user
     if @user.assistant || @user.instructor

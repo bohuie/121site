@@ -1,5 +1,6 @@
 class CoursesController < ApplicationController
 
+  before_action :authenticate_user!, except: [:show]
   before_action :check_instructor  , only: [:new, :create]
 
   def new
