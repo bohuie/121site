@@ -24,6 +24,10 @@ class User < ActiveRecord::Base
                     uniqueness: { case_sensitive: true }
 
   after_create :do_setID
+
+  def fullname
+    return self.fname + " " + self.lname
+  end
   
   private
 

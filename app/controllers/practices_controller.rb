@@ -28,6 +28,8 @@ class PracticesController < ApplicationController
 		@practice.totaltime = ((@practice.endtime-@practice.starttime)/1.second).to_i
 		@game.number = @game.number + 1
 		@game.save
+		@practice.course_id = @game.course_id
+		@practice.lab_id = current_user.labs.where(course_id: @game.course_id).first.id
 		@practice.save
 		if Question.find_by(:question_id => @practice.question_id).answer == @answer
 			@game.correct = @game.correct + 1

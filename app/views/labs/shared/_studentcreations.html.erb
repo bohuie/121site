@@ -1,0 +1,24 @@
+<div class = "row" style = "padding: 5px; margin-bottom: 5px;">
+	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+		<p> <%= studentcreations.course.title %> </p>
+	</div>
+	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+		<p> <%= studentcreations.name %> </p>
+	</div>
+	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+		<p> <%= Question.where(topic_id: studentcreations.id, user_id: @user.user_id, course_id: @lab.course.id, lab_id: @lab.id).count %> </p>
+	</div>
+	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+		<p> <%= Question.where(topic_id: studentcreations.id, user_id: @user.user_id, submitted: true, course_id: @lab.course.id, lab_id: @lab.id).count%> </p>
+	</div>
+	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+		<p> <%= Question.where(topic_id: studentcreations.id, user_id: @user.user_id, submitted: true, grade: "Correct", course_id: @lab.course.id, lab_id: @lab.id).count%> </p>
+	</div>
+	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+		<% if !(Question.where(topic_id: studentcreations.id, user_id: @user.user_id, submitted: true, course_id: @lab.course.id, lab_id: @lab.id).count == 0) %>
+			<p> <%= Question.where(topic_id: studentcreations.id, user_id: @user.user_id, submitted: true, grade: "Correct", course_id: @lab.course.id, lab_id: @lab.id).count*100/Question.where(topic_id: studentcreations.id, course_id: @lab.course.id, lab_id: @lab.id, user_id: @user.user_id, submitted: true).count*100/100%>% </p>
+		<% else %>
+			<p> ~ N/A ~ </p>
+		<% end %>
+	</div>
+</div>

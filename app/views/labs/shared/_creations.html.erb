@@ -1,14 +1,17 @@
+<% @lab.students.each do |student| %>
+<%byebug %>
 <div class = "row" style = "padding: 5px; margin-bottom: 5px;">
 	<div class = "col-md-3" style = "border-bottom: 1px solid black;">
-		<p> <%= creations.course.title %> - <%= creations.course.year %></p>
+		<p> <%= student.fullname %> </p>
 	</div>
 	<div class = "col-md-3" style = "border-bottom: 1px solid black;">
 		<p> <%= creations.name %> </p>
 	</div>
 	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<p> <%= Question.where(topic_id: creations.id).count %> </p>
+		<p> <%= Question.where(topic_id: creations.id, lab_id: @lab.id, user_id: student.id).count %> </p>
 	</div>
 	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<p> <%= Question.where(topic_id: creations.id, submitted: true).count %> </p>
+		<p> <%= Question.where(topic_id: creations.id, submitted: true, lab_id: @lab.id, user_id: student.id).count %> </p>
 	</div>
 </div>
+<% end %>

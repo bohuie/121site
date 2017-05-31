@@ -91,7 +91,7 @@
 					</div>
 					<div class = "row" style = "padding: 5px; margin-bottom: 5px;">
 						<div class = "col-md-3" style = "border-bottom: 1px solid black;">
-							<p> <%= @lab.name %> </p>
+							<p> Students </p>
 						</div>
 						<div class = "col-md-3" style = "border-bottom: 1px solid black;">
 							<p> Overall </p>
@@ -107,7 +107,7 @@
 						More
 					</div>
 					<div id = "morecreate" style = "display: none">
-						<%= render partial: 'shared/creations', collection: @topics %>
+						<%= render partial: 'labs/shared/creations', collection: @topics %>
 					</div>
 					<div class = "btn btn-small btn-danger" id = "lessbuttoncreate" onclick = "hidecreate()" style = "display: none">
 						Less
@@ -167,7 +167,7 @@
 						More
 					</div>
 					<div id = "morepractice" style = "display: none">
-						<%= render partial: 'shared/stats', collection: @topics %>
+						<%= render partial: 'labs/shared/stats', collection: @topics %>
 					</div>
 					<div class = "btn btn-small btn-danger" id = "lessbuttonpractice" onclick = "hidepractice()" style = "display: none">
 						Less
@@ -225,7 +225,7 @@
 						More
 					</div>
 					<div id = "morestudentcreate" style = "display: none">
-						<%= render partial: 'shared/studentcreations', collection: @topics %>
+						<%= render partial: 'labs/shared/studentcreations', collection: @topics %>
 					</div>
 					<div class = "btn btn-small btn-danger" id = "lessbuttonstudentcreate" onclick = "hidestudentcreate()" style = "display: none">
 						Less
@@ -275,7 +275,7 @@
 						More
 					</div>
 					<div id = "morestudentpractice" style = "display: none">
-						<%= render partial: 'shared/studentstats', collection: @topics %>
+						<%= render partial: 'labs/shared/studentstats', collection: @topics %>
 					</div>
 					<div class = "btn btn-small btn-danger" id = "lessbuttonstudentpractice" onclick = "hidestudentpractice()" style = "display: none">
 						Less
