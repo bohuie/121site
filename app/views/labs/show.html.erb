@@ -57,18 +57,26 @@
 					<p><%= link_to course.title + " - " + course.year, show_course_path(course) %></p>
 					<% if @lab.course_id == course.id %>
 						<ul>
-							<% course.labs.each do |lab| %>
-								<% if lab.id == params[:id].to_i %>
-									<li><b><%= link_to lab.name, show_lab_path(lab) %></b></li>
-								<% else %>
-									<li><%= link_to lab.name, show_lab_path(lab) %></li>
+							<% if @user.has_role? :instructor %>
+								<% course.labs.each do |lab| %>
+									<% if lab.id == params[:id].to_i %>
+										<li><b><%= link_to lab.name, show_lab_path(lab) %></b></li>
+									<% else %>
+										<li><%= link_to lab.name, show_lab_path(lab) %></li>
+									<% end %>
 								<% end %>
+								<li><%= link_to 'Add New Lab', new_lab_path(course) %></li>
+							<% else %>
+								<li><b><%= link_to @lab.name, show_lab_path(@lab) %></b></li>
 							<% end %>
-							<li><%= link_to 'Add New Lab', new_lab_path(course) %></li>
 						</ul>
 					<% end %>
 				<% end %>
-				<p><%= link_to 'Add New Course', new_course_path %></p>
+				<% if @user.has_role? :instructor %>
+					<p><%= link_to 'Add New Course', new_course_path %></p>
+				<% else %>
+					<p><%= link_to 'Register for Another Course', new_student_course_path %></p>
+				<% end %>
 			</div>
 			<div class = "col-md-9">
 				<% if @user.assistant || @user.instructor %>

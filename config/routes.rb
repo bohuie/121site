@@ -55,8 +55,11 @@ get 'labs/new/:course_id' => 'labs#new', as: :new_lab
 get 'lab/:id' => 'labs#show', as: :show_lab
 post 'labs' => 'labs#create'
 
-get 'student_labs/new/:lab_id', as: :new_student_lab
-post 'student_labs/create'
+get 'student_labs/new/:course_id' => 'student_labs#new', as: :new_student_lab
+post 'student_labs' => 'student_labs#create'
+
+get 'student_courses/new' => 'student_courses#new', as: :new_student_course
+post 'student_courses' => 'student_courses#create'
 
 mount Ckeditor::Engine => '/ckeditor'
 
