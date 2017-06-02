@@ -24,14 +24,16 @@ First_Website::Application.configure do
   # config.action_dispatch.rack_cache = true
 
   # Disable Rails's static asset server (Apache or nginx will already do this).
-  config.serve_static_assets = true
+  config.serve_static_files = true
 
   # Compress JavaScripts and CSS.
-  config.assets.js_compressor = :uglifier
+  #config.assets.js_compressor = :uglifier
   # config.assets.css_compressor = :sass
+  require_relative '../../lib/assets/selective_assets_compressor'
+  config.assets.js_compressor = SelectiveAssetsCompressor.new
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
-  config.assets.compile = false
+  config.assets.compile = true
 
   # Generate digests for assets URLs.
   config.assets.digest = true
@@ -83,7 +85,7 @@ First_Website::Application.configure do
   config.log_formatter = ::Logger::Formatter.new
 
   config.assets.precompile += ['static_pages.css']
-  config.serve_static_assets = true
+  config.serve_static_files = true
   config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
   config.assets.compile = false
 

@@ -30,6 +30,10 @@ group :development, :test do
   gem 'guard-spork'
   gem 'childprocess'
   gem 'byebug'
+  gem 'capistrano-rvm'
+  gem 'capistrano-bundler'
+  gem 'capistrano-rails'
+  gem 'capistrano'
 end
 
 group :test do
