@@ -15,6 +15,6 @@ class Game < ActiveRecord::Base
 		end
 
 		def set_course
-			self.course_id = self.topic.course_id unless self.topic.nil?
+			#self.course_id = self.topic.course_id unless self.topic.nil?
 		end
 end

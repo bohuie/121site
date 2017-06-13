@@ -1,4 +1,8 @@
 class Lab < ActiveRecord::Base
+
+	has_many :questions, through: :course
+	has_many :practices
+
 	belongs_to :course
 
 	#Students taking the labs

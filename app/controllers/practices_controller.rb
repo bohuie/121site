@@ -31,7 +31,11 @@ class PracticesController < ApplicationController
 		@game.number = @game.number + 1
 		@game.save
 		@practice.course_id = @game.course_id
-		@practice.lab_id = current_user.labs.where(course_id: @game.course_id).first.id
+		if current_user.labs.where(course_id: @game.course_id).first
+			@practice.lab_id = current_user.labs.where(course_id: @game.course_id).first.id
+		else
+			@practice.lab_id = 0
+		end
 		@practice.save
 		if Question.find_by(:question_id => @practice.question_id).answer == @answer
 			@game.correct = @game.correct + 1
@@ -74,7 +78,7 @@ class PracticesController < ApplicationController
 						@practice.game_id = @game.game_id
 						@practice.user_id = @user.user_id
 						@practice.question_id = q.question_id
-						@practice.topic_id = q.topic_id
+						#@practice.topic_id = q.topic_id
 						@practice.save
 						break
 					end

@@ -7,12 +7,14 @@ class Course < ActiveRecord::Base
 	has_many :students, through: :student_courses
 
 	#Topics belonging to the course
-	has_many :topics
+	has_many :course_topics
+	has_many :topics, through: :course_topics
 
 	#Questions belonging to the course
-	has_many :questions
+	has_many :questions, through: :topics
 
 	has_many :labs
+	has_many :practices
 
 	validates :title, presence: { message: 'cannot be empty' }
 	validates :subject, presence: { message: 'cannot be empty' }

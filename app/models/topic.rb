@@ -1,9 +1,11 @@
 class Topic < ActiveRecord::Base
 
 	has_many :questions
-	has_many :practices
+	has_many :practices, through: :questions
 	has_many :games
-	belongs_to :course
+	
+	has_many :course_topics
+	has_many :courses, through: :course_topics
 	
 
 	validates :name, presence: true

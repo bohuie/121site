@@ -24,22 +24,36 @@ student5.save
 student6 = User.new(fname: "Derryne", lname: "Keith", password: "password", username: "Derryne@Keith.com", email: "Derryne@Keith.com", studentnumber: 66666666)
 student6.save
 
+t1 = Topic.create(name:"Loops")
+t2 = Topic.create(name:"Conditionals")
+t3 = Topic.create(name: "Variables")
+t4 = Topic.create(name: "Polymorphism")
+t5 = Topic.create(name: "Sprites")
+
 c1 = Course.find(1)
 c1.labs.build(name: "L01")
 c1.labs.build(name: "L02")
 c1.labs.build(name: "L03")
+c1.topics << t1
+c1.topics << t2
+c1.topics << t3
 c1.save
 
 c2 = Course.find(2)
 c2.labs.build(name: "L01")
 c2.labs.build(name: "L02")
 c2.labs.build(name: "L03")
+c2.topics << t1
+c2.topics << t2
+c2.topics << t3
+c2.topics << t5
 c2.save
 
 c3 = Course.find(3)
 c3.labs.build(name: "L01")
 c3.labs.build(name: "L02")
 c3.labs.build(name: "L03")
+c3.topics << t4
 c3.save
 
 student1.courses << c1

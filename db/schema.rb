@@ -11,10 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170530231225) do
+ActiveRecord::Schema.define(version: 20170603002206) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "course_topics", force: :cascade do |t|
+    t.integer  "course_id"
+    t.integer  "topic_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "courses", force: :cascade do |t|
     t.string   "title"
@@ -47,7 +54,6 @@ ActiveRecord::Schema.define(version: 20170530231225) do
     t.integer  "practice_id", default: 0,     null: false
     t.integer  "user_id",     default: 0,     null: false
     t.integer  "question_id", default: 0,     null: false
-    t.integer  "topic_id",    default: 0,     null: false
     t.integer  "attempts",    default: 0,     null: false
     t.integer  "answer"
     t.boolean  "correct",     default: false, null: false
@@ -114,8 +120,7 @@ ActiveRecord::Schema.define(version: 20170530231225) do
 
   create_table "topics", force: :cascade do |t|
     t.string  "name"
-    t.integer "topic_id",  default: 0, null: false
-    t.integer "course_id"
+    t.integer "topic_id", default: 0, null: false
   end
 
   create_table "users", force: :cascade do |t|

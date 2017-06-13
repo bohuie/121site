@@ -1,12 +1,15 @@
 class User < ActiveRecord::Base
   rolify
 
+  after_create :assign_default_role
+
   has_many :questions
   has_many :teach_courses, class_name: "Course", foreign_key: "instructor_id"
   has_many :student_courses
   has_many :courses, through: :student_courses
   has_many :student_labs
   has_many :labs, through: :student_labs
+  has_many :practices
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
@@ -42,5 +45,9 @@ class User < ActiveRecord::Base
     def self.find_for_database_authentication(conditions={})
       self.where("username = ?", conditions[:email]).limit(1).first ||
       self.where("email = ?", conditions[:email]).limit(1).first
+    end
+
+    def assign_default_role
+      self.add_role(:student) if self.roles.blank?
     end
 end

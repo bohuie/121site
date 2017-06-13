@@ -51,7 +51,7 @@ class CoursesController < ApplicationController
         end
       end
     end
-    @topics = Topic.where(course_id: params[:id])
+    @topics = @course.topics
     @created = Question.where(course_id: params[:id]).count
     @submitted = Question.where(submitted: true, course_id: params[:id]).count
   end

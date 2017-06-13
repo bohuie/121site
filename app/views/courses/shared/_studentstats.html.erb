@@ -1,21 +1,52 @@
 <div class = "row" style = "padding: 5px; margin-bottom: 5px;">	
 	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<p> <%= studentstats.course.title %> </p>
+		<p> Average in Course </p>
 	</div>
 	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
 		<p> <%= studentstats.name %> </p>
 	</div>
 	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<p> <%= Practice.where(user_id: @user.user_id, :topic_id => studentstats.id, course_id: @lab.course.id, lab_id: @lab.id).count %> </p>
-	</div>
-	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<p> <%= Practice.where(user_id: @user.user_id, correct: true, :topic_id => studentstats.id, course_id: @lab.course.id, lab_id: @lab.id).count %> </p>
-	</div>
-	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<% if !(Practice.where(user_id: @user.user_id, :topic_id => studentstats.id, course_id: @lab.course.id, lab_id: @lab.id).count == 0) %>
-			<p> <%= (Practice.where(user_id: @user.user_id, correct: true, :topic_id => studentstats.id, course_id: @lab.course.id, lab_id: @lab.id).count*100/Practice.where(:topic_id => studentstats.id, user_id: @user.user_id, course_id: @lab.course.id, lab_id: @lab.id).count*100)/100 %> %</p>
+		<% unless @course.students.count == 0 %>
+			<p> <%= studentstats.practices.count/@course.students.count %> </p>
 		<% else %>
 			<p> ~ N/A ~ </p>
 		<% end %>
 	</div>
+	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+		<% unless @course.students.count == 0 %>
+			<p> <%= studentstats.practices.where(correct: true).count/@course.students.count %> </p>
+		<% else %>
+			<p> ~ N/A ~ </p>
+		<% end %>
+	</div>
+	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+		<% if !(studentstats.practices.count == 0) %>
+			<p> <%= (studentstats.practices.where(correct: true).count*100/studentstats.practices.count*100)/100 %> %</p>
+		<% else %>
+			<p> ~ N/A ~ </p>
+		<% end %>
+	</div>
+	<div class="col-md-2"></div>
+</div>
+<div class = "row" style = "padding: 5px; margin-bottom: 5px;">	
+	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+		<p> My Results </p>
+	</div>
+	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+		<p> <%= studentstats.name %> </p>
+	</div>
+	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+		<p> <%= studentstats.practices.where(user_id: @user.user_id).count %> </p>
+	</div>
+	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+		<p> <%= studentstats.practices.where(user_id: @user.user_id, correct: true).count %> </p>
+	</div>
+	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+		<% if !(studentstats.practices.where(user_id: @user.user_id).count == 0) %>
+			<p> <%= (studentstats.practices.where(user_id: @user.user_id, correct: true).count*100/studentstats.practices.where(user_id: @user.user_id).count*100)/100 %> %</p>
+		<% else %>
+			<p> ~ N/A ~ </p>
+		<% end %>
+	</div>
+	<div class="col-md-2"></div>
 </div>

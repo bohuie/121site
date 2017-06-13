@@ -218,7 +218,7 @@
 						More
 					</div>
 					<div id = "morestudentcreate" style = "display: none">
-						<%= render partial: 'shared/studentcreations', collection: @topics %>
+						<%= render partial: 'shared/studentcreations', collection: @courses %>
 					</div>
 					<div class = "btn btn-small btn-danger" id = "lessbuttonstudentcreate" onclick = "hidestudentcreate()" style = "display: none">
 						Less
@@ -242,6 +242,7 @@
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Percent </h4>
 						</div>
+						<div class="col-md-2"></div>
 					</div>
 					<div class = "row" style = "padding: 5px; margin-bottom: 5px;">
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
@@ -263,12 +264,13 @@
 								<p> ~ N/A ~ </p>
 							<% end %>
 						</div>
+						<div class="col-md-2"></div>
 					</div>
 					<div class = "btn btn-small btn-primary" id = "morebuttonstudentpractice" onclick = "showstudentpractice()" >
 						More
 					</div>
 					<div id = "morestudentpractice" style = "display: none">
-						<%= render partial: 'shared/studentstats', collection: @topics %>
+						<%= render partial: 'shared/studentstats', collection: @courses %>
 					</div>
 					<div class = "btn btn-small btn-danger" id = "lessbuttonstudentpractice" onclick = "hidestudentpractice()" style = "display: none">
 						Less
