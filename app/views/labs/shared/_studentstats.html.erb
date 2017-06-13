@@ -7,14 +7,14 @@
 	</div>
 	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
 		<% unless @lab.students.count == 0 %>
-			<p style = "display: inline;"><%= @user.practices.includes(:question).where("questions.topic_id = ? AND practices.lab_id = ?", studentstats.id, @lab.id).references(:questions).count %> <p style = "display: inline;color: blue;">(<%= @lab.practices.includes(:question).where('questions.topic_id = ?', studentstats.id).references(:questions).count/@lab.students.count %>)</p></p>
+			<p style = "display: inline;"><%= @user.practices.includes(:question).where("questions.topic_id = ? AND practices.lab_id = ?", studentstats.id, @lab.id).references(:questions).count %> <p class="average" style = "display: inline;">(<%= (@lab.practices.includes(:question).where('questions.topic_id = ?', studentstats.id).references(:questions).count.to_f/@lab.students.count).round(1) %>)</p></p>
 		<% else %>
 			<p> ~ N/A ~ </p>
 		<% end %>
 	</div>
 	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
 		<% unless @lab.students.count == 0 %>
-			<p style = "display: inline;"><%= @user.practices.includes(:question).where("questions.topic_id = ? AND practices.lab_id = ? AND practices.correct = TRUE", studentstats.id, @lab.id).references(:questions).count %> <p style = "display: inline;color: blue;">(<%= @lab.practices.includes(:question).where('practices.correct = ? AND questions.topic_id = ?', true, studentstats.id).references(:question).count/@lab.students.count %>)</p></p>
+			<p style = "display: inline;"><%= @user.practices.includes(:question).where("questions.topic_id = ? AND practices.lab_id = ? AND practices.correct = TRUE", studentstats.id, @lab.id).references(:questions).count %> <p class="average" style = "display: inline;">(<%= (@lab.practices.includes(:question).where('practices.correct = ? AND questions.topic_id = ?', true, studentstats.id).references(:question).count.to_f/@lab.students.count).round(1) %>)</p></p>
 		<% else %>
 			<p> ~ N/A ~ </p>
 		<% end %>
@@ -23,10 +23,10 @@
 		<% if !(@user.practices.includes(:question).where("questions.topic_id = ? AND practices.lab_id = ?", studentstats.id, @lab.id).references(:questions).count == 0) %>
 			<p style = "display: inline;">
 				<%= (@user.practices.includes(:question).where("questions.topic_id = ? AND practices.lab_id = ? AND practices.correct = TRUE", studentstats.id, @lab.id).references(:questions).count*100/@user.practices.includes(:question).where("practices.lab_id = ?", @lab.id).references(:questions).count*100)/100 %>%
-				<p style = "display: inline;color: blue;">(<%= (@lab.practices.includes(:question).where('practices.correct = ? AND questions.topic_id = ? ', true, studentstats.id).references(:questions).count*100/@lab.practices.includes(:question).where('questions.topic_id = ?', studentstats.id).references(:questions).count*100)/100 %>%)</p>
+				<p class="average" style = "display: inline;">(<%= (@lab.practices.includes(:question).where('practices.correct = ? AND questions.topic_id = ? ', true, studentstats.id).references(:questions).count*100/@lab.practices.includes(:question).where('questions.topic_id = ?', studentstats.id).references(:questions).count*100)/100 %>%)</p>
 			</p>
 		<% elsif !(@lab.practices.includes(:question).where('questions.topic_id = ?', studentstats.id).references(:questions).count == 0) %>
-			<p style = "display: inline;"> ~ N/A ~ <p style = "display: inline;color: blue;">(<%= (@lab.practices.includes(:question).where('practices.correct = ? AND questions.topic_id = ? ', true, studentstats.id).references(:question).count*100/@lab.practices.includes(:question).where('questions.topic_id = ?', studentstats.id).references(:questions).count*100)/100 %>%)</p></p>
+			<p style = "display: inline;"> ~ N/A ~ <p class="average" style = "display: inline;">(<%= (@lab.practices.includes(:question).where('practices.correct = ? AND questions.topic_id = ? ', true, studentstats.id).references(:question).count*100/@lab.practices.includes(:question).where('questions.topic_id = ?', studentstats.id).references(:questions).count*100)/100 %>%)</p></p>
 		<% else %>
 			<p> ~ N/A ~ </p>
 		<% end %>

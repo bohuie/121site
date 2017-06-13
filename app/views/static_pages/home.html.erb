@@ -190,32 +190,8 @@
 							<h4 style = "margin: 5px;"> Percent Correct </h4>
 						</div>
 					</div>
-					<div class = "row" style = "padding: 5px; margin-bottom: 5px;">
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> All </p>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> Overall </p>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= Question.where(user_id: @user.user_id).count %> </p>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= Question.where(user_id: @user.user_id, submitted: true).count%> </p>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= Question.where(user_id: @user.user_id, submitted: true, grade: "Correct").count%> </p>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<% if !(Question.where(user_id: @user.user_id, submitted: true).count == 0) %>
-								<p> <%= Question.where(user_id: @user.user_id, submitted: true, grade: "Correct").count*100/Question.where(user_id: @user.user_id, submitted: true).count*100/100%>% </p>
-							<% else %>
-								<p> ~ N/A ~ </p>
-							<% end %>
-						</div>
-					</div>
 					<div class = "btn btn-small btn-primary" id = "morebuttonstudentcreate" onclick = "showstudentcreate()" >
-						More
+						View All
 					</div>
 					<div id = "morestudentcreate" style = "display: none">
 						<%= render partial: 'shared/studentcreations', collection: @courses %>
@@ -244,30 +220,8 @@
 						</div>
 						<div class="col-md-2"></div>
 					</div>
-					<div class = "row" style = "padding: 5px; margin-bottom: 5px;">
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> All </p>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> Overall </p>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= Practice.where(user_id: @user.user_id).count %> </p>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= Practice.where(correct: true, user_id: @user.user_id).count %> </p>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<% if !(Practice.where(user_id: @user.user_id).count == 0) %>
-								<p> <%= (Practice.where(correct: true, user_id: @user.user_id).count*100/Practice.where(user_id: @user.user_id).count*100)/100 %>%</p>
-							<% else %>
-								<p> ~ N/A ~ </p>
-							<% end %>
-						</div>
-						<div class="col-md-2"></div>
-					</div>
 					<div class = "btn btn-small btn-primary" id = "morebuttonstudentpractice" onclick = "showstudentpractice()" >
-						More
+						View All
 					</div>
 					<div id = "morestudentpractice" style = "display: none">
 						<%= render partial: 'shared/studentstats', collection: @courses %>

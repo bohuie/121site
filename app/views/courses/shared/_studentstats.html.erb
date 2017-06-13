@@ -1,49 +1,32 @@
 <div class = "row" style = "padding: 5px; margin-bottom: 5px;">	
 	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<p> Average in Course </p>
-	</div>
-	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<p> <%= studentstats.name %> </p>
-	</div>
-	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<% unless @course.students.count == 0 %>
-			<p> <%= studentstats.practices.count/@course.students.count %> </p>
-		<% else %>
-			<p> ~ N/A ~ </p>
-		<% end %>
-	</div>
-	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<% unless @course.students.count == 0 %>
-			<p> <%= studentstats.practices.where(correct: true).count/@course.students.count %> </p>
-		<% else %>
-			<p> ~ N/A ~ </p>
-		<% end %>
-	</div>
-	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<% if !(studentstats.practices.count == 0) %>
-			<p> <%= (studentstats.practices.where(correct: true).count*100/studentstats.practices.count*100)/100 %> %</p>
-		<% else %>
-			<p> ~ N/A ~ </p>
-		<% end %>
-	</div>
-	<div class="col-md-2"></div>
-</div>
-<div class = "row" style = "padding: 5px; margin-bottom: 5px;">	
-	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
 		<p> My Results </p>
 	</div>
 	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
 		<p> <%= studentstats.name %> </p>
 	</div>
 	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<p> <%= studentstats.practices.where(user_id: @user.user_id).count %> </p>
+		<% unless @course.students.count == 0 %>
+			<p style = "display: inline;"><%= @user.practices.includes(:question).where("questions.topic_id = ? AND practices.course_id = ?", studentstats.id, @course.id).references(:questions).count %> <p class="average" style = "display: inline;">(<%= (@course.practices.includes(:question).where('questions.topic_id = ?', studentstats.id).references(:questions).count.to_f/@course.students.count).round(1) %>)</p></p>
+		<% else %>
+			<p> ~ N/A ~ </p>
+		<% end %>
 	</div>
 	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<p> <%= studentstats.practices.where(user_id: @user.user_id, correct: true).count %> </p>
+		<% unless @course.students.count == 0 %>
+			<p style = "display: inline;"><%= @user.practices.includes(:question).where("questions.topic_id = ? AND practices.course_id = ? AND practices.correct = TRUE", studentstats.id, @course.id).references(:questions).count %> <p class="average" style = "display: inline;">(<%= (@course.practices.includes(:question).where('practices.correct = ? AND questions.topic_id = ?', true, studentstats.id).references(:question).count.to_f/@course.students.count).round(1) %>)</p></p>
+		<% else %>
+			<p> ~ N/A ~ </p>
+		<% end %>
 	</div>
 	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<% if !(studentstats.practices.where(user_id: @user.user_id).count == 0) %>
-			<p> <%= (studentstats.practices.where(user_id: @user.user_id, correct: true).count*100/studentstats.practices.where(user_id: @user.user_id).count*100)/100 %> %</p>
+		<% if !(@user.practices.includes(:question).where("questions.topic_id = ? AND practices.course_id = ?", studentstats.id, @course.id).references(:questions).count == 0) %>
+			<p style = "display: inline;">
+				<%= (@user.practices.includes(:question).where("questions.topic_id = ? AND practices.course_id = ? AND practices.correct = TRUE", studentstats.id, @course.id).references(:questions).count*100/@user.practices.includes(:question).where("practices.course_id = ?", @course.id).references(:questions).count*100)/100 %>%
+				<p class="average" style = "display: inline;">(<%= (@course.practices.includes(:question).where('practices.correct = ? AND questions.topic_id = ? ', true, studentstats.id).references(:questions).count*100/@course.practices.includes(:question).where('questions.topic_id = ?', studentstats.id).references(:questions).count*100)/100 %>%)</p>
+			</p>
+		<% elsif !(@course.practices.includes(:question).where('questions.topic_id = ?', studentstats.id).references(:questions).count == 0) %>
+			<p style = "display: inline;"> ~ N/A ~ <p class="average" style = "display: inline;">(<%= (@course.practices.includes(:question).where('practices.correct = ? AND questions.topic_id = ? ', true, studentstats.id).references(:question).count*100/@course.practices.includes(:question).where('questions.topic_id = ?', studentstats.id).references(:questions).count*100)/100 %>%)</p></p>
 		<% else %>
 			<p> ~ N/A ~ </p>
 		<% end %>

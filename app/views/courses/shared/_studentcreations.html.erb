@@ -1,58 +1,37 @@
 <div class = "row" style = "padding: 5px; margin-bottom: 5px;">
 	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<p> Average In Course </p>
+		<p> My Results</p>
 	</div>
 	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
 		<p> <%= studentcreations.name %> </p>
 	</div>
 	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
 		<% unless @course.students.count == 0 %>
-			<p> <%= (studentcreations.questions.count/@course.students.count.to_f).round(2) %></p>
+			<p style = "display: inline;"> <%= studentcreations.questions.where( user_id: @user.id).count %> <p class="average" style = "display: inline;">(<%= (studentcreations.questions.count/@course.students.count.to_f).round(1) %>)</p></p>
 		<% else %>
 			<p> ~ N/A ~ </p>
 		<% end %>
 	</div>
 	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
 		<% unless @course.students.count == 0 %>
-			<p> <%= (studentcreations.questions.where(submitted: true).count/@course.students.count.to_f).round(2) %> </p>
+			<p style = "display: inline;"><%= studentcreations.questions.where(user_id: @user.id, submitted: true).count %> <p class="average" style = "display: inline;">(<%= (studentcreations.questions.where(submitted: true).count/@course.students.count.to_f).round(1) %>)</p></p>
 		<% else %>
 			<p> ~ N/A ~ </p>
 		<% end %>
 	</div>
 	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
 		<% unless @course.students.count == 0 %>
-			<p> <%= (studentcreations.questions.where(submitted: true, grade: "Correct").count/@course.students.count.to_f).round(2) %> </p>
+			<p style = "display: inline;"><%= studentcreations.questions.where(user_id: @user.id, submitted: true, grade: "Correct").count %>
+			<p class="average" style = "display: inline;">(<%= (studentcreations.questions.where(submitted: true, grade: "Correct").count/@course.students.count.to_f).round(1) %> )</p></p>
 		<% else %>
 			<p> ~ N/A ~ </p>
 		<% end %>
-	</div>
-	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<% if !(studentcreations.questions.where(submitted: true).count == 0) %>
-			<p> <%= studentcreations.questions.where(submitted: true, grade: "Correct").count*100/studentcreations.questions.where(submitted: true).count*100/100%>% </p>
-		<% else %>
-			<p> ~ N/A ~ </p>
-		<% end %>
-	</div>
-</div>
-<div class = "row" style = "padding: 5px; margin-bottom: 5px;">
-	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<p> My Results </p>
-	</div>
-	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<p> <%= studentcreations.name %> </p>
-	</div>
-	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<p> <%= studentcreations.questions.where( user_id: @user.id).count %></p>
-	</div>
-	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<p> <%= studentcreations.questions.where(user_id: @user.id, submitted: true).count %> </p>
-	</div>
-	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<p> <%= studentcreations.questions.where(user_id: @user.id, submitted: true, grade: "Correct").count %> </p>
 	</div>
 	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
 		<% if !(studentcreations.questions.where(user_id: @user.id, submitted: true).count == 0) %>
-			<p> <%= studentcreations.questions.where(user_id: @user.id, submitted: true, grade: "Correct").count*100/studentcreations.questions.where(user_id: @user.id, submitted: true).count*100/100%>% </p>
+			<p style = "display: inline;">  <%= studentcreations.questions.where(user_id: @user.id, submitted: true, grade: "Correct").count*100/studentcreations.questions.where(user_id: @user.id, submitted: true).count*100/100%>% <p class="average" style = "display: inline;">(<%= studentcreations.questions.where(submitted: true, grade: "Correct").count*100/studentcreations.questions.where(submitted: true).count*100/100%>%)</p> </p>
+		<% elsif !(studentcreations.questions.where(submitted: true).count == 0)%>
+			<p style = "display: inline;"> ~ N/A ~ <p class="average" style = "display: inline;">(<%= studentcreations.questions.where(submitted: true, grade: "Correct").count*100/studentcreations.questions.where(submitted: true).count*100/100%>%)</p></p>
 		<% else %>
 			<p> ~ N/A ~ </p>
 		<% end %>
