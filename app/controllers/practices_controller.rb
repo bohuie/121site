@@ -6,6 +6,10 @@ class PracticesController < ApplicationController
 		@user = current_user
 		@game = Game.new
 		@topics = Topic.all
+		@courses = Hash.new
+  		@user.courses.each do |course|
+  			@courses[course.title + " - " + course.year] = course.id
+  		end
 	end
 
 	def create
@@ -90,6 +94,13 @@ class PracticesController < ApplicationController
 		end
 		@current = Practice.new
 	end
+
+	def update_topics
+    	@topics = Course.find(params[:course_id]).topics
+    	respond_to do |format|
+      		format.js
+    	end
+  	end
 
 	private 
 

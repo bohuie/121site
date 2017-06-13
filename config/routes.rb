@@ -5,6 +5,7 @@ devise_for :users
 resource :questions
 resource :search, :controller => :search
 resource :topics
+get 'practices/update_topics', as: 'update_topics'
 resource :practices
 
  
