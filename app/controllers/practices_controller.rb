@@ -96,7 +96,7 @@ class PracticesController < ApplicationController
 		@current = Practice.new
 	end
 
-	def update_topics
+	def update_practice_topics
     	@topics = Course.find(params[:course_id]).topics
     	respond_to do |format|
       		format.js

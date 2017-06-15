@@ -178,6 +178,11 @@ class QuestionsController < ApplicationController
     @user = current_user
     @userID = current_user.user_id
     @question = Question.new
+    @courses = Hash.new
+    @user.courses.each do |course|
+      @courses[course.title + " - " + course.year] = course.id
+    end
+    @topics = []
     @topic = Topic.all
     @answer = ['a', 'b', 'c', 'd', 'e']
   end
@@ -307,6 +312,13 @@ class QuestionsController < ApplicationController
     $flagged = false
     $grade = false
     $grade = true
+  end
+
+  def update_question_topics
+    @topics = Course.find(params[:course_id]).topics
+    respond_to do |format|
+        format.js
+    end
   end
 
    private
