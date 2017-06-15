@@ -1,16 +1,23 @@
-<% @course.labs.each do |lab| %>
+
 	<div class = "row" style = "padding: 5px; margin-bottom: 5px;">
 		<div class = "col-md-3" style = "border-bottom: 1px solid black;">
-			<p> <%= lab.name %> </p>
+			<p> Overall Topic Stats </p>
 		</div>
 		<div class = "col-md-3" style = "border-bottom: 1px solid black;">
 			<p> <%= creations.name %> </p>
 		</div>
 		<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-			<p> <%= Question.where(topic_id: creations.id, course_id: @course.id, lab_id: lab.id).count %> </p>
+		<% unless @course.students.count == 0 %>
+			<p> <%= (creations.questions.count/@course.students.count.to_f).round(1) %></p>
+		<% else %>
+			<p> ~ N/A ~ </p>
+		<% end %>
 		</div>
 		<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-			<p> <%= Question.where(topic_id: creations.id, submitted: true, course_id: @course.id, lab_id: lab.id).count %> </p>
+			<% unless @course.students.count == 0 %>
+			<p><%= (creations.questions.where(submitted: true).count/@course.students.count.to_f).round(1) %></p>
+		<% else %>
+			<p> ~ N/A ~ </p>
+		<% end %>
 		</div>
 	</div>
-<% end %>

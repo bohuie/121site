@@ -106,10 +106,10 @@
 							<p> Overall </p>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= @created %> </p>
+							<p> <%=  @lab.questions.count %> </p>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= @submitted %> </p>
+							<p> <%= @lab.questions.where(submitted: true).count %> </p>
 						</div>
 					</div>
 					<div class = "btn btn-small btn-primary" id = "morebuttoncreate" onclick = "showcreate()" >
@@ -126,7 +126,7 @@
 					</div>
 					<div class = "row" style = "padding: 5px;">
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<h4 style = "margin: 5px;"> Lab </h4>
+							<h4 style = "margin: 5px;"> &nbsp; </h4>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Topic </h4>
@@ -152,21 +152,21 @@
 							<p> Overall </p>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= Practice.where(course_id: @lab.course.id, lab_id: @lab.id).count %> </p>
+							<p> <%= @lab.practices.where(course_id: @lab.course_id).count %> </p>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= Practice.where(correct: true, course_id: @lab.course.id, lab_id: @lab.id).count %> </p>
+							<p> <%= @lab.practices.where(course_id: @lab.course_id, correct: true).count %> </p>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<% if !(Practice.where(course_id: @lab.course.id, lab_id: @lab.id).count == 0) %>
-								<p> <%= (Practice.where(correct: true, course_id: @lab.course.id, lab_id: @lab.id).count*100/Practice.where(course_id: @lab.course.id, lab_id: @lab.id).count*100)/100 %>%</p>
+							<% if !(@lab.practices.where(course_id: @lab.course_id).count == 0) %>
+								<p> <%= (@lab.practices.where(course_id: @lab.course_id, correct: true).count*100/@lab.practices.where(course_id: @lab.course_id).count*100)/100 %>%</p>
 							<% else %>
 								<p> ~ N/A ~ </p>
 							<% end %>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<% if !(Practice.where(course_id: @lab.course.id, lab_id: @lab.id).count == 0) %>
-								<p> <%= (Practice.sum(:totaltime, course_id: @lab.course.id, lab_id: @lab.id)*100/Practice.where(course_id: @lab.course.id, lab_id: @lab.id).count*100)/10000 %> seconds</p>
+							<% if !(@lab.practices.where(course_id: @lab.course_id).count == 0) %>
+								<p> <%= (@lab.practices.where(course_id: @lab.course_id).sum(:totaltime)*100/@lab.practices.where(course_id: @lab.course_id).count*100)/10000 %> seconds</p>
 							<% else %>
 								<p> ~ N/A ~ </p>
 							<% end %>
@@ -188,7 +188,7 @@
 					</div>
 					<div class = "row" style = "padding: 5px;">
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<h4 style = "margin: 5px;"> Lab Results </h4>
+							<h4 style = "margin: 5px;"> &nbsp; </h4>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Topic </h4>

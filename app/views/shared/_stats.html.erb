@@ -1,26 +1,26 @@
 <div class = "row is-table-row" style = "padding: 5px; margin-bottom: 5px;">	
 	<div class = "col-xs-2 col-sm-2 col-md-2" style = "border-bottom: 1px solid black;">
-		<p> <%= stats.course.title %> - <%= stats.course.year %></p>
+		<p> <%= stats.title %> - <%= stats.year %></p>
 	</div>
 	<div class = "col-xs-2 col-sm-2 col-md-2" style = "border-bottom: 1px solid black;">
-		<p> <%= stats.name %> </p>
+		<p> All </p>
 	</div>
 	<div class = "col-xs-2 col-sm-2 col-md-2" style = "border-bottom: 1px solid black;">
-		<p> <%= Practice.where(:topic_id => stats.id).count %> </p>
+		<p> <%= stats.practices.count %> </p>
 	</div>
 	<div class = "col-xs-2 col-sm-2 col-md-2" style = "border-bottom: 1px solid black;">
-		<p> <%= Practice.where(correct: true, :topic_id => stats.id).count %> </p>
+		<p> <%= stats.practices.where(correct: true).count %> </p>
 	</div>
 	<div class = "col-xs-2 col-sm-2 col-md-2" style = "border-bottom: 1px solid black;">
-		<% if !(Practice.where(:topic_id => stats.id).count == 0) %>
-			<p> <%= (Practice.where(correct: true, :topic_id => stats.id).count*100/Practice.where(:topic_id => stats.id).count*100)/100 %> %</p>
+		<% if !(stats.practices.count == 0) %>
+			<p> <%= (stats.practices.where(correct: true).count*100/stats.practices.count*100)/100 %> %</p>
 		<% else %>
 			<p> ~ N/A ~ </p>
 		<% end %>
 	</div>
 	<div class = "col-xs-2 col-sm-2 col-md-2" style = "border-bottom: 1px solid black;">
-		<% if !(Practice.where(:topic_id => stats.id).count == 0) %>
-			<p> <%= (Practice.sum(:totaltime, :conditions =>{:topic_id => stats.id})*100/Practice.where(:topic_id => stats.id).count*100)/10000 %> seconds</p>
+		<% if !(stats.practices.count == 0) %>
+			<p> <%= (stats.practices.sum(:totaltime)*100/stats.practices.count*100)/10000 %> seconds</p>
 		<% else %>
 			<p> ~ N/A ~ </p>
 		<% end %>

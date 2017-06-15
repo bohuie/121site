@@ -82,25 +82,11 @@
 							<h4 style = "margin: 5px;"> Submitted </h4>
 						</div>
 					</div>
-					<div class = "row" style = "padding: 5px; margin-bottom: 5px;">
-						<div class = "col-md-3" style = "border-bottom: 1px solid black;">
-							<p> All </p>
-						</div>
-						<div class = "col-md-3" style = "border-bottom: 1px solid black;">
-							<p> Overall </p>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= @created %> </p>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= @submitted %> </p>
-						</div>
-					</div>
 					<div class = "btn btn-small btn-primary" id = "morebuttoncreate" onclick = "showcreate()" >
-						More
+						View All
 					</div>
 					<div id = "morecreate" style = "display: none">
-						<%= render partial: 'shared/creations', collection: @topics %>
+						<%= render partial: 'shared/creations', collection: @courses %>
 					</div>
 					<div class = "btn btn-small btn-danger" id = "lessbuttoncreate" onclick = "hidecreate()" style = "display: none">
 						Less
@@ -128,39 +114,11 @@
 							<h4 style = "margin: 5px;"> Average Time</h4>
 						</div>
 					</div>
-					<div class = "row" style = "padding: 5px; margin-bottom: 5px;">
-						<div class = "col-xs-2 col-sm-2 col-md-2" style = "border-bottom: 1px solid black;">
-							<p> All </p>
-						</div>
-						<div class = "col-xs-2 col-sm-2 col-md-2" style = "border-bottom: 1px solid black;">
-							<p> Overall </p>
-						</div>
-						<div class = "col-xs-2 col-sm-2 col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= Practice.all.count %> </p>
-						</div>
-						<div class = "col-xs-2 col-sm-2 col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= Practice.where(correct: true).count %> </p>
-						</div>
-						<div class = "col-xs-2 col-sm-2 col-md-2" style = "border-bottom: 1px solid black;">
-							<% if !(Practice.all.count == 0) %>
-								<p> <%= (Practice.where(correct: true).count*100/Practice.all.count*100)/100 %>%</p>
-							<% else %>
-								<p> ~ N/A ~ </p>
-							<% end %>
-						</div>
-						<div class = "col-xs-2 col-sm-2 col-md-2" style = "border-bottom: 1px solid black;">
-							<% if !(Practice.all.count == 0) %>
-								<p> <%= (Practice.sum(:totaltime)*100/Practice.all.count*100)/10000 %> seconds</p>
-							<% else %>
-								<p> ~ N/A ~ </p>
-							<% end %>
-						</div>
-					</div>
 					<div class = "btn btn-small btn-primary" id = "morebuttonpractice" onclick = "showpractice()" >
-						More
+						View All
 					</div>
 					<div id = "morepractice" style = "display: none">
-						<%= render partial: 'shared/stats', collection: @topics %>
+						<%= render partial: 'shared/stats', collection: @courses %>
 					</div>
 					<div class = "btn btn-small btn-danger" id = "lessbuttonpractice" onclick = "hidepractice()" style = "display: none">
 						Less

@@ -1,10 +1,15 @@
 <% if questions.visible %>
 	<div class = "row" style = "border-bottom: 1px solid black; padding: 5px;">
-		<div class = "col-md-6">
+		<div class = "col-md-5">
 			<%=questions.qtext.html_safe%>
 		</div>
 		<div class = "col-md-1">
-			<%=Topic.find_by(:topic_id => questions.topic_id).name%>
+			<% questions.courses.each do |c| %>
+			<p><%= c.title %> - <%= c.year %></p>
+			<% end %>
+		</div>
+		<div class = "col-md-1">
+			<%= questions.topic.name%>
 		</div>
 		<div class = "col-md-1">
 			<%= link_to "View", {controller: "questions", action: "view", id: questions.id}, class: "btn btn-mdall btn-info" %>

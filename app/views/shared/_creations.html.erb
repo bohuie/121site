@@ -1,14 +1,14 @@
 <div class = "row" style = "padding: 5px; margin-bottom: 5px;">
 	<div class = "col-md-3" style = "border-bottom: 1px solid black;">
-		<p> <%= creations.course.title %> - <%= creations.course.year %></p>
+		<p> <%= creations.title %> - <%= creations.year %></p>
 	</div>
 	<div class = "col-md-3" style = "border-bottom: 1px solid black;">
-		<p> <%= creations.name %> </p>
+		<p> All </p>
 	</div>
 	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<p> <%= Question.where(topic_id: creations.id).count %> </p>
+		<p> <%= creations.questions.count %> </p>
 	</div>
 	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<p> <%= Question.where(topic_id: creations.id, submitted: true).count %> </p>
+		<p> <%= creations.questions.where(submitted: true).count %> </p>
 	</div>
 </div>

@@ -88,7 +88,7 @@
 					</div>
 					<div class = "row" style = "padding: 5px;">
 						<div class = "col-md-3" style = "border-bottom: 1px solid black;">
-							<h4 style = "margin: 5px;"> Labs </h4>
+							<h4 style = "margin: 5px;"> &nbsp; </h4>
 						</div>
 						<div class = "col-md-3" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Topic </h4>
@@ -102,16 +102,16 @@
 					</div>
 					<div class = "row" style = "padding: 5px; margin-bottom: 5px;">
 						<div class = "col-md-3" style = "border-bottom: 1px solid black;">
-							<p> All </p>
+							<p> <%= @course.title %> </p>
 						</div>
 						<div class = "col-md-3" style = "border-bottom: 1px solid black;">
 							<p> Overall </p>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= @created %> </p>
+							<p> <%= @course.questions.count %> </p>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= @submitted %> </p>
+							<p> <%= @course.questions.where(submitted: true).count %> </p>
 						</div>
 					</div>
 					<div class = "btn btn-small btn-primary" id = "morebuttoncreate" onclick = "showcreate()" >
@@ -128,7 +128,7 @@
 					</div>
 					<div class = "row" style = "padding: 5px;">
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<h4 style = "margin: 5px;"> Labs </h4>
+							<h4 style = "margin: 5px;"> &nbsp; </h4>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Topic </h4>
@@ -148,27 +148,27 @@
 					</div>
 					<div class = "row" style = "padding: 5px; margin-bottom: 5px;">
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> All </p>
+							<p> <%= @course.title %> </p>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
 							<p> Overall </p>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= Practice.where(course_id: @course.id).count %> </p>
+							<p> <%= @course.practices.count %> </p>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= Practice.where(correct: true, course_id: @course.id).count %> </p>
+							<p> <%= @course.practices.where(correct: true).count %> </p>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<% if !(Practice.where(course_id: @course.id).count == 0) %>
-								<p> <%= (Practice.where(correct: true, course_id: @course.id).count*100/Practice.where(course_id: @course.id).count*100)/100 %>%</p>
+							<% if !(@course.practices.count == 0) %>
+								<p> <%= (@course.practices.where(correct: true).count*100/@course.practices.count*100)/100 %>%</p>
 							<% else %>
 								<p> ~ N/A ~ </p>
 							<% end %>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<% if !(Practice.where(course_id: @course.id).count == 0) %>
-								<p> <%= (Practice.sum(:totaltime, course_id: @course.id)*100/Practice.where(course_id: @course.id).count*100)/10000 %> seconds</p>
+							<% if !(@course.practices.count == 0) %>
+								<p> <%= (@course.practices.sum(:totaltime)*100/@course.practices.count*100)/10000 %> seconds</p>
 							<% else %>
 								<p> ~ N/A ~ </p>
 							<% end %>
