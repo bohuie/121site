@@ -7,7 +7,7 @@
 		<%= simple_form_for @game, :url => { :action => "create" } do |f| %>
 			<%= f.input :course_id, collection: @courses %>
 			<%= f.label "Select a topic (leave blank for all topics)" %>
-      		<%= f.input :name, collection: @topics %>
+      		<%= f.input :name, collection: @topics, label: "Topics" %>
    			<%= f.submit "Start Studying", class: "btn btn-medium btn-success" %>
 		<% end %>
     </div>

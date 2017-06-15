@@ -29,6 +29,22 @@ class LabsController < ApplicationController
     else
         @courses = @user.courses
     end
+    @games = Game.where(:user_id => @user.user_id, course_id: @lab.course_id)
+    @count = @games.count
+    @number = 0
+    @percent = 0
+    @games.each do |g|
+        if !(g.number == 0)
+        	if((g.correct*100/g.number*100)/100) > @percent
+            	@percent = ((g.correct*100/g.number*100)/100)
+            	@number = g.number
+          	elsif ((g.correct*100/g.number*100)/100) == @percent
+            	if g.number > @number
+              		@number = g.number
+            	end
+          	end
+        end
+    end
     @topics = @lab.course.topics
     @created = @lab.questions.includes(:courses).where("courses.id = ?",1).references(:courses).count
     @submitted = @lab.questions.includes(:courses).where("courses.id = ? AND questions.submitted = true",1).references(:courses).count
