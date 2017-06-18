@@ -1,8 +1,30 @@
 
+<h3>Add New Topic to Quiz Nova</h3>
+<p>Use the form below to create a new topic.</p>
+<%= simple_form_for @topic, :url => { :action => "create" } do |f| %>
+  <div class = "row">
+    <div class = "col-md-6 col-sm-6">
+      <%= f.input :name, label: "Topic Name" %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <%= f.submit "Create Topic", class: "btn btn-medium btn-success" %>
+    </div>
+  </div>
+<% end %>
+
+<hr>
+
+<h3>Linking Topics to Courses</h3>
+<p>Select a course from the drop down menu, then add or remove topics to the course.</p> 
+
 <div class="row">
   <%= simple_form_for @ct, :url => { :action => "create" } do |f| %>
-    <div class = "col-md-6">
+    <div class = "col-md-6 col-sm-6">
+
       <%= f.input :course_id, :required => true, collection: @courses %>
+      <hr />
     </div>
   <% end %>
 </div>
@@ -10,19 +32,3 @@
   <div class="col-md-12" id="class_topics">
   </div>
 </div>
-<hr>
-<%= simple_form_for @topic, :url => { :action => "create" } do |f| %>
-  <div class = "row">
-    <div class = "col-sm-6">
-      <%= f.label "Topic Name" %>
-      <%= f.text_field :name%>
-    </div>
-  </div>
-   <%= f.submit "Create Topic", class: "btn btn-medium btn-success" %>
-<% end %>
-<% if @topics.any? %>
-	<div class="row", style = "border-bottom: 3px solid black;">
-  		  <h3 style = "margin: 5px;"> All Topics </h3>
-   	</div>
-	<%= render partial: 'shared/topics', collection: @topics %>
-<% end %>

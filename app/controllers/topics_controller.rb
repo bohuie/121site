@@ -44,7 +44,7 @@ class TopicsController < ApplicationController
 	end
 	def update_course_topics
 		@course = Course.find(params[:course_id])
-    	@course_topics = @course.topics
+    	@course_topics = @course.course_topics
     	@course_topic = CourseTopic.new
     	@topics = Topic.all
     	respond_to do |format|

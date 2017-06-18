@@ -19,7 +19,7 @@ class CourseTopicsController < ApplicationController
   end
 
   def delete
-  	@course_topic = CourseTopic.find(id: params[:id])
+  	@course_topic = CourseTopic.find(params[:id])
 	if @course_topic.delete
 		flash[:success] = "Successfully removed the topic from the course."
   		redirect_to topics_path
@@ -58,7 +58,7 @@ class CourseTopicsController < ApplicationController
 
   def check_existence_course_topic
   	byebug
-  	unless CourseTopic.find(10)
+  	unless CourseTopic.find(params[:id])
   		flash[:warning] = "That topic must belong to a course before you can remove it."
   		redirect_to topics_path
   	end

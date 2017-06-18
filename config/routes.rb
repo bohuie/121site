@@ -13,7 +13,7 @@ get 'search/update_search_topics', as: 'update_search_topics'
 get 'search/update_search_labs', as: 'update_search_labs'
 get 'topics/update_course_topics', as: 'update_course_topics'
 post 'course_topics/create' => 'course_topics#create', as: :create_course_topic
-delete 'course_topics/delete' => 'course_topics#delete', as: :delete_course_topic
+delete 'course_topics/delete/:id' => 'course_topics#delete', as: :delete_course_topic
 resource :practices
 
  
