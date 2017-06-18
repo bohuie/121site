@@ -27,9 +27,6 @@ class StaticPagesController < ApplicationController
         end
       end
     end
-    @topics = Topic.all
-    @created = Question.all.count
-    @submitted = Question.where(submitted: true).count
   end
 
   def terms

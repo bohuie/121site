@@ -4,10 +4,13 @@
 <%= simple_form_for @result, :url => { :action => "create" } do |f| %>
 	<div class = "row">
 		<div class = "col-sm-4">
-      		<%= f.input :name, label: "Select a topic", collection: @topic %>
+      		<%= f.input :course_id, label: "Select a Course", collection: @courses %>
+    	</div>
+		<div class = "col-sm-4">
+      		<%= f.input :name, label: "Select a topic", collection: @topics %>
     	</div>
     	<div class = "col-sm-4">
-      		<%= f.input :lab, label: "Select a lab section", collection: @lab %>
+      		<%= f.input :lab, label: "Select a lab section", collection: @labs %>
     	</div>
     </div>
     <%= f.submit "Find Questions", class: "btn btn-medium btn-success" %>

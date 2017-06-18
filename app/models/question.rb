@@ -1,7 +1,10 @@
 class Question < ActiveRecord::Base
 
+	attr_accessor :course_id
+
 	belongs_to :user
 	belongs_to :topic
+	belongs_to :lab
 
 	has_many :practices
 	

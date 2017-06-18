@@ -1,5 +1,7 @@
 First_Website::Application.routes.draw do
 
+  get 'course_topics/update'
+
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
 devise_for :users
 resource :questions
@@ -7,6 +9,11 @@ resource :search, :controller => :search
 resource :topics
 get 'practices/update_practice_topics', as: 'update_practice_topics'
 get 'questions/update_question_topics', as: 'update_question_topics'
+get 'search/update_search_topics', as: 'update_search_topics'
+get 'search/update_search_labs', as: 'update_search_labs'
+get 'topics/update_course_topics', as: 'update_course_topics'
+post 'course_topics/create' => 'course_topics#create', as: :create_course_topic
+delete 'course_topics/delete' => 'course_topics#delete', as: :delete_course_topic
 resource :practices
 
  

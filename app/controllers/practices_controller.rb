@@ -7,7 +7,14 @@ class PracticesController < ApplicationController
 		@game = Game.new
 		@topics = Topic.all
 		@courses = Hash.new
-  		@user.courses.each do |course|
+		if @user.instructor
+        	course = Course.where(instructor_id: @user.id).order(year: :desc)
+      	elsif @user.assistant
+        	course = @user.courses
+     	else
+        	course = @user.courses
+      	end
+  		course.each do |course|
   			@courses[course.title + " - " + course.year] = course.id
   		end
 	end

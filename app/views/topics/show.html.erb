@@ -1,6 +1,16 @@
-<br/>
-</br>
-</br>
+
+<div class="row">
+  <%= simple_form_for @ct, :url => { :action => "create" } do |f| %>
+    <div class = "col-md-6">
+      <%= f.input :course_id, :required => true, collection: @courses %>
+    </div>
+  <% end %>
+</div>
+<div class="row">
+  <div class="col-md-12" id="class_topics">
+  </div>
+</div>
+<hr>
 <%= simple_form_for @topic, :url => { :action => "create" } do |f| %>
   <div class = "row">
     <div class = "col-sm-6">

@@ -52,8 +52,6 @@ class CoursesController < ApplicationController
       end
     end
     @topics = @course.topics
-    @created = Question.where(course_id: params[:id]).count
-    @submitted = Question.where(submitted: true, course_id: params[:id]).count
   end
 
   private

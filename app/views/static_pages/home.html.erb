@@ -48,7 +48,7 @@
 	<h1>Welcome</h1>
 	<% if user_signed_in? %>
 		<div class = "row">
-			<div class = "col-md-3">
+			<div class = "col-md-2">
 				<p> So far you have done <%= @count %> game<% if !(@count== 1) %>s<% end %>  </p>
 				<p> Your high score is <%= @percent %>% on <%= @number %> question<% if !(@number== 1) %>s<% end %> </p>
 				<hr>
@@ -63,7 +63,7 @@
 					<p><%= link_to 'Register for Another Course', new_student_course_path %></p>
 				<% end %>
 			</div>
-			<div class = "col-md-9">
+			<div class = "col-md-10">
 				<% if @user.assistant || @user.instructor %>
 					<div class = "row">
 						<h3 style = "margin: 5px;"> Creation </h3>

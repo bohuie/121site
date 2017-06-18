@@ -1,0 +1,6 @@
+<div class="row">
+	<h5>
+		<div class="col-md-6"><%= course_topics.name %></div>
+		<div class="col-md-6"><%= link_to "Remove Topic", delete_course_topic_path(course_topics), data: {:confirm => 'Are you sure?'}, :method => :delete, class: "btn btn-small btn-danger" %></div>
+	</h5>
+</div>

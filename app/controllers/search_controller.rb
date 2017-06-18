@@ -7,23 +7,23 @@ class SearchController < ApplicationController
 		@result = Result.new
 		@topic = Topic.all
 		@users = User.all
+    	@courses = Hash.new
+    	if @user.instructor
+        	course = Course.where(instructor_id: @user.id).order(year: :desc)
+      	elsif @user.assistant
+        	course = @user.courses
+      	else
+        	course = @user.courses
+      	end
+      	course.each  do |course|
+        	@courses[course.title + " - " + course.year] = course.id
+      	end
+      	@topics = []
+      	@labs = []
 		@lab = Array.new
 		@users.each do |u|
 			if !@lab.include?(u.lab)
 				@lab.push(u.lab)
-			end
-		end
-		@fillnames = Question.all
-		@fillnames.each do |f|
-			@owner = User.find(f.user_id)
-			if f.fname.nil?
-				f.fname = @owner.fname
-			end
-			if f.lname.nil?
-				f.lname = @owner.lname
-			end
-			if f.studentnumber.nil?
-				f.studentnumber = @owner.studentnumber
 			end
 		end
 	end
@@ -48,13 +48,13 @@ class SearchController < ApplicationController
 		@result.name = params[:topic_id]
 		@result.lab = params[:lab]
 		if (@result.name.eql?("") && @result.lab.eql?(""))
-			@questions = Question.all.order(lname: :asc, fname: :asc)
+			@questions = Question.all.includes(:user).order("users.lname asc", "users.fname asc")
 		elsif @result.name.eql?("")
-			@questions = Question.where(:lab => @result.lab).order(lname: :asc, fname: :asc)
+			@questions = Question.where(:lab => @result.lab).includes(:user).order("users.lname asc", "users.fname asc")
 		elsif @result.lab.eql?("")
-			@questions = Question.where(:topic_id => @result.name).order(lname: :asc, fname: :asc)
+			@questions = Question.where(:topic_id => @result.name).includes(:user).order("users.lname asc", "users.fname asc")
 		else
-			@questions = Question.where(:topic_id => @result.name, :lab => @result.lab).order(lname: :asc, fname: :asc)
+			@questions = Question.where(:topic_id => @result.name, :lab => @result.lab).includes(:user).order("users.lname asc", "users.fname asc")
 		end
 	end
 
@@ -64,13 +64,13 @@ class SearchController < ApplicationController
 		@result.name = params[:topic_id]
 		@result.lab = params[:lab]
 		if (@result.name.eql?("") && @result.lab.eql?(""))
-			@questions = Question.all.order(studentnumber: :asc)
+			@questions = Question.all.includes(:user).order("users.studentnumber asc")
 		elsif @result.name.eql?("")
-			@questions = Question.where(:lab => @result.lab).order(studentnumber: :asc)
+			@questions = Question.where(:lab => @result.lab).includes(:user).order("users.studentnumber asc")
 		elsif @result.lab.eql?("")
-			@questions = Question.where(:topic_id => @result.name).order(studentnumber: :asc)
+			@questions = Question.where(:topic_id => @result.name).includes(:user).order("users.studentnumber asc")
 		else
-			@questions = Question.where(:topic_id => @result.name, :lab => @result.lab).order(studentnumber: :asc)
+			@questions = Question.where(:topic_id => @result.name, :lab => @result.lab).includes(:user).order("users.studentnumber asc")
 		end
 	end
 
@@ -80,13 +80,13 @@ class SearchController < ApplicationController
 		@result.name = params[:topic_id]
 		@result.lab = params[:lab]
 		if (@result.name.eql?("") && @result.lab.eql?(""))
-			@questions = Question.all.order(lab: :desc)
+			@questions = Question.all.order(lab_id: :desc)
 		elsif @result.name.eql?("")
-			@questions = Question.where(:lab => @result.lab).order(lab: :desc)
+			@questions = Question.where(:lab => @result.lab).order(lab_id: :desc)
 		elsif @result.lab.eql?("")
-			@questions = Question.where(:topic_id => @result.name).order(lab: :desc)
+			@questions = Question.where(:topic_id => @result.name).order(lab_id: :desc)
 		else
-			@questions = Question.where(:topic_id => @result.name, :lab => @result.lab).order(lab: :desc)
+			@questions = Question.where(:topic_id => @result.name, :lab => @result.lab).order(lab_id: :desc)
 		end
 	end
 	
@@ -137,6 +137,20 @@ class SearchController < ApplicationController
 			@questions = Question.where(:topic_id => @result.name, :lab => @result.lab).order(grade: :asc)
 		end
 	end
+
+	def update_search_topics
+    	@topics = Course.find(params[:course_id]).topics
+    	respond_to do |format|
+        	format.js
+    	end
+  	end
+
+  	def update_search_labs
+    	@labs = Course.find(params[:course_id]).labs
+    	respond_to do |format|
+        	format.js
+    	end
+  	end
 
 	private
 		def result_params

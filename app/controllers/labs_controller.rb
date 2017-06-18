@@ -46,10 +46,6 @@ class LabsController < ApplicationController
         end
     end
     @topics = @lab.course.topics
-    @created = @lab.questions.includes(:courses).where("courses.id = ?",1).references(:courses).count
-    @submitted = @lab.questions.includes(:courses).where("courses.id = ? AND questions.submitted = true",1).references(:courses).count
-  	#@created = @lab.course.questions.count
-    #@submitted = Question.where(submitted: true, course_id:  @lab.course.id, lab_id: @lab.id).count
   end
 
   private
