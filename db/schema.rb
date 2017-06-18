@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170615202227) do
+ActiveRecord::Schema.define(version: 20170618212559) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,15 +72,16 @@ ActiveRecord::Schema.define(version: 20170615202227) do
     t.text     "a4text"
     t.text     "a5text"
     t.integer  "answer"
-    t.integer  "user_id",        default: 0,     null: false
-    t.integer  "question_id",    default: 0,     null: false
-    t.integer  "topic_id",       default: 0,     null: false
-    t.boolean  "submitted",      default: false, null: false
-    t.text     "grade",          default: "",    null: false
-    t.boolean  "visible",        default: true,  null: false
-    t.boolean  "exam",           default: false, null: false
+    t.integer  "user_id",              default: 0,     null: false
+    t.integer  "question_id",          default: 0,     null: false
+    t.integer  "topic_id",             default: 0,     null: false
+    t.boolean  "submitted",            default: false, null: false
+    t.text     "grade",                default: "",    null: false
+    t.boolean  "visible",              default: true,  null: false
+    t.boolean  "exam",                 default: false, null: false
     t.datetime "date_submitted"
     t.integer  "lab_id"
+    t.integer  "course_created_in_id"
   end
 
   create_table "results", force: :cascade do |t|

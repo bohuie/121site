@@ -2,6 +2,8 @@ class Course < ActiveRecord::Base
 	#Instructor
 	belongs_to :instructor, class_name: :User
 
+  	has_many :questions_created_in, class_name: "Question", foreign_key: "course_created_in_id"
+
 	#Students taking the course
 	has_many :student_courses
 	has_many :students, through: :student_courses

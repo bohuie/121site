@@ -201,6 +201,7 @@ class QuestionsController < ApplicationController
 	    @question.user_id = current_user.user_id
       unless @user.labs.where('labs.course_id = ?',params[:question][:course_id]).count == 0
         @question.lab = @user.labs.where('labs.course_id = ?',params[:question][:course_id]).first
+        @question.course_created_in = @question.lab.course
       else
         flash[:warning] = "Please select a valid lab"
         redirect_to new_questions_path
