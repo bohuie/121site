@@ -16,6 +16,8 @@ class Course < ActiveRecord::Base
 	has_many :labs
 	has_many :practices
 
+	has_many :games
+
 	validates :title, presence: { message: 'cannot be empty' }
 	validates :subject, presence: { message: 'cannot be empty' }
 	validates :year, presence: { message: 'cannot be empty' }

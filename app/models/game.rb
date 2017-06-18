@@ -2,11 +2,14 @@ class Game < ActiveRecord::Base
 
 	belongs_to :user
 	has_many :practices
+	belongs_to :course
 	belongs_to :topic
 	
 	after_save :set_course
 
 	after_create :do_setID
+
+	validates :course, presence: true
   
   	private
     	def do_setID
