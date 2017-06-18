@@ -199,12 +199,16 @@ class QuestionsController < ApplicationController
 	  if user_signed_in?
 	    @question = Question.new(question_params)
 	    @question.user_id = current_user.user_id
-      unless @user.labs.where('labs.course_id = ?',params[:question][:course_id]).count == 0
-        @question.lab = @user.labs.where('labs.course_id = ?',params[:question][:course_id]).first
-        @question.course_created_in = @question.lab.course
+      unless @user.labs.where('labs.course_id = ?',params[:question][:course_created_in]).count == 0 
+        @question.lab = @user.labs.where('labs.course_id = ?',params[:question][:course_created_in]).first
+        @question.course_created_in = Course.find(params[:question][:course_created_in])
       else
-        flash[:warning] = "Please select a valid lab"
-        redirect_to new_questions_path
+        if @user.has_role?(:instructor)
+          @question.course_created_in = Course.find(params[:question][:course_created_in])
+        else
+          flash[:warning] = "Please select a valid lab"
+          redirect_to new_questions_path and return
+        end
       end
       @answer = answer_params.to_s
       if @answer[12, @answer.length - 14] == "a"
