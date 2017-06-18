@@ -18,8 +18,8 @@ class SearchController < ApplicationController
       	course.each  do |course|
         	@courses[course.title + " - " + course.year] = course.id
       	end
-      	@topics = []
-      	@labs = []
+      	@topics = course.first.topics
+      	@labs = course.first.labs
 		@lab = Array.new
 		@users.each do |u|
 			if !@lab.include?(u.lab)
@@ -32,13 +32,13 @@ class SearchController < ApplicationController
 		@user = current_user
 		@result = Result.create(result_params)
 		if (@result.name.eql?("") && @result.lab.eql?(""))
-			@questions = Question.all.order(user_id: :desc)
+			@questions = Question.where(course_created_in: @result.course).order(user_id: :desc)
 		elsif @result.name.eql?("")
-			@questions = Question.where(:lab => @result.lab).order(user_id: :desc)
+			@questions = Question.where(:lab => @result.lab, course_created_in: @result.course).order(user_id: :desc)
 		elsif @result.lab.eql?("")
-			@questions = Question.where(:topic_id => @result.name).order(user_id: :desc)
+			@questions = Question.where(:topic_id => @result.name, course_created_in: @result.course).order(user_id: :desc)
 		else
-			@questions = Question.where(:topic_id => @result.name, :lab => @result.lab).order(user_id: :desc)
+			@questions = Question.where(:topic_id => @result.name, :lab => @result.lab, course_created_in: @result.course).order(user_id: :desc)
 		end
 	end
 
@@ -48,13 +48,13 @@ class SearchController < ApplicationController
 		@result.name = params[:topic_id]
 		@result.lab = params[:lab]
 		if (@result.name.eql?("") && @result.lab.eql?(""))
-			@questions = Question.all.includes(:user).order("users.lname asc", "users.fname asc")
+			@questions = Question.where(course_created_in: @result.course).includes(:user).order("users.lname asc", "users.fname asc")
 		elsif @result.name.eql?("")
-			@questions = Question.where(:lab => @result.lab).includes(:user).order("users.lname asc", "users.fname asc")
+			@questions = Question.where(:lab => @result.lab, course_created_in: @result.course).includes(:user).order("users.lname asc", "users.fname asc")
 		elsif @result.lab.eql?("")
-			@questions = Question.where(:topic_id => @result.name).includes(:user).order("users.lname asc", "users.fname asc")
+			@questions = Question.where(:topic_id => @result.name, course_created_in: @result.course).includes(:user).order("users.lname asc", "users.fname asc")
 		else
-			@questions = Question.where(:topic_id => @result.name, :lab => @result.lab).includes(:user).order("users.lname asc", "users.fname asc")
+			@questions = Question.where(:topic_id => @result.name, :lab => @result.lab, course_created_in: @result.course).includes(:user).order("users.lname asc", "users.fname asc")
 		end
 	end
 
@@ -154,6 +154,6 @@ class SearchController < ApplicationController
 
 	private
 		def result_params
-			params.require(:result).permit(:name, :lab)
+			params.require(:result).permit(:name, :lab, :course_id)
 		end
 end

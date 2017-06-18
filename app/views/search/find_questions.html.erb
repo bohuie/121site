@@ -4,7 +4,7 @@
 <%= simple_form_for @result, :url => { :action => "create" } do |f| %>
 	<div class = "row">
 		<div class = "col-sm-4">
-      		<%= f.input :course_id, label: "Select a Course", collection: @courses %>
+      		<%= f.input :course_id, label: "Select a Course", collection: @courses, include_blank: false %>
     	</div>
 		<div class = "col-sm-4">
       		<%= f.input :name, label: "Select a topic", collection: @topics %>

@@ -11,10 +11,14 @@
 					<% end %>
 				</div>
 				<div class = "col-md-1">
-					<%= markquestions.lab.course.title %> - <%=markquestions.lab.course.year %>
+					<% if markquestions.course_created_in %>
+						<%= markquestions.course_created_in.title %> - <%=markquestions.course_created_in.year %>
+					<% else %>
+						N/A
+					<% end %>
 				</div>
 				<div class = "col-md-1">
-					<%= markquestions.lab.name %>
+					<%= markquestions.lab ? markquestions.lab.name : "N/A" %>
 				</div>
 				<div class = "col-md-1">
 					<%= Topic.find_by(:topic_id => markquestions.topic_id).name %>
