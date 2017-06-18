@@ -10,7 +10,14 @@
 				<% end %>
 			</div>
 			<div class = "col-md-1">
-				<%= flagquestions.lab.name %>
+				<% if flagquestions.course_created_in %>
+					<%= flagquestions.course_created_in.title %> - <%=flagquestions.course_created_in.year %>
+				<% else %>
+					N/A
+				<% end %>
+			</div>
+			<div class = "col-md-1">
+				<%= flagquestions.lab ? flagquestions.lab.name : "N/A" %>
 			</div>
 			<div class = "col-md-1">
 				<%= Topic.find_by(:topic_id => flagquestions.topic_id).name %>
@@ -25,7 +32,7 @@
 			<div class = "col-md-1">
 				<%= link_to "View", {controller: "questions", action: "flagview", id: flagquestions.id}, class: "btn btn-mdall btn-success" %>
 			</div>
-			<div class = "col-md-3 col-md-offset-1">
+			<div class = "col-md-1 col-md-offset-1">
 				<%=flagquestions.grade.html_safe %>
 			</div>
 		</div>
@@ -40,7 +47,14 @@
 				<% end %>
 			</div>
 			<div class = "col-md-1">
-				<%= flagquestions.lab.name %>
+				<% if flagquestions.course_created_in %>
+					<%= flagquestions.course_created_in.title %> - <%=flagquestions.course_created_in.year %>
+				<% else %>
+					N/A
+				<% end %>
+			</div>
+			<div class = "col-md-1">
+				<%= flagquestions.lab ? flagquestions.lab.name : "N/A" %>
 			</div>
 			<div class = "col-md-1">
 				<%= Topic.find_by(:topic_id => flagquestions.topic_id).name %>
@@ -58,7 +72,7 @@
 			<div class = "col-md-1">
 				Flagged
 			</div>
-			<div class = "col-md-3">
+			<div class = "col-md-1">
 				<%=flagquestions.grade.html_safe %>
 			</div>
 		</div>
