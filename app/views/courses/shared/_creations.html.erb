@@ -8,14 +8,14 @@
 		</div>
 		<div class = "col-md-2" style = "border-bottom: 1px solid black;">
 		<% unless @course.students.count == 0 %>
-			<p> <%= (creations.questions.count/@course.students.count.to_f).round(1) %></p>
+			<p> <%= (creations.questions_created_in.count/@course.students.count.to_f).round(1) %></p>
 		<% else %>
 			<p> ~ N/A ~ </p>
 		<% end %>
 		</div>
 		<div class = "col-md-2" style = "border-bottom: 1px solid black;">
 			<% unless @course.students.count == 0 %>
-			<p><%= (creations.questions.where(submitted: true).count/@course.students.count.to_f).round(1) %></p>
+			<p><%= (creations.questions_created_in.where(submitted: true).count/@course.students.count.to_f).round(1) %></p>
 		<% else %>
 			<p> ~ N/A ~ </p>
 		<% end %>
