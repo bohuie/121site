@@ -1,4 +1,5 @@
 class Course < ActiveRecord::Base
+	resourcify
 	#Instructor
 	belongs_to :instructor, class_name: :User
 
