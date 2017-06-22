@@ -8,7 +8,9 @@ class User < ActiveRecord::Base
 
   has_many :student_courses
   has_many :courses, through: :student_courses
-  scope :student_questions, lambda { |course| joins(:questions).where("questions.course_created_in_id = ?", course.id) }
+  #User.with_role(:student, Course.find(1)).course_student_questions(Course.find(1)).count
+  scope :course_student_questions, lambda { |course| joins(:questions).where("questions.course_created_in_id = ?", course.id) }
+  scope :lab_student_questions, lambda { |lab| joins(:questions).where("questions.lab_id = ?", lab.id) }
 
   has_many :student_labs
   has_many :labs, through: :student_labs
