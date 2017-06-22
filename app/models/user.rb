@@ -4,17 +4,23 @@ class User < ActiveRecord::Base
   after_create :assign_default_role
 
   has_many :questions
+  #User.with_role(:student, Course.find(1)).course_student_questions(Course.find(1)).count
+  scope :course_student_questions, lambda { |course| joins(:questions).where("questions.course_created_in_id = ?", course.id) }
+  #User.with_role(:student, Lab.find(1).course).lab_student_questions(Lab.find(1)).count
+  scope :lab_student_questions, lambda { |lab| joins(:questions).where("questions.lab_id = ?", lab.id) }
+
   has_many :teach_courses, class_name: "Course", foreign_key: "instructor_id"
 
   has_many :student_courses
   has_many :courses, through: :student_courses
-  #User.with_role(:student, Course.find(1)).course_student_questions(Course.find(1)).count
-  scope :course_student_questions, lambda { |course| joins(:questions).where("questions.course_created_in_id = ?", course.id) }
-  scope :lab_student_questions, lambda { |lab| joins(:questions).where("questions.lab_id = ?", lab.id) }
 
   has_many :student_labs
   has_many :labs, through: :student_labs
   has_many :practices
+  #User.with_role(:student, Course.find(1)).course_student_practices(Course.find(1)).count
+  scope :course_student_practices, lambda { |course| joins(:practices).where("practices.course_id = ?", course.id) }
+  #User.with_role(:student, Lab.find(1).course).lab_student_practices(Lab.find(1)).count
+  scope :lab_student_practices, lambda { |lab| joins(:practices).where("practices.lab_id = ?", lab.id) }
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
