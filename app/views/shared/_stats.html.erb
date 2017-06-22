@@ -12,14 +12,14 @@
 		<p> <%= User.with_role(:student, stats).course_student_practices_correct(stats).count %> </p>
 	</div>
 	<div class = "col-xs-2 col-sm-2 col-md-2" style = "border-bottom: 1px solid black;">
-		<% if !(stats.practices.count == 0) %>
+		<% if !(User.with_role(:student, stats).course_student_practices(stats).count == 0) %>
 			<p> <%= (User.with_role(:student, stats).course_student_practices_correct(stats).count*100/User.with_role(:student, stats).course_student_practices(stats).count*100)/100 %> %</p>
 		<% else %>
 			<p>N/A</p>
 		<% end %>
 	</div>
 	<div class = "col-xs-2 col-sm-2 col-md-2" style = "border-bottom: 1px solid black;">
-		<% if !(stats.practices.count == 0) %>
+		<% if !(User.with_role(:student, stats).course_student_practices(stats).count == 0) %>
 			<p> <%= (User.with_role(:student, stats).course_student_practices(stats).sum(:totaltime)*100/User.with_role(:student, stats).course_student_practices(stats).count*100)/10000 %> seconds</p>
 		<% else %>
 			<p>N/A</p>

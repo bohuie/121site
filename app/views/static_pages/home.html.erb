@@ -134,15 +134,12 @@
 					</div>
 					<%= link_to "Detailed practice information", "/stats", class: "btn btn-primary btn-primary" %>
 				<% else %>
-					<div class = "row">
+					<div class = "row is">
 						<h3 style = "margin: 5px;"> Creation </h3>
 					</div>
 					<div class = "row" style = "padding: 5px;">
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+						<div class = "col-md-3" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Course </h4>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<h4 style = "margin: 5px;"> Topic </h4>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Created </h4>
@@ -154,7 +151,7 @@
 							<h4 style = "margin: 5px;"> Correct </h4>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<h4 style = "margin: 5px;"> Percent Correct </h4>
+							<h4 style = "margin: 5px;"> Percent </h4>
 						</div>
 					</div>
 					<div class = "btn btn-small btn-primary" id = "morebuttonstudentcreate" onclick = "showstudentcreate()" >
@@ -170,11 +167,8 @@
 						<h3 style = "margin: 5px;"> Practice </h3>
 					</div>
 					<div class = "row" style = "padding: 5px;">
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+						<div class = "col-md-3" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Course </h4>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<h4 style = "margin: 5px;"> Topic </h4>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Attempted </h4>
@@ -185,7 +179,6 @@
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Percent </h4>
 						</div>
-						<div class="col-md-2"></div>
 					</div>
 					<div class = "btn btn-small btn-primary" id = "morebuttonstudentpractice" onclick = "showstudentpractice()" >
 						View All
