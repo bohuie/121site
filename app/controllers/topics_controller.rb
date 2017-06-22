@@ -46,7 +46,7 @@ class TopicsController < ApplicationController
 		@course = Course.find(params[:course_id])
     	@course_topics = @course.course_topics
     	@course_topic = CourseTopic.new
-    	@topics = Topic.where.not(id: @course.topics)
+    	@topics = Topic.where.not(id: @course.topics).order('name asc')
     	respond_to do |format|
         	format.js
     	end
