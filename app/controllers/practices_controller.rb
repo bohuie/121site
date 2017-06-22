@@ -59,7 +59,7 @@ class PracticesController < ApplicationController
 			redirect_to :controller => "practices", :action => "use", :id => @game.game_id
 		else
 			flash[:error] = "Incorrect"
-			redirect_to :controller => "practices", :action => "incorrect", :gameid => @game.game_id, :questionid => Question.find_by(:question_id => @practice.question_id).id
+			redirect_to :controller => "practices", :action => "incorrect", :gameid => @game.game_id, :questionid => Question.find(@practice.question_id).id
 		end	
 	end
 
@@ -82,15 +82,13 @@ class PracticesController < ApplicationController
 			end
 			@i = 0
 			@questions.each do |q| 
-				if (Practice.where(:game_id => @game.game_id, :question_id => 
-					q.question_id).nil? ||
-					Practice.where(:game_id => @game.game_id, :question_id => 
-						q.question_id).empty?)
+				if (Practice.where(:game_id => @game.game_id, :question_id => q.id).nil? ||
+					Practice.where(:game_id => @game.game_id, :question_id => q.id).empty? )
 					if (q.submitted == true && q.grade == "Correct")
 						@practice = Practice.create
 						@practice.game_id = @game.game_id
 						@practice.user_id = @user.user_id
-						@practice.question_id = q.question_id
+						@practice.question_id = q.id
 						#@practice.topic_id = q.topic_id
 						@practice.save
 						break

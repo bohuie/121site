@@ -86,30 +86,48 @@
 					</div>
 					<div class = "row" style = "padding: 5px;">
 						<div class = "col-md-3" style = "border-bottom: 1px solid black;">
-							<h4 style = "margin: 5px;"> Lab </h4>
-						</div>
-						<div class = "col-md-3" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Topic </h4>
 						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Created </h4>
 						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Submitted </h4>
+						</div>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Incorrect </h4>
+						</div>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Accepted </h4>
+						</div>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Revise </h4>
+						</div>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Pending </h4>
 						</div>
 					</div>
 					<div class = "row" style = "padding: 5px; margin-bottom: 5px;">
 						<div class = "col-md-3" style = "border-bottom: 1px solid black;">
-							<p> Students </p>
+							<p> All Topics </p>
 						</div>
-						<div class = "col-md-3" style = "border-bottom: 1px solid black;">
-							<p> Overall </p>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<p><%= User.with_role(:student, @lab.course).lab_student_questions(@lab).count %></p>
 						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%=  @lab.questions.count %> </p>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<p><%= User.with_role(:student, @lab.course).lab_student_questions_submitted(@lab).count %></p>
 						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= @lab.questions.where(submitted: true).count %> </p>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<p><%= User.with_role(:student, @lab.course).lab_student_questions_incorrect(@lab).count %></p>
+						</div>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<p><%= User.with_role(:student, @lab.course).lab_student_questions_accept(@lab).count %></p>
+						</div>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<p><%= User.with_role(:student, @lab.course).lab_student_questions_revise(@lab).count %></p>
+						</div>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<p><%= User.with_role(:student, @lab.course).lab_student_questions_pending(@lab).count %></p>
 						</div>
 					</div>
 					<div class = "btn btn-small btn-primary" id = "morebuttoncreate" onclick = "showcreate()" >
@@ -125,9 +143,6 @@
 						<h3 style = "margin: 5px;"> Practice </h3>
 					</div>
 					<div class = "row" style = "padding: 5px;">
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<h4 style = "margin: 5px;"> &nbsp; </h4>
-						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Topic </h4>
 						</div>
@@ -146,29 +161,26 @@
 					</div>
 					<div class = "row" style = "padding: 5px; margin-bottom: 5px;">
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= @lab.name %> </p>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
 							<p> Overall </p>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= @lab.practices.where(course_id: @lab.course_id).count %> </p>
+							<p> <%= User.with_role(:student, @lab.course).lab_student_practices(@lab).count %> </p>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= @lab.practices.where(course_id: @lab.course_id, correct: true).count %> </p>
+							<p> <%= User.with_role(:student, @lab.course).lab_student_practices_correct(@lab).count %> </p>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<% if !(@lab.practices.where(course_id: @lab.course_id).count == 0) %>
-								<p> <%= (@lab.practices.where(course_id: @lab.course_id, correct: true).count*100/@lab.practices.where(course_id: @lab.course_id).count*100)/100 %>%</p>
+							<% if !(User.with_role(:student, @lab.course).lab_student_practices(@lab).count == 0) %>
+								<p> <%= (User.with_role(:student, @lab.course).lab_student_practices_correct(@lab).count*100/User.with_role(:student, @lab.course).lab_student_practices(@lab).count*100)/100 %>%</p>
 							<% else %>
-								<p> ~ N/A ~ </p>
+								<p>N/A </p>
 							<% end %>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
 							<% if !(@lab.practices.where(course_id: @lab.course_id).count == 0) %>
 								<p> <%= (@lab.practices.where(course_id: @lab.course_id).sum(:totaltime)*100/@lab.practices.where(course_id: @lab.course_id).count*100)/10000 %> seconds</p>
 							<% else %>
-								<p> ~ N/A ~ </p>
+								<p>N/A </p>
 							<% end %>
 						</div>
 					</div>
@@ -230,9 +242,9 @@
 									<p class="sum" style = "display: inline;"> (<%= @lab.questions.where(submitted: true, grade: "Correct").count*100/@lab.questions.where(submitted: true).count*100/100 %>%)</p>
 								</p>
 							<% elsif !(@lab.questions.where(submitted: true).count == 0) %>
-								<p style = "display: inline;"> ~ N/A ~ <p class="sum" style = "display: inline;"> (<%= @lab.questions.where(submitted: true, grade: "Correct").count*100/@lab.questions.where(submitted: true).count*100/100 %>%)</p></p>
+								<p style = "display: inline;">N/A <p class="sum" style = "display: inline;"> (<%= @lab.questions.where(submitted: true, grade: "Correct").count*100/@lab.questions.where(submitted: true).count*100/100 %>%)</p></p>
 							<% else %>
-								<p> ~ N/A ~ </p>
+								<p>N/A </p>
 							<% end %>
 						</div>
 					</div>
@@ -285,9 +297,9 @@
 									<p class="sum" style = "display: inline;">(<%= (@lab.practices.where(correct: true).count*100/@lab.practices.count*100)/100 %>%)</p>
 								</p>
 							<% elsif !(@lab.practices.count == 0) %>
-								<p style = "display: inline;"> ~ N/A ~ <p class="sum" style = "display: inline;">(<%= (@lab.practices.where(correct: true).count*100/@lab.practices.count*100)/100 %>%)</p></p>
+								<p style = "display: inline;">N/A <p class="sum" style = "display: inline;">(<%= (@lab.practices.where(correct: true).count*100/@lab.practices.count*100)/100 %>%)</p></p>
 							<% else %>
-								<p> ~ N/A ~ <p class="sum" style = "display: inline;">(~ N/A ~)</p></p>
+								<p>N/A <p class="sum" style = "display: inline;">(~ N/A ~)</p></p>
 							<% end %>
 						</div>
 					</div>
