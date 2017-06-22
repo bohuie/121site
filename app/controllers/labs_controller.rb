@@ -3,6 +3,8 @@ class LabsController < ApplicationController
   before_action :authenticate_user!
   before_action :check_instructor, only: [:new, :create]
   before_action :check_owner, only: [:new]
+  before_action :check_student_belongs, only: [:show]
+
   def new
   	@user = current_user
   	@lab = Lab.new
@@ -58,6 +60,15 @@ class LabsController < ApplicationController
     if !current_user.has_role? :instructor
       flash[:danger] = 'Instructors only.'
       redirect_to root_path
+    end
+  end
+
+  def check_student_belongs
+    unless  current_user.has_role?(:instructor)
+      unless current_user.lab.exists?(params[:id])
+        flash[:warning] = "You must register for a lab before you can view it."
+        redirect_to root_path
+      end
     end
   end
 

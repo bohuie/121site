@@ -1,6 +1,6 @@
 class CourseTopicsController < ApplicationController
   before_action :authenticate_user!
-  before_action :check_instructor  , only: [:create]
+  before_action :check_instructor  , only: [:create, :delete]
   before_action :check_existence_topic, only: [:create]
   before_action :check_existence_course, only: [:create]
   before_action :check_uniqueness_course_topic, only: [:create]
@@ -65,7 +65,7 @@ class CourseTopicsController < ApplicationController
   end
 
   def check_instructor # Checks current user is an instructor
-    if !current_user.has_role? :instructor
+    if !current_user.has_role?(:instructor)
       flash[:danger] = 'Instructors only.'
       redirect_to root_path
     end

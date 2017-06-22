@@ -20,6 +20,7 @@ class StudentCoursesController < ApplicationController
   		@courses[course.title + " - " + course.year] = course.id
   	end
   	if @student_course.save
+  		@user.add_role(:student, Course.find(params[:student_course][:course_id]))
   		flash[:success] = "Thank you for registering for your course."
   		redirect_to show_course_path(@student_course.course)
   	else

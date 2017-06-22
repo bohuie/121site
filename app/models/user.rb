@@ -28,19 +28,11 @@ class User < ActiveRecord::Base
   validates :email, presence:   true,
                     format:     { with: VALID_EMAIL_REGEX },
                     uniqueness: { case_sensitive: true }
-
-  after_create :do_setID
-
   def fullname
     return self.fname + " " + self.lname
   end
   
   private
-
-  def do_setID
-    newID = self.id
-    self.update_attributes(:user_id => newID)
-  end
 
   def self.find_for_database_authentication(conditions={})
     self.where("username = ?", conditions[:email]).limit(1).first ||
@@ -48,7 +40,13 @@ class User < ActiveRecord::Base
   end
 
   def assign_default_role
-    self.add_role(:student) if self.roles.blank?
+    if self.roles.blank?
+      if self.courses.empty?
+        self.add_role(:student)
+      else
+        self.add_role(:student, self.courses.first)
+      end
+    end
   end
 
 

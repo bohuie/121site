@@ -3,10 +3,8 @@ class StaticPagesController < ApplicationController
   def home
     if user_signed_in?
       @user = current_user
-      if @user.instructor
+      if @user.has_role(:instructor)
         @courses = Course.where(instructor_id: @user.id).order(year: :desc)
-      elsif @user.assistant
-        @courses = @user.courses
       else
         @courses = @user.courses
       end
