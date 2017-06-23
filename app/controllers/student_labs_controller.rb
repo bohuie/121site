@@ -35,7 +35,8 @@ class StudentLabsController < ApplicationController
 
   def check_course_lab_student_uniqueness
   	course = Course.find(params[:student_lab][:course_id])
-  	unless course.labs.includes(:student_labs).where("student_labs.user_id = ?", params[:student_lab][:user_id]).references(:student_labs).first.nil?
+  	user = User.find(params[:student_lab][:user_id])
+  	unless user.has_role?(:assistant, course) || course.labs.includes(:student_labs).where("student_labs.user_id = ?", params[:student_lab][:user_id]).references(:student_labs).first.nil?
   		flash[:warning] = "You can only register for one lab in each course."
   		redirect_to root_path
   	end

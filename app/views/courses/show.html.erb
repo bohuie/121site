@@ -81,7 +81,7 @@
 				<% end %>
 			</div>
 			<div class = "col-md-10">
-				<% if @user.assistant || @user.instructor %>
+				<% if @user.has_role?(:assistant, @course) || @user.has_role?(:instructor) %>
 					<h2 style="display:inline; "">Below you can view various stats based on topics and creations.  Total sums are in <p class="sum" style="display:inline;">green</p> and averages are in <p class="average" style="display:inline;">blue</p>.</h2>
 					<div class = "row">
 						<h3 style = "margin: 5px;"> Creation </h3>

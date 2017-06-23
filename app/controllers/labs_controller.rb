@@ -65,7 +65,7 @@ class LabsController < ApplicationController
 
   def check_student_belongs
     unless  current_user.has_role?(:instructor)
-      unless current_user.lab.exists?(params[:id])
+      unless current_user.labs.exists?(params[:id])
         flash[:warning] = "You must register for a lab before you can view it."
         redirect_to root_path
       end

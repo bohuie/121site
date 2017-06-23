@@ -8,7 +8,7 @@ class PracticesController < ApplicationController
 		@game = Game.new
 		@topics = []
 		@courses = Hash.new
-		if @user.has_role(:instructor)
+		if @user.has_role?(:instructor)
         	course = Course.where(instructor_id: @user.id).order(year: :desc)
      	else
         	course = @user.courses
