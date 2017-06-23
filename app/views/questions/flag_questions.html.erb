@@ -1,19 +1,17 @@
-<h3 style = "margin: 5px;"> Results </h3>
-<table data-toggle="table" data-sort-order="desc" data-classes="table" data-sortable="true">
-	<thead>
-    	<tr>
-      		<th data-sortable="true" class="col-md-2">Student Name</th>
-      		<th data-sortable="true" class="col-md-1">Number</th>
-      		<th data-sortable="true" class="col-md-1">Course</th>
-      		<th data-sortable="true" class="col-md-1">Lab</th>
-      		<th data-sortable="true" class="col-md-1">Topic</th>
-      		<th data-sortable="true" class="col-md-2">Date</th>
-      		<th data-sortable="true" class="col-md-1"></th>
-      		<th data-sortable="true" class="col-md-1">Flagged</th>
-      		<th data-sortable="true" class="col-md-2">Grade</th>
-      	</tr>
-	</thead>
-	<tbody>
-		<%= render partial: 'shared/flagquestions', collection: @questions %>
-	</tbody>
-</table>
+</br>
+</br>
+</br>
+<%= simple_form_for @result, url: display_flag_questions_path do |f| %>
+	<div class = "row">
+		<div class = "col-sm-4">
+      		<%= f.input :course_id, label: "Select a Course", collection: @courses, include_blank: false %>
+    	</div>
+    	<div class = "col-sm-4">
+      		<%= f.input :lab, label: "Select a lab section", collection: @labs %>
+    	</div>
+		<div class = "col-sm-4">
+      		<%= f.input :name, label: "Select a topic", collection: @topics %>
+    	</div>
+    </div>
+    <%= f.submit "Find Questions", class: "btn btn-medium btn-success" %>
+<% end %>

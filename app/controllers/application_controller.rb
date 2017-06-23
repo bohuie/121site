@@ -18,4 +18,12 @@ class ApplicationController < ActionController::Base
   def after_sign_out_path_for(resource_or_scope)
     root_path
   end
+
+  def check_instructor # Checks current user is an instructor
+    if !current_user.has_role? :instructor
+      flash[:danger] = 'Instructors only.'
+      redirect_to root_path
+    end
+  end
+  
 end

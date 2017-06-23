@@ -1,18 +1,15 @@
 class SearchController < ApplicationController
 
 	before_action :authenticate_user!
+	before_action :instructor_or_assistant, only: [:display]
 
 	def find_questions
 		@user = current_user
 		@result = Result.new
-		@topic = Topic.all
-		@users = User.all
     	@courses = Hash.new
-    	if @user.instructor
+    	if @user.has_role?(:instructor)
         	course = Course.where(instructor_id: @user.id).order(year: :desc)
-      	elsif @user.assistant
-        	course = @user.courses
-      	else
+		else
         	course = @user.courses
       	end
       	course.each  do |course|
@@ -20,12 +17,6 @@ class SearchController < ApplicationController
       	end
       	@topics = course.first.topics
       	@labs = course.first.labs
-		@lab = Array.new
-		@users.each do |u|
-			if !@lab.include?(u.lab)
-				@lab.push(u.lab)
-			end
-		end
 	end
 
 	def display
@@ -58,7 +49,26 @@ class SearchController < ApplicationController
   	end
 
 	private
-		def result_params
-			params.require(:result).permit(:name, :lab, :course_id)
+	def result_params
+		params.require(:result).permit(:name, :lab, :course_id)
+	end
+
+
+	def instructor_or_assistant
+		unless current_user.has_role?(:instructor)
+			if params[:result][:course_id].nil?
+				flash[:warning] = "Your query could not be handled.  Please contact your instructor or try again later."
+				redirect_to root_path and return
+			end
+			course = Course.find(params[:result][:course_id])
+			if course.nil?
+				flash[:warning] = "Your course-query could not be handled.  Please contact your instructor or try again later."
+				redirect_to root_path and return
+			end
+			unless current_user.has_role?(:assistant, course)
+				flash[:warning] = "You must be an instructor or TA to do this."
+				redirect_to root_path and return
+			end
 		end
+	end
 end

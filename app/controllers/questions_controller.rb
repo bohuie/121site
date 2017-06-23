@@ -1,6 +1,7 @@
 class QuestionsController < ApplicationController
 
   before_action :authenticate_user!
+  before_action :check_instructor, only: [:flag_questions, :display_flag_questions]
 
   def correct
     @user = current_user
@@ -67,17 +68,27 @@ class QuestionsController < ApplicationController
 
   def flag_questions
     @user = current_user
-    $name = false
-    $number = false
-    $topic = false
-    $lab = false
-    $time = false
-    $flagged = false
-    $grade = false
-    if @user.instructor
-      @questions = Question.where(submitted: true).paginate(page: params[:page])  
+    @courses = Hash.new
+    course = Course.where(instructor_id: @user.id).order(year: :desc)
+    course.each  do |course|
+      @courses[course.title + " - " + course.year] = course.id
+    end
+    @topics = course.first.topics
+    @labs = course.first.labs
+    @result = Result.new
+  end
+
+  def display_flag_questions
+    @user = current_user
+    @result = Result.new(result_params)
+    if (@result.name.eql?("") && @result.lab.eql?(""))
+      @questions = Question.where(course_created_in: @result.course, submitted: true).order(user_id: :desc)
+    elsif @result.name.eql?("")
+      @questions = Question.where(:lab => @result.lab, course_created_in: @result.course, submitted: true).order(user_id: :desc)
+    elsif @result.lab.eql?("")
+      @questions = Question.where(:topic_id => @result.name, course_created_in: @result.course, submitted: true).order(user_id: :desc)
     else
-      @questions = nil
+      @questions = Question.where(:topic_id => @result.name, :lab => @result.lab, course_created_in: @result.course, submitted: true).order(user_id: :desc)
     end
   end
 
@@ -338,21 +349,24 @@ class QuestionsController < ApplicationController
     end
   end
 
-   private
+  private
     
-    def question_params
-      params.require(:question).permit(:qtext, :a1text, :a2text, :a3text, :a4text, :a5text, :topic_id, :submitted)
-    end
+  def result_params
+    params.require(:result).permit(:name, :lab, :course_id)
+  end
+  def question_params
+    params.require(:question).permit(:qtext, :a1text, :a2text, :a3text, :a4text, :a5text, :topic_id, :submitted)
+  end
 
-    def answer_params
-      params.require(:question).permit(:answer)
-    end
+  def answer_params
+    params.require(:question).permit(:answer)
+  end
 
-    def id_params
-      params.require(:question).permit(:question_id)
-    end
+  def id_params
+    params.require(:question).permit(:question_id)
+  end
 
-    def grade_params
-      params.require(:question).permit(:grade)
-    end
+  def grade_params
+    params.require(:question).permit(:grade)
+  end
 end

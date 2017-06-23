@@ -56,13 +56,6 @@ class LabsController < ApplicationController
     params.require(:lab).permit(:name, :course_id)
   end
 
-  def check_instructor # Checks current user is an instructor
-    if !current_user.has_role? :instructor
-      flash[:danger] = 'Instructors only.'
-      redirect_to root_path
-    end
-  end
-
   def check_student_belongs
     unless  current_user.has_role?(:instructor)
       unless current_user.labs.exists?(params[:id])

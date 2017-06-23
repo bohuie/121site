@@ -12,6 +12,7 @@ get 'questions/update_question_topics', as: 'update_question_topics'
 get 'search/update_search_topics', as: 'update_search_topics'
 get 'search/update_search_labs', as: 'update_search_labs'
 post 'search/display', as: :display_search
+post 'questions/display' => 'questions#display_flag_questions', as: :display_flag_questions
 
 get 'topics/update_course_topics', as: 'update_course_topics'
 post 'course_topics/create' => 'course_topics#create', as: :create_course_topic
