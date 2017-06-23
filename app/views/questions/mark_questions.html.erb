@@ -1,17 +1,29 @@
 <h3> Mark Questions </h3>
 <p>From here you can select a course (required), lab (optional), and topic (optional), and see the questions related to those selections.  From there, you can mark questions for students.</p>
 </br>
-<%= simple_form_for @result, url: display_mark_questions_path do |f| %>
+<%= simple_form_for @result, url: set_mark_questions_path do |f| %>
 	<div class = "row">
 		<div class = "col-sm-4">
-      		<%= f.input :course_id, label: "Select a Course", collection: @courses, include_blank: false %>
-    	</div>
-    	<div class = "col-sm-4">
-      		<%= f.input :lab, label: "Select a lab section", collection: @labs %>
-    	</div>
-		<div class = "col-sm-4">
-      		<%= f.input :name, label: "Select a topic", collection: @topics %>
-    	</div>
+      <% if defined?(session[:mark_questions_course_id]) && !session[:mark_questions_course_id].blank? %>
+      	<%= f.input :course_id, label: "Select a Course", collection: @courses, include_blank: false, selected: session[:mark_questions_course_id] %>
+      <% else %>
+        <%= f.input :course_id, label: "Select a Course", collection: @courses, include_blank: false %>
+      <% end %>
     </div>
-    <%= f.submit "Find Questions", class: "btn btn-medium btn-success" %>
+  	<div class = "col-sm-4">
+      <% if defined?(session[:mark_questions_lab]) && !session[:mark_questions_lab].blank? %>
+    		<%= f.input :lab, label: "Select a lab section", collection: @labs, selected: session[:mark_questions_lab], include_blank: true %>
+      <% else %>
+        <%= f.input :lab, label: "Select a lab section", collection: @labs %>
+      <% end %>
+    </div>
+		<div class = "col-sm-4">
+      <% if defined?(session[:mark_questions_topic]) && !session[:mark_questions_topic].blank? %>
+    		<%= f.input :name, label: "Select a topic", collection: @topics, selected: session[:mark_questions_topic], include_blank: true %>
+      <% else %>
+        <%= f.input :name, label: "Select a topic", collection: @topics %>
+      <% end %>
+    </div>
+  </div>
+  <%= f.submit "Find Questions", class: "btn btn-medium btn-success" %>
 <% end %>

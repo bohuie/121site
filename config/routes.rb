@@ -13,9 +13,11 @@ get 'questions/update_search_topics', as: 'update_search_topics'
 get 'questions/update_search_labs', as: 'update_search_labs'
 get 'questions/update_question_topics', as: 'update_question_topics'
 get 'questions/flag_questions' => 'questions#flag_questions', as: :flag_questions
-post 'questions/display_flag_questions' => 'questions#display_flag_questions', as: :display_flag_questions
+post 'questions/set_flag_questions' => 'questions#set_flag_questions', as: :set_flag_questions
+get 'questions/display_flag_questions' => 'questions#display_flag_questions', as: :display_flag_questions
 get 'questions/mark_questions' => 'questions#mark_questions', as: :mark_questions
-post 'questions/display_mark_questions' => 'questions#display_mark_questions', as: :display_mark_questions
+post 'questions/set_mark_questions' => 'questions#set_mark_questions', as: :set_mark_questions
+get 'questions/display_mark_questions' => 'questions#display_mark_questions', as: :display_mark_questions
 
 get 'topics/update_course_topics', as: 'update_course_topics'
 post 'course_topics/create' => 'course_topics#create', as: :create_course_topic
