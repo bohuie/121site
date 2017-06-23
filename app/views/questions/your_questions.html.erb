@@ -1,22 +1,23 @@
 <% if user_signed_in? %>
 	</br>
-	</br>
-	</br>
-    <div class="row", style = "padding: 5px;">
-  		<%= link_to'Create a Question', '/questions/new', class: "btn btn-medium btn-success"  %>  
-   	</div>
-   	<div class="row", style = "padding: 5px; border-bottom: 3px solid black;" >
-   		<div class = "col-md-5">
-   			<h3 style = "margin: 5px;"> Your Questions </h3>
-   		</div>
-      <div class ="col-md-1">
-      <h3 style ="margin: 5px;"> Course </h3>
-      </div>
-   		<div class = "col-md-1">
-   			<h3 style = "margin: 5px;"> Topic </h3>
-   		</div> 
-   	</div>
-	<% if @questions.any? %>
-		<%= render partial: 'shared/questions', collection: @questions %>
-	<% end %>
+  <div class="row", style = "padding: 15px;">
+  	<%= link_to'Create a Question', '/questions/new', class: "btn btn-medium btn-success"  %>  
+  </div>
+  <table data-toggle="table" data-sort-order="desc" data-classes="table" data-sortable="true">
+    <thead>
+      <tr>
+        <th data-sortable="true" class="col-md-5">Question</th>
+        <th data-sortable="true" class="col-md-2">Course(s)</th>
+        <th data-sortable="true" class="col-md-1">Topic</th>
+        <th data-sortable="true" class="col-md-1">View</th>
+        <th data-sortable="true" class="col-md-3">Status</th>
+        <th data-sortable="true" class="col-md-1">Flagged</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @questions.any? %>
+		    <%= render partial: 'shared/questions', collection: @questions %>
+      <% end %>
+    </tbody>
+  </table>
 <% end %>

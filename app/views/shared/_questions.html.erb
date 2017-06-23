@@ -1,51 +1,53 @@
 <% if questions.visible %>
-	<div class = "row" style = "border-bottom: 1px solid black; padding: 5px;">
-		<div class = "col-md-5">
+	<tr>
+		<td>
 			<%=questions.qtext.html_safe%>
-		</div>
-		<div class = "col-md-1">
+		</td>
+		<td>
 			<% questions.courses.each do |c| %>
 			<p><%= c.title %> - <%= c.year %></p>
 			<% end %>
-		</div>
-		<div class = "col-md-1">
+		</td>
+		<td>
 			<%= questions.topic.name%>
-		</div>
-		<div class = "col-md-1">
+		</td>
+		<td>
 			<%= link_to "View", {controller: "questions", action: "view", id: questions.id}, class: "btn btn-mdall btn-info" %>
-		</div>
+		</td>
 		<%if !questions.submitted %>
-			<div class = "col-md-1">
+			<td>
 				<%= link_to "Submit", {controller: "questions", action: "submit", id: questions.id}, class: "btn btn-mdall btn-success" %>
-			</div>
-			<div class = "col-md-1">
+			</td>
+			<td>
 				<%= link_to "Delete", {controller: "questions", action: "hide", id: questions.id}, class: "btn btn-mdall btn-danger" %>
-			</div>
-			<div class = "col-md-1">
+			</td>
+			<td>
 				<%= link_to "Edit", {controller: "questions", action: "edit", id: questions.id}, class: "btn btn-mdall btn-primary" %>
-			</div>
+			</td>
 		<% else %>
 			<% if !(questions.grade == "Review Pending" || questions.grade == "Correct" || questions.grade == "Incorrect") %>
-				<div class = "col-md-1">
+				<td>
 					<%= link_to "Edit", {controller: "questions", action: "edit", id: questions.id}, class: "btn btn-mdall btn-primary" %>
-				</div>
-				<div class = "col-md-1">
+				</td>
+				<td>
 					<%= link_to "Resubmit", {controller: "questions", action: "submit", id: questions.id}, class: "btn btn-mdall btn-success" %>
-				</div>
-				<div class = "col-md-1">
+				</td>
+				<td>
 					<%=questions.grade.html_safe %>
-				</div>
+				</td>
 			<% else %>
-				<div class = "col-md-3">
+				<td>
 					<%=questions.grade.html_safe %>
-				</div>
+				</td>
 			<% end %>
 		<% end %>
-		<div class = "col-md-1">
+		<td>
 			<% if questions.exam %>
-				Question chosen for exams
+				Yes
+			<% else %>
+				No
 			<% end %>
-		</div>
-	</div>
+		</td>
+	</td>
 <% end %>
 
