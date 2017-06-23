@@ -63,10 +63,15 @@
 								<% end %>
 								<li><%= link_to 'Add New Lab', new_lab_path(course) %></li>
 							<% else %>
-								<% if @lab.nil? %>
+								<% if @labs.nil? %>
 									<li><%= link_to 'Register for a Lab', new_student_lab_path(@course) %></li>
 								<% else %>
-									<li><%= link_to @lab.name, show_lab_path(@lab) %></li>
+									<% @labs.each do |lab| %>
+										<li><%= link_to lab.name, show_lab_path(lab) %></li>
+									<% end %>
+									<% if @user.has_role?(:assistant, @course) %>
+										<li><%= link_to 'Add Another Lab', new_student_lab_path(@course) %></li>
+									<% end %>
 								<% end %>
 							<% end %>
 						</ul>

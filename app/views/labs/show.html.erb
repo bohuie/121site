@@ -66,6 +66,15 @@
 									<% end %>
 								<% end %>
 								<li><%= link_to 'Add New Lab', new_lab_path(course) %></li>
+							<% elsif @user.has_role?(:assistant, @lab.course) %>
+								<% @user.labs.where(course_id: @lab.course.id).each do |lab| %>
+									<% if lab.id == params[:id].to_i %>
+										<li><b><%= link_to lab.name, show_lab_path(lab) %></b></li>
+									<% else %>
+										<li><%= link_to lab.name, show_lab_path(lab) %></li>
+									<% end %>
+								<% end %>
+								<li><%= link_to 'Add Another Lab', new_student_lab_path(@lab.course) %></li>
 							<% else %>
 								<li><b><%= link_to @lab.name, show_lab_path(@lab) %></b></li>
 							<% end %>

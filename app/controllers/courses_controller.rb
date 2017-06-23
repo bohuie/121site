@@ -30,10 +30,10 @@ class CoursesController < ApplicationController
         @courses = Course.where(instructor_id: @user.id).order(year: :desc)
       elsif @user.assistant
       	@courses = @user.courses
-        @lab = @course.labs.includes(:student_labs).where("student_labs.user_id = ?",@user.id).references(:student_labs).first
+        @labs = @course.labs.includes(:student_labs).where("student_labs.user_id = ?",@user.id).references(:student_labs)
       else
         @courses = @user.courses
-        @lab = @course.labs.includes(:student_labs).where("student_labs.user_id = ?",@user.id).references(:student_labs).first
+        @labs = @course.labs.includes(:student_labs).where("student_labs.user_id = ?",@user.id).references(:student_labs)
       end
       @games = Game.where(:user_id => @user.user_id, course_id: params[:id])
       @count = @games.count
