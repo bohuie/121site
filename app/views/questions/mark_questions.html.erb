@@ -1,7 +1,7 @@
 <h3> Mark Questions </h3>
 <p>From here you can select a course (required), lab (optional), and topic (optional), and see the questions related to those selections.  From there, you can mark questions for students.</p>
 </br>
-<%= simple_form_for @result, url: display_search_path do |f| %>
+<%= simple_form_for @result, url: display_mark_questions_path do |f| %>
 	<div class = "row">
 		<div class = "col-sm-4">
       		<%= f.input :course_id, label: "Select a Course", collection: @courses, include_blank: false %>

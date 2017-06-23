@@ -2,6 +2,7 @@ class QuestionsController < ApplicationController
 
   before_action :authenticate_user!
   before_action :check_instructor, only: [:flag_questions, :display_flag_questions]
+  before_action :instructor_or_assistant, only: [:display_mark_questions]
 
   def correct
     @user = current_user
@@ -92,53 +93,33 @@ class QuestionsController < ApplicationController
     end
   end
 
-  def flag
+  def mark_questions
     @user = current_user
-    if @user.instructor
-      @question = Question.find_by(id: params[:id])
-      @question.update_attribute(:exam, true)
-    end
-    if $name
-      redirect_to '/flagname'
-    elsif $number
-      redirect_to '/flagnumber'
-    elsif $topic
-      redirect_to '/flagtopic'
-    elsif $lab
-      redirect_to '/flaglab'
-    elsif $flagged
-      redirect_to '/flagexam'
-    elsif $time
-      redirect_to '/flagtime'
-    elsif $grade
-      redirect_to '/flaggrade'
+    @result = Result.new
+    @courses = Hash.new
+    if @user.has_role?(:instructor)
+      course = Course.where(instructor_id: @user.id).order(year: :desc)
     else
-      redirect_to '/flag_questions'
+      course = @user.courses
     end
+    course.each  do |course|
+      @courses[course.title + " - " + course.year] = course.id
+    end
+    @topics = course.first.topics
+    @labs = course.first.labs
   end
 
-   def unflag
+  def display_mark_questions
     @user = current_user
-    if @user.instructor
-      @question = Question.find_by(id: params[:id])
-      @question.update_attribute(:exam, false)
-    end
-    if $name
-      redirect_to '/flagname'
-    elsif $number
-      redirect_to '/flagnumber'
-    elsif $topic
-      redirect_to '/flagtopic'
-    elsif $lab
-      redirect_to '/flaglab'
-    elsif $flagged
-      redirect_to '/flagexam'
-    elsif $time
-      redirect_to '/flagtime'
-    elsif $grade
-      redirect_to '/flaggrade'
+    @result = Result.new(result_params)
+    if (@result.name.eql?("") && @result.lab.eql?(""))
+      @questions = Question.where(course_created_in: @result.course).order(user_id: :desc)
+    elsif @result.name.eql?("")
+      @questions = Question.where(:lab => @result.lab, course_created_in: @result.course).order(user_id: :desc)
+    elsif @result.lab.eql?("")
+      @questions = Question.where(:topic_id => @result.name, course_created_in: @result.course).order(user_id: :desc)
     else
-      redirect_to '/flag_questions'
+      @questions = Question.where(:topic_id => @result.name, :lab => @result.lab, course_created_in: @result.course).order(user_id: :desc)
     end
   end
 
@@ -251,101 +232,31 @@ class QuestionsController < ApplicationController
 	  end
   end
 
-  def name
-    @user = current_user
-    @questions = Question.all.order(lname: :asc, fname: :asc).paginate(page: params[:page])
-    $name = false
-    $number = false
-    $topic = false
-    $lab = false
-    $time = false
-    $flagged = false
-    $grade = false
-    $name = true
-  end
-
-  def number
-    @user = current_user
-    @questions = Question.all.order(studentnumber: :asc).paginate(page: params[:page])
-    $name = false
-    $number = false
-    $topic = false
-    $lab = false
-    $time = false
-    $flagged = false
-    $grade = false
-    $number = true
-  end
-
-  def lab
-    @user = current_user
-    @questions = Question.all.order(lab: :desc).paginate(page: params[:page])
-    $name = false
-    $number = false
-    $topic = false
-    $lab = false
-    $time = false
-    $flagged = false
-    $grade = false
-    $lab = true
-  end
-  
-  def topic
-    @user = current_user
-    @questions = Question.all.order(topic_id: :desc).paginate(page: params[:page])
-    $name = false
-    $number = false
-    $topic = false
-    $lab = false
-    $time = false
-    $flagged = false
-    $grade = false
-    $topic = true
-  end
-
-  def time
-    @user = current_user
-    @questions = Question.all.order(date_submitted: :desc).paginate(page: params[:page])
-    $name = false
-    $number = false
-    $topic = false
-    $lab = false
-    $time = false
-    $flagged = false
-    $grade = false
-    $time = true
-  end
-
-  def flagged
-    @user = current_user
-    @questions = Question.all.order(exam: :desc).paginate(page: params[:page])
-    $name = false
-    $number = false
-    $topic = false
-    $lab = false
-    $time = false
-    $flagged = false
-    $grade = false
-    $flagged = true
-  end
-
-  def grade
-    @user = current_user
-    @questions = Question.all.order(grade: :asc).paginate(page: params[:page])
-    $name = false
-    $number = false
-    $topic = false
-    $lab = false
-    $time = false
-    $flagged = false
-    $grade = false
-    $grade = true
-  end
-
   def update_question_topics
     @topics = Course.find(params[:course_id]).topics
     respond_to do |format|
         format.js
+    end
+  end
+
+  def update_question_labs
+    @labs = Course.find(params[:course_id]).labs
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def update_search_topics
+    @topics = Course.find(params[:course_id]).topics
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def update_search_labs
+    @labs = Course.find(params[:course_id]).labs
+    respond_to do |format|
+      format.js
     end
   end
 
@@ -354,6 +265,7 @@ class QuestionsController < ApplicationController
   def result_params
     params.require(:result).permit(:name, :lab, :course_id)
   end
+
   def question_params
     params.require(:question).permit(:qtext, :a1text, :a2text, :a3text, :a4text, :a5text, :topic_id, :submitted)
   end
@@ -368,5 +280,23 @@ class QuestionsController < ApplicationController
 
   def grade_params
     params.require(:question).permit(:grade)
+  end
+
+  def instructor_or_assistant
+    unless current_user.has_role?(:instructor)
+      if params[:result][:course_id].nil?
+        flash[:warning] = "Your query could not be handled.  Please contact your instructor or try again later."
+        redirect_to root_path and return
+      end
+      course = Course.find(params[:result][:course_id])
+      if course.nil?
+        flash[:warning] = "Your course-query could not be handled.  Please contact your instructor or try again later."
+        redirect_to root_path and return
+      end
+      unless current_user.has_role?(:assistant, course)
+        flash[:warning] = "You must be an instructor or TA to do this."
+        redirect_to root_path and return
+      end
+    end
   end
 end

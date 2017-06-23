@@ -6,13 +6,16 @@ First_Website::Application.routes.draw do
 devise_for :users, controllers: { registrations: 'users/registrations' }
 resource :questions
 resource :topics
-get 'practices/update_practice_topics', as: 'update_practice_topics'
-get 'questions/update_question_topics', as: 'update_question_topics'
 
-get 'search/update_search_topics', as: 'update_search_topics'
-get 'search/update_search_labs', as: 'update_search_labs'
-post 'search/display', as: :display_search
-post 'questions/display' => 'questions#display_flag_questions', as: :display_flag_questions
+get 'practices/update_practice_topics', as: 'update_practice_topics'
+
+get 'questions/update_search_topics', as: 'update_search_topics'
+get 'questions/update_search_labs', as: 'update_search_labs'
+get 'questions/update_question_topics', as: 'update_question_topics'
+get 'questions/flag_questions' => 'questions#flag_questions', as: :flag_questions
+post 'questions/display_flag_questions' => 'questions#display_flag_questions', as: :display_flag_questions
+get 'questions/mark_questions' => 'questions#mark_questions', as: :mark_questions
+post 'questions/display_mark_questions' => 'questions#display_mark_questions', as: :display_mark_questions
 
 get 'topics/update_course_topics', as: 'update_course_topics'
 post 'course_topics/create' => 'course_topics#create', as: :create_course_topic
@@ -27,8 +30,6 @@ delete 'courses/:id/remove_ta/:student' => 'courses#remove_ta', as: :remove_ta
 root to: 'static_pages#home'
 
 match '/your_questions', to: 'questions#your_questions', via: 'get'
-match '/flag_questions', to: 'questions#flag_questions', via: 'get'
-match '/find_questions', to: 'search#find_questions', via: 'get'
 match '/flag', to: 'questions#flag', via: 'get'
 match '/unflag', to: 'questions#unflag', via: 'get'
 match '/submitted', to: 'questions#submit', via: 'get'
