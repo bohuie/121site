@@ -13,10 +13,10 @@
 //= require jquery
 //= require jquery-ui
 //= require jquery_ujs
+//= require bootstrap-table
 //= require twitter/bootstrap
 //= require autocomplete-rails
 //= require bootstrap
-//= require turbolinks
 //= require ckeditor/init
 //= require_tree .
 
