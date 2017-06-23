@@ -1,41 +1,19 @@
 <h3 style = "margin: 5px;"> Results </h3>
-<div class="row", style = "border-bottom: 3px solid black;">
-	<div class = "col-md-2">
-		<p style = "font-size: 18px; font-weight: bold;">
-			<%= link_to "Student Name", :controller => "search", :action => "name", :topic_id => @result.name, :lab => @result.lab%>
-		</p>
-	</div>
-	<div class = "col-md-1">
-		<p style = "font-size: 18px; font-weight: bold;">
-			<%= link_to "Number", :controller => "search", :action => "number", :topic_id => @result.name, :lab => @result.lab%>
-		</p>
-	</div>
-	<div class = "col-md-1">
-		<p style = "font-size: 18px; font-weight: bold;">
-			Course
-		</p>
-	</div>
-	<div class = "col-md-1">
-		<p style = "font-size: 18px; font-weight: bold;">
-			<%= link_to "Lab", :controller => "search", :action => "lab", :topic_id => @result.name, :lab => @result.lab%>
-		</p>
-	</div>
-	<div class = "col-md-1">
-		<p style = "font-size: 18px; font-weight: bold;">
-			<%= link_to "Topic", :controller => "search", :action => "topic", :topic_id => @result.name, :lab => @result.lab%>
-		</p>
-	</div>
-	<div class = "col-md-2">
-		<p style = "font-size: 18px; font-weight: bold;">
-			<%= link_to "Submitted At", :controller => "search", :action => "time", :topic_id => @result.name, :lab => @result.lab%>
-		</p>
-	</div>
-	<div class = "col-md-2 col-md-offset-2">
-		<p style = "font-size: 18px; font-weight: bold;">
-			<%= link_to "Current Mark", :controller => "search", :action => "grade", :topic_id => @result.name, :lab => @result.lab%>
-		</p>
-	</div>
-</div>
-<% if @questions.any? %>
-	<%= render partial: 'shared/markquestions', collection: @questions %>
-<% end %>
+<table data-toggle="table" data-sort-order="desc" data-classes="table" data-sortable="true">
+	<thead>
+    	<tr>
+      		<th data-sortable="true" class="col-md-2">Student Name</th>
+      		<th data-sortable="true" class="col-md-1">Number</th>
+      		<th data-sortable="true" class="col-md-1">Course</th>
+      		<th data-sortable="true" class="col-md-1">Lab</th>
+      		<th data-sortable="true" class="col-md-1">Topic</th>
+      		<th data-sortable="true" class="col-md-2">Submitted Date</th>
+      		<th data-sortable="true" class="col-md-1">View/Mark</th>
+      		<th data-sortable="true" class="col-md-1">Remark</th>
+      		<th data-sortable="true" class="col-md-2">Current Mark</th>
+      	</tr>
+	</thead>
+	<tbody>
+		<%= render partial: 'shared/markquestions', collection: @questions %>
+	</tbody>
+</table>

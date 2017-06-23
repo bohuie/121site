@@ -4,8 +4,8 @@ class QuestionsController < ApplicationController
 
   def correct
     @user = current_user
-    @question = Question.find(params[:id])
-    if @user.has_role(:instructor) || @user.has_role(:assistant, @question.course_created_in)
+    @question = Question.find(params[:question][:id])
+    if @user.has_role?(:instructor) || @user.has_role?(:assistant, @question.course_created_in)
       @question.update_attribute(:grade, "Correct")
       @questions = Question.where(:topic_id => @question.topic_id, :lab => @question.lab)
       @result = Result.create(:name => @question.topic_id, :lab => @question.lab)
@@ -16,23 +16,23 @@ class QuestionsController < ApplicationController
 
   def view
     @user = current_user
-    @question = Question.find_by(id: params[:id])
+    @question = Question.find(params[:id])
   end
 
   def mark
     @user = current_user
-    @question = Question.find_by(id: params[:id])
+    @question = Question.find(params[:id])
   end
 
   def flagview
     @user = current_user
-    @question = Question.find_by(id: params[:id])
+    @question = Question.find(params[:id])
   end
 
   def incorrect
     @user = current_user
-    @question = Question.find(params[:id])
-    if @user.has_role(:instructor) || @user.has_role(:assistant, @question.course_created_in)
+    @question = Question.find(params[:question][:id])
+    if @user.has_role?(:instructor) || @user.has_role?(:assistant, @question.course_created_in)
       @question.update_attribute(:grade, "Incorrect")
       @questions = Question.where(:topic_id => @question.topic_id, :lab => @question.lab)
       @result = Result.create(:name => @question.topic_id, :lab => @question.lab)
@@ -48,8 +48,8 @@ class QuestionsController < ApplicationController
 
   def comment
     @user = current_user
-      @question = Question.find(params[:id])
-    if @user.has_role(:instructor) || @user.has_role(:assistant, @question.course_created_in)
+      @question = Question.find(params[:question][:id])
+    if @user.has_role?(:instructor) || @user.has_role?(:assistant, @question.course_created_in)
       @question.update_attributes(grade_params)
       @question.grade = "Marker comment: " + @question.grade.to_s
       @question.save

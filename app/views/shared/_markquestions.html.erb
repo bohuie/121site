@@ -1,83 +1,81 @@
-<body>
+<tr>
 	<% if markquestions.submitted %>
 		<% if markquestions.grade == "Review Pending" %>
-			<div class = "row" style = "border-bottom: 1px solid black; padding: 5px;">
-				<div class = "col-md-2">
+				<td class = "col-md-2">
 					<p><%= markquestions.user.lname %>, <%= markquestions.user.fname %></p>
-				</div>
-				<div class = "col-md-1">
+				</td>
+				<td class = "col-md-1">
 					<% if !markquestions.user.assistant && !markquestions.user.instructor %>
 						<p><%= markquestions.user.studentnumber %></p>
 					<% end %>
-				</div>
-				<div class = "col-md-1">
+				</td>
+				<td class = "col-md-1">
 					<% if markquestions.course_created_in %>
 						<%= markquestions.course_created_in.title %> - <%=markquestions.course_created_in.year %>
 					<% else %>
 						N/A
 					<% end %>
-				</div>
-				<div class = "col-md-1">
+				</td>
+				<td class = "col-md-1">
 					<%= markquestions.lab ? markquestions.lab.name : "N/A" %>
-				</div>
-				<div class = "col-md-1">
+				</td>
+				<td class = "col-md-1">
 					<%= Topic.find_by(:topic_id => markquestions.topic_id).name %>
-				</div>
-				<div class = "col-md-2">
+				</td>
+				<td class = "col-md-2">
 					<% if markquestions.date_submitted.nil? %>
 						<% markquestions.date_submitted = (DateTime.now.to_time - 8.hours).to_datetime %>
 						<% markquestions.save %>
 					<% end %>
 					<%= markquestions.date_submitted.strftime("%a %b %-d at %I:%M%p") %>
-				</div>
-				<div class = "col-md-1">
+				</td>
+				<td class = "col-md-1">
 					<%= link_to "Mark", {controller: "questions", action: "mark", id: markquestions.id}, class: "btn btn-mdall btn-success" %>
-				</div>
-			</div>
+				</td>
+				<td class="col-md-1"></td>
+				<td class="col-md-1"></td>
 		<% else %>
-			<div class = "row" style = "border-bottom: 1px solid black; padding: 5px;">
-				<div class = "col-md-2">
+				<td class = "col-md-2">
 					<p><%= markquestions.user.lname %>, <%= markquestions.user.fname %></p>
-				</div>
-				<div class = "col-md-1">
+				</td>
+				<td class = "col-md-1">
 					<% if !markquestions.user.assistant && !markquestions.user.instructor %>
 						<p><%= markquestions.user.studentnumber %></p>
 					<% end %>
-				</div>
-				<div class = "col-md-1">
+				</td>
+				<td class = "col-md-1">
 					<% if markquestions.course_created_in %>
 						<%= markquestions.course_created_in.title %> - <%=markquestions.course_created_in.year %>
 					<% else %>
 						N/A
 					<% end %>
-				</div>
-				<div class = "col-md-1">
+				</td>
+				<td class = "col-md-1">
 					<%= markquestions.lab ? markquestions.lab.name : "N/A" %>
-				</div>
-				<div class = "col-md-1">
+				</td>
+				<td class = "col-md-1">
 					<%= Topic.find_by(:topic_id => markquestions.topic_id).name %>
-				</div>
-				<div class = "col-md-2">
+				</td>
+				<td class = "col-md-2">
 					<% if markquestions.date_submitted.nil? %>
 						<% markquestions.date_submitted = (DateTime.now.to_time - 8.hours).to_datetime %>
 						<% markquestions.save %>
 					<% end %>
 					<%= markquestions.date_submitted.strftime("%a %b %-d at %I:%M%p") %>
-				</div>
-				<div class = "col-md-1">
+				</td>
+				<td class = "col-md-1">
 					<%= link_to "View", {controller: "questions", action: "view", id: markquestions.id}, class: "btn btn-mdall btn-info" %>
-				</div>
-				<div class = "col-md-1">
+				</td>
+				<td class = "col-md-1">
 					<%= link_to "Remark", {controller: "questions", action: "mark", id: markquestions.id}, class: "btn btn-mdall btn-warning" %>
-				</div>
-				<div class = "col-md-2">
+				</td>
+				<td class = "col-md-2">
 					<% if !(markquestions.grade == "Correct" || markquestions.grade == "Incorrect") %>
 						<%=markquestions.grade.html_safe %>
 					<% else %>
 						<%=markquestions.grade.html_safe %>
 					<% end %>
-				</div>
-			</div>
+				</td>
 		<% end %>
 	<% end %>
-</body>
+</tr>
