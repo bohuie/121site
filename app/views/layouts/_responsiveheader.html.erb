@@ -17,14 +17,23 @@
     </ul>
     <ul class="nav pull-right">
       <% if user_signed_in? %>
-        <% if @user.instructor %>
+        <% if @user.has_role?(:instructor) %>
           <li ><%= link_to "Flag Questions", '/flag_questions', id: "brand"%></li>
           <li><%= link_to "Mark Questions", '/find_questions', id: "brand"%></li>
           <li><%= link_to "Topics", '/topics', id: "brand"%></li>
         <% end %>
-        <% if @user.assistant %>
-          <li><%= link_to "Mark Questions", '/find_questions', id: "brand"%></li>
-          <li><%= link_to "Topics", '/topics', id: "brand"%></li>
+        <% if defined?(@course) || defined?(@lab) %>
+          <% if defined?(@course) %>
+            <% if @user.has_role?(:assistant, @course) %>
+              <li><%= link_to "Mark Questions", '/find_questions', id: "brand"%></li>
+              <li><%= link_to "Topics", '/topics', id: "brand"%></li>
+            <% end %>
+          <% else %>
+            <% if @user.has_role?(:assistant, @lab.course) %>
+              <li><%= link_to "Mark Questions", '/find_questions', id: "brand"%></li>
+              <li><%= link_to "Topics", '/topics', id: "brand"%></li>
+            <% end %>
+          <% end %>
         <% end %>
         <li><%= link_to "Practice", '/practices', id: "brand"%></li>
         <li><%= link_to "Your Questions", '/your_questions', id: "brand"%></li>
