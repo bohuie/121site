@@ -5,12 +5,14 @@ First_Website::Application.routes.draw do
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
 devise_for :users, controllers: { registrations: 'users/registrations' }
 resource :questions
-resource :search, :controller => :search
 resource :topics
 get 'practices/update_practice_topics', as: 'update_practice_topics'
 get 'questions/update_question_topics', as: 'update_question_topics'
+
 get 'search/update_search_topics', as: 'update_search_topics'
 get 'search/update_search_labs', as: 'update_search_labs'
+post 'search/display', as: :display_search
+
 get 'topics/update_course_topics', as: 'update_course_topics'
 post 'course_topics/create' => 'course_topics#create', as: :create_course_topic
 delete 'course_topics/delete/:id' => 'course_topics#delete', as: :delete_course_topic
@@ -30,7 +32,6 @@ match '/correct', to: 'questions#correct', via: 'get'
 match '/incorrect', to: 'questions#incorrect', via: 'get'
 match '/changes', to: 'questions#changes', via: 'get'
 match '/comment', to: 'questions#comment', via: 'patch'
-match '/search', to: 'search#create', via: 'get'
 match '/remove', to: 'topics#remove', via: 'get'
 match '/study/', to: 'practices#use', via: 'get'
 match '/answer', to: 'practices#submit', via: 'post'
@@ -40,13 +41,6 @@ match '/mark', to: 'questions#mark', via:'get'
 match '/terms', to: 'static_pages#terms', via:'get'
 match '/stats', to: 'static_pages#stats', via:'get'
 match '/view', to: 'static_pages#view', via:'post'
-match '/name', to: 'search#name', via: 'get'
-match '/name', to: 'search#name', via: 'get'
-match '/number', to: 'search#number', via: 'get'
-match '/lab', to: 'search#lab', via: 'get'
-match '/topic', to: 'search#topic', via: 'get'
-match '/time', to: 'search#time', via: 'get'
-match '/grade', to: 'search#grade', via: 'get'
 match '/flagname', to: 'questions#name', via: 'get'
 match '/flagnumber', to: 'questions#number', via: 'get'
 match '/flaglab', to: 'questions#lab', via: 'get'

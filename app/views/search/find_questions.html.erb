@@ -1,7 +1,7 @@
 </br>
 </br>
 </br>
-<%= simple_form_for @result, :url => { :action => "create" } do |f| %>
+<%= simple_form_for @result, url: display_search_path do |f| %>
 	<div class = "row">
 		<div class = "col-sm-4">
       		<%= f.input :course_id, label: "Select a Course", collection: @courses, include_blank: false %>
