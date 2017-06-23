@@ -1,8 +1,9 @@
 class CoursesController < ApplicationController
 
   before_action :authenticate_user!
-  before_action :check_instructor  , only: [:new, :create]
+  before_action :check_instructor  , only: [:new, :create, :manage, :add_ta, :remove_ta]
   before_action :check_student_belongs, only: [:show]
+  before_action :check_course_exists, only: [:manage, :add_ta, :remove_ta]
 
   def new
     @user = current_user
@@ -54,10 +55,65 @@ class CoursesController < ApplicationController
     @topics = @course.topics
   end
 
-  private
+  def manage
+    @course = Course.find(params[:id])
+    @user = current_user
+    @students = User.with_any_role({name: :student, resource: @course}, {name: :assistant, resource: @course})
+  end
 
+  def add_ta
+    @user = current_user
+    @course = Course.find(params[:id])
+    @student = User.find(params[:student])
+    if @student.nil?
+      flash[:warning] = "That student could not be found.  Try again later."
+      redirect_to root_path and return
+    else
+      if @student.has_role?(:assistant, @course)
+        flash[:warning] = "That student is already a TA for this course."
+        redirect_to root_path and return
+      else
+        @student.add_role(:assistant, @course)
+        @student.remove_role(:student, @course)
+        @student.save
+        flash[:success] = "Student has been added as a TA."
+        redirect_to manage_ta_path
+      end
+    end
+  end
+
+  def remove_ta
+    @user = current_user
+    @course = Course.find(params[:id])
+    @student = User.find(params[:student])
+    if @student.nil?
+      flash[:warning] = "That student could not be found.  Try again later."
+      redirect_to root_path and return
+    else
+      if @student.has_role?(:student, @course)
+        flash[:warning] = "That student is not a TA for this course."
+        redirect_to root_path and return
+      else
+        @student.add_role(:student, @course)
+        @student.remove_role(:assistant, @course)
+        @student.save
+        flash[:success] = "Student is no longer a TA."
+        redirect_to manage_ta_path
+      end
+    end
+  end
+
+  private
   def course_params # Restricts parameters
     params.require(:course).permit(:title, :subject, :year, :instructor_id)
+  end
+
+  def check_course_exists
+    course = Course.find(params[:id])
+    if course.nil?
+      flash[:warning] = "That course could not be found.  Try again later."
+      redirect_to root_path
+    end
   end
 
   def check_student_belongs

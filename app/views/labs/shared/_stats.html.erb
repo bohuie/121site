@@ -1,8 +1,8 @@
 <div class = "row" style = "padding: 5px; margin-bottom: 5px;">	
-	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+	<div class = "col-md-3" style = "border-bottom: 1px solid black;">
 		<p> <%= stats.name %> </p>
 	</div>
-	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+	<div class = "col-md-1" style = "border-bottom: 1px solid black;">
 		<p style = "display: inline;" class="sum">
 			<%= User.with_role(:student, @lab.course).lab_student_practices(@lab, stats).count %>
 			<% unless User.with_role(:student, @lab.course).joins(:labs).where("labs.id = ?", @lab.id).count == 0 %>
@@ -12,7 +12,7 @@
 			<% end %>
 		</p>
 	</div>
-	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+	<div class = "col-md-1" style = "border-bottom: 1px solid black;">
 		<p style = "display: inline;" class="sum">
 			<%= User.with_role(:student, @lab.course).lab_student_practices_correct(@lab, stats).count %>
 			<% unless User.with_role(:student, @lab.course).joins(:labs).where("labs.id = ?", @lab.id).count == 0 %>
@@ -22,7 +22,7 @@
 			<% end %>
 		</p>
 	</div>
-	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+	<div class = "col-md-1" style = "border-bottom: 1px solid black;">
 		<p style = "display: inline;" class="sum">
 			<% if !(User.with_role(:student, @lab.course).lab_student_practices(@lab, stats).count == 0) %>
 				<p class="average" style = "display: inline;">( <%= (User.with_role(:student, @lab.course).lab_student_practices_correct(@lab, stats).count*100/User.with_role(:student, @lab.course).lab_student_practices(@lab, stats).count*100)/100 %>%)</p>

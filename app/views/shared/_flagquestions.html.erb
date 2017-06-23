@@ -1,11 +1,10 @@
 <tr>
 	<% if flagquestions.exam == false %>
-		
 			<td class = "col-md-2">
 				<p><%= flagquestions.user.lname %>, <%= flagquestions.user.fname %></p>
 			</td>
 			<td class = "col-md-1">
-				<% if !flagquestions.user.assistant && !flagquestions.user.instructor %>
+				<% if !flagquestions.user.has_role?(:instructor) %>
 					<p><%= flagquestions.user.studentnumber %></p>
 				<% end %>
 			</td>
@@ -32,16 +31,16 @@
 			<td class = "col-md-1">
 				<%= link_to "View", {controller: "questions", action: "flagview", id: flagquestions.id}, class: "btn btn-mdall btn-success" %>
 			</td>
+			<td class="col-md-1"></td>
 			<td class = "col-md-1">
 				<%=flagquestions.grade.html_safe %>
 			</td>
-			<td class="col-md-1"></td>
 	<% else %>
 			<td class = "col-md-2">
 				<p><%= flagquestions.user.lname %>, <%= flagquestions.user.fname %></p>
 			</td>
 			<td class = "col-md-1">
-				<% if !flagquestions.user.assistant && !flagquestions.user.instructor %>
+				<% if !flagquestions.user.has_role?(:instructor) %>
 					<p><%= flagquestions.user.studentnumber %></p>
 				<% end %>
 			</td>

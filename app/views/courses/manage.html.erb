@@ -1,0 +1,15 @@
+<h3 style = "margin: 5px;"> Results </h3>
+<table data-toggle="table" data-sort-order="desc" data-classes="table" data-sortable="true">
+	<thead>
+            <tr>
+      		<th data-sortable="true" class="col-md-2">Student Name</th>
+      		<th data-sortable="true" class="col-md-1">Number</th>
+      		<th data-sortable="true" class="col-md-1">Lab</th>
+      		<th data-sortable="true" class="col-md-1">Role</th>
+      		<th data-sortable="true" class="col-md-2">Action</th>
+      	</tr>
+	</thead>
+	<tbody>
+		<%= render partial: 'shared/manage', collection: @students %>
+	</tbody>
+</table>

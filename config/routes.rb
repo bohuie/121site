@@ -19,6 +19,10 @@ post 'course_topics/create' => 'course_topics#create', as: :create_course_topic
 delete 'course_topics/delete/:id' => 'course_topics#delete', as: :delete_course_topic
 resource :practices
 
+get 'courses/:id/manage' => 'courses#manage', as: :manage_ta
+post 'courses/:id/add_ta/:student' => 'courses#add_ta', as: :add_ta
+delete 'courses/:id/remove_ta/:student' => 'courses#remove_ta', as: :remove_ta
+
  
 root to: 'static_pages#home'
 

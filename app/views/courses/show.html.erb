@@ -145,16 +145,16 @@
 						<h3 style = "margin: 5px;"> Practice </h3>
 					</div>
 					<div class = "row" style = "padding: 5px;">
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+						<div class = "col-md-3" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Topic </h4>
 						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Attempted </h4>
 						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Correct </h4>
 						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Percent </h4>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
@@ -162,16 +162,16 @@
 						</div>
 					</div>
 					<div class = "row" style = "padding: 5px; margin-bottom: 5px;">
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+						<div class = "col-md-3" style = "border-bottom: 1px solid black;">
 							<p> All Topics </p>
 						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
 							<p> <%= User.with_role(:student, @course).course_student_practices(@course).count %> </p>
 						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
 							<p> <%= User.with_role(:student, @course).course_student_practices_correct(@course).count %> </p>
 						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
 							<% if !(User.with_role(:student, @course).course_student_practices(@course).count == 0) %>
 								<p> <%= (User.with_role(:student, @course).course_student_practices_correct(@course).count*100/User.with_role(:student, @course).course_student_practices(@course).count*100)/100 %>%</p>
 							<% else %>
