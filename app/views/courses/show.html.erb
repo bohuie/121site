@@ -293,7 +293,7 @@
 							<% elsif !(User.with_role(:student, @course).course_student_practices(@course).count == 0) %>
 								<p style = "display: inline;">N/A <p class="sum" style = "display: inline;">(<%= (User.with_role(:student, @course).course_student_practices_correct(@course).count*100/User.with_role(:student, @course).course_student_practices(@course).count*100)/100 %>%)</p></p>
 							<% else %>
-								<p>N/A <p class="sum" style = "display: inline;">(~ N/A ~)</p></p>
+								<p style = "display: inline;">N/A <p class="sum" style = "display: inline;">(N/A)</p></p>
 							<% end %>
 						</div>
 					</div>
