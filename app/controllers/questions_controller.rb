@@ -231,10 +231,8 @@ class QuestionsController < ApplicationController
     @userID = current_user.id
     @question = Question.new
     @courses = Hash.new
-    if @user.instructor
+    if @user.has_role?(:instructor)
       course = Course.where(instructor_id: @user.id).order(year: :desc)
-    elsif @user.assistant
-      course = @user.courses
     else
       course = @user.courses
     end
