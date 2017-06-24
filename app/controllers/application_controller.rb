@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
     def configure_permitted_parameters
       @courses = Course.all
       devise_parameter_sanitizer.permit(:sign_up) do |u|
-        u.permit :username, :email, :password, :password_confirmation, :fname, :lname, :courses, :studentnumber
+        u.permit :username, :email, :password, :password_confirmation, :fname, :lname, :course_ids, :studentnumber
       end
     end
   
