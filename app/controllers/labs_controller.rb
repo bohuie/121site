@@ -24,10 +24,8 @@ class LabsController < ApplicationController
   def show
   	@user = current_user
   	@lab = Lab.find(params[:id])
-  	if @user.instructor
+  	if @user.has_role?(:instructor)
         @courses = Course.where(instructor_id: @user.id).order(year: :desc)
-    elsif @user.assistant
-      	@courses = @user.courses
     else
         @courses = @user.courses
     end
