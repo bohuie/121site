@@ -25,7 +25,7 @@ class PracticesController < ApplicationController
 		@game.topic_id = topic_params.to_s[10, topic_params.to_s.length-12].to_i
 		#@game.course_id = params[:game][:course_id]
 		if @game.save
-			redirect_to :controller => "practices", :action => "use", :id => @game.game_id
+			redirect_to :controller => "practices", :action => "use", :id => @game.id
 		else
 			flash[:warning] = "Please select a course from the drop down."
 			redirect_to :controller => "practices", :action => "show"
@@ -54,10 +54,10 @@ class PracticesController < ApplicationController
 			@practice.correct = true
 			@practice.save
 			@game.save
-			redirect_to :controller => "practices", :action => "use", :id => @game.game_id
+			redirect_to :controller => "practices", :action => "use", :id => @game.id
 		else
 			flash[:error] = "Incorrect"
-			redirect_to :controller => "practices", :action => "incorrect", :gameid => @game.game_id, :questionid => Question.find(@practice.question_id).id
+			redirect_to :controller => "practices", :action => "incorrect", :gameid => @game.id, :questionid => Question.find(@practice.question_id).id
 		end	
 	end
 
@@ -80,8 +80,8 @@ class PracticesController < ApplicationController
 			end
 			@i = 0
 			@questions.each do |q| 
-				if (Practice.where(:game_id => @game.game_id, :question_id => q.id).nil? ||
-					Practice.where(:game_id => @game.game_id, :question_id => q.id).empty? )
+				if (Practice.where(:game_id => @game.id, :question_id => q.id).nil? ||
+					Practice.where(:game_id => @game.id, :question_id => q.id).empty? )
 					if (q.submitted == true && q.grade == "Correct")
 						@practice = Practice.create
 						@practice.game_id = @game.id
