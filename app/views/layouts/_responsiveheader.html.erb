@@ -18,9 +18,9 @@
     <ul class="nav navbar-nav pull-right">
       <% if user_signed_in? %>
         <% if @user.has_role?(:instructor) %>
-          <% if defined?(@course) && !@course.id.nil?%>
+          <% if defined?(@course) && !@course.id.nil? %>
             <li><%= link_to "Manage TAs", manage_ta_path(@course), id: "brand" %></li>
-          <%elsif defined?(@lab) %>
+          <%elsif defined?(@lab) && !@lab.course.nil? %>
             <li><%= link_to "Manage TAs", manage_ta_path(@lab.course), id: "brand" %></li>
           <% end %>
           <li ><%= link_to "Flag Questions", flag_questions_path, id: "brand"%></li>
