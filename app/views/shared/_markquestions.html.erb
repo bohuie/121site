@@ -20,7 +20,7 @@
 					<%= markquestions.lab ? markquestions.lab.name : "N/A" %>
 				</td>
 				<td class = "col-md-1">
-					<%= Topic.find_by(:topic_id => markquestions.topic_id).name %>
+					<%= Topic.find(markquestions.id).name %>
 				</td>
 				<td class = "col-md-2">
 					<% if markquestions.date_submitted.nil? %>
@@ -54,7 +54,7 @@
 					<%= markquestions.lab ? markquestions.lab.name : "N/A" %>
 				</td>
 				<td class = "col-md-1">
-					<%= Topic.find_by(:topic_id => markquestions.topic_id).name %>
+					<%= Topic.find(markquestions.id).name %>
 				</td>
 				<td class = "col-md-2">
 					<% if markquestions.date_submitted.nil? %>
