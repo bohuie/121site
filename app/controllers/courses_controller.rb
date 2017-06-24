@@ -26,11 +26,8 @@ class CoursesController < ApplicationController
   	if user_signed_in?
       @user = current_user
       @course = Course.find(params[:id])
-      if @user.instructor
+      if @user.has_role?(:instructor)
         @courses = Course.where(instructor_id: @user.id).order(year: :desc)
-      elsif @user.assistant
-      	@courses = @user.courses
-        @labs = @course.labs.includes(:student_labs).where("student_labs.user_id = ?",@user.id).references(:student_labs)
       else
         @courses = @user.courses
         @labs = @course.labs.includes(:student_labs).where("student_labs.user_id = ?",@user.id).references(:student_labs)
