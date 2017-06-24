@@ -31,7 +31,7 @@ class LabsController < ApplicationController
     else
         @courses = @user.courses
     end
-    @games = Game.where(:user_id => @user.user_id, course_id: @lab.course_id)
+    @games = Game.where(:user_id => @user.id, course_id: @lab.course_id)
     @count = @games.count
     @number = 0
     @percent = 0

@@ -26,7 +26,7 @@ class QuestionsController < ApplicationController
 
   def your_questions
     @user = current_user
-    @questions = Question.where(user_id: current_user.user_id)
+    @questions = Question.where(user_id: current_user.id)
   end
 
   def flag
@@ -228,7 +228,7 @@ class QuestionsController < ApplicationController
 
   def new
     @user = current_user
-    @userID = current_user.user_id
+    @userID = current_user.id
     @question = Question.new
     @courses = Hash.new
     if @user.instructor
@@ -250,7 +250,7 @@ class QuestionsController < ApplicationController
     @user = current_user
 	  if user_signed_in?
 	    @question = Question.new(question_params)
-	    @question.user_id = current_user.user_id
+	    @question.user_id = current_user.id
       unless @user.labs.where('labs.course_id = ?',params[:question][:course_created_in]).count == 0 
         @question.lab = @user.labs.where('labs.course_id = ?',params[:question][:course_created_in]).first
         @question.course_created_in = Course.find(params[:question][:course_created_in])

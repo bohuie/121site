@@ -21,7 +21,7 @@ class PracticesController < ApplicationController
 	def create
 		@user = current_user
 		@game = Game.create(game_params)
-		@game.user_id = @user.user_id
+		@game.user_id = @user.id
 		@game.topic_id = topic_params.to_s[10, topic_params.to_s.length-12].to_i
 		#@game.course_id = params[:game][:course_id]
 		if @game.save
@@ -84,8 +84,8 @@ class PracticesController < ApplicationController
 					Practice.where(:game_id => @game.game_id, :question_id => q.id).empty? )
 					if (q.submitted == true && q.grade == "Correct")
 						@practice = Practice.create
-						@practice.game_id = @game.game_id
-						@practice.user_id = @user.user_id
+						@practice.game_id = @game.id
+						@practice.user_id = @user.id
 						@practice.question_id = q.id
 						#@practice.topic_id = q.topic_id
 						@practice.save

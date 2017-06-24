@@ -35,7 +35,7 @@ class CoursesController < ApplicationController
         @courses = @user.courses
         @labs = @course.labs.includes(:student_labs).where("student_labs.user_id = ?",@user.id).references(:student_labs)
       end
-      @games = Game.where(:user_id => @user.user_id, course_id: params[:id])
+      @games = Game.where(:user_id => @user.id, course_id: params[:id])
       @count = @games.count
       @number = 0
       @percent = 0
