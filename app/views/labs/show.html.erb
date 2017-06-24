@@ -209,7 +209,7 @@
 					</div>
 					<div class = "row" style = "padding: 5px;">
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<h4 style = "margin: 5px;"> &nbsp; </h4>
+							<h4 style = "margin: 5px;"> Topic </h4>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Created </h4>
@@ -295,7 +295,7 @@
 							<% elsif !(User.with_role(:student, @lab.course).lab_student_practices(@lab).count == 0) %>
 								<p style = "display: inline;">N/A <p class="sum" style = "display: inline;">(<%= (User.with_role(:student, @lab.course).lab_student_practices_correct(@lab).count*100/User.with_role(:student, @lab.course).lab_student_practices(@lab).count*100)/100 %>%)</p></p>
 							<% else %>
-								<p>N/A <p class="sum" style = "display: inline;">(~ N/A ~)</p></p>
+								<p style = "display: inline;">N/A <p class="sum" style = "display: inline;">(N/A)</p></p>
 							<% end %>
 						</div>
 					</div>
