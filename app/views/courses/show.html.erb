@@ -63,7 +63,7 @@
 								<% end %>
 								<li><%= link_to 'Add New Lab', new_lab_path(course) %></li>
 							<% else %>
-								<% if @labs.nil? %>
+								<% if @labs.empty? %>
 									<li><%= link_to 'Register for a Lab', new_student_lab_path(@course) %></li>
 								<% else %>
 									<% @labs.each do |lab| %>
