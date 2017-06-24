@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170618215933) do
+ActiveRecord::Schema.define(version: 20170624181832) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,7 +33,6 @@ ActiveRecord::Schema.define(version: 20170618215933) do
   end
 
   create_table "games", force: :cascade do |t|
-    t.integer "game_id",   default: 0, null: false
     t.integer "user_id",   default: 0, null: false
     t.integer "topic_id",  default: 0, null: false
     t.integer "number",    default: 0, null: false
@@ -51,7 +50,6 @@ ActiveRecord::Schema.define(version: 20170618215933) do
 
   create_table "practices", force: :cascade do |t|
     t.integer  "game_id",     default: 0,     null: false
-    t.integer  "practice_id", default: 0,     null: false
     t.integer  "user_id",     default: 0,     null: false
     t.integer  "question_id", default: 0,     null: false
     t.integer  "attempts",    default: 0,     null: false
@@ -73,7 +71,6 @@ ActiveRecord::Schema.define(version: 20170618215933) do
     t.text     "a5text"
     t.integer  "answer"
     t.integer  "user_id",              default: 0,     null: false
-    t.integer  "question_id",          default: 0,     null: false
     t.integer  "topic_id",             default: 0,     null: false
     t.boolean  "submitted",            default: false, null: false
     t.text     "grade",                default: "",    null: false
@@ -116,31 +113,26 @@ ActiveRecord::Schema.define(version: 20170618215933) do
   end
 
   create_table "topics", force: :cascade do |t|
-    t.string  "name"
-    t.integer "topic_id", default: 0, null: false
+    t.string "name"
   end
 
   create_table "users", force: :cascade do |t|
     t.string   "username"
-    t.integer  "user_id",                default: 0,     null: false
-    t.string   "email",                  default: "",    null: false
-    t.boolean  "assistant",              default: false
-    t.boolean  "instructor",             default: false
+    t.string   "email",                  default: "", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "remember_token"
-    t.string   "encrypted_password",     default: "",    null: false
+    t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,     null: false
+    t.integer  "sign_in_count",          default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
     t.string   "fname"
     t.string   "lname"
-    t.string   "lab"
     t.integer  "studentnumber"
   end
 

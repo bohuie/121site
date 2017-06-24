@@ -21,8 +21,6 @@ class User < ActiveRecord::Base
   validates :username, uniqueness: true
 
   validates :username, :fname, :lname, :studentnumber,  presence:  true
-  validates_inclusion_of  :instructor, :in => [true, false]
-  validates_inclusion_of  :assistant, :in => [true, false]
   
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, presence:   true,

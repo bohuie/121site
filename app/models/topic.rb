@@ -10,12 +10,4 @@ class Topic < ActiveRecord::Base
 	attr_accessor :course_id
 
 	validates :name, presence: true
-
-	after_create :do_setID
-  
-  	private
-    	def do_setID
-     		newID = self.id
-      		self.update_attributes(:topic_id => newID)
-		end
 end
