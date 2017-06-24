@@ -57,7 +57,6 @@ class CourseTopicsController < ApplicationController
   end
 
   def check_existence_course_topic
-  	byebug
   	unless CourseTopic.find(params[:id])
   		flash[:warning] = "That topic must belong to a course before you can remove it."
   		redirect_to topics_path
