@@ -25,7 +25,7 @@ class ApplicationController < ActionController::Base
     yield
     rescue ActiveRecord::RecordNotFound
       flash[:alert] = "There was an error with your search.  Please try again later, or contact an administrator."
-      redirect_back_or root_url
+      redirect_to root_url
   end
 
   def check_instructor # Checks current user is an instructor
