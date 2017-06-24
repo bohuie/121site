@@ -5,10 +5,8 @@ class TopicsController < ApplicationController
 		@topics = Topic.all
 		@ct = Topic.new #dummy variable for a simple form drop down
 		@courses = Hash.new
-    	if @user.instructor
+    	if @user.has_role?(:instructor)
 	    	course = Course.where(instructor_id: @user.id).order(year: :desc)
-    	elsif @user.assistant
-      		course = @user.courses
     	else
       		course = @user.courses
     	end
@@ -21,7 +19,7 @@ class TopicsController < ApplicationController
 
 	def create
 		@user = current_user
-		if @user.has_role(:instructor) || @user.has_role(:assistant, Course.find(params[:course_id]))
+		if @user.has_role?(:instructor) || @user.has_role?(:assistant, Course.find(params[:course_id]))
 			@topic = Topic.create(topic_params)
 			if @topic.save
 				flash[:success] = "Topic created"
@@ -34,7 +32,7 @@ class TopicsController < ApplicationController
 
 	def remove
 		@user = current_user
-		if @user.has_role(:instructor, Course.find(params[:course_id])) || @user.has_role(:assistant, Course.find(params[:course_id]))
+		if @user.has_role?(:instructor, Course.find(params[:course_id])) || @user.has_role?(:assistant, Course.find(params[:course_id]))
 			@topic = Topic.find_by(topic_id: params[:id])
 			if(!@topic.nil?)
 				@topic.delete
