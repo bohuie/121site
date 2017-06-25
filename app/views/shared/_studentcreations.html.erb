@@ -16,7 +16,7 @@
 		<% if !(studentcreations.questions_created_in.where(user_id: @user.id, submitted: true).count == 0) %>
 			<p> <%= studentcreations.questions_created_in.where(user_id: @user.id, submitted: true, grade: "Correct").count*100/studentcreations.questions_created_in.where(user_id: @user.id, submitted: true).count*100/100%>% </p>
 		<% else %>
-			<p> ~ N/A ~ </p>
+			<p>N/A</p>
 		<% end %>
 	</div>
 </div>
