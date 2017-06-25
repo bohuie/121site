@@ -178,7 +178,7 @@
 						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
 							<p> <%= User.with_role(:student, @lab.course).lab_student_practices_correct(@lab).count %> </p>
 						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
 							<% if !(User.with_role(:student, @lab.course).lab_student_practices(@lab).count == 0) %>
 								<p> <%= (User.with_role(:student, @lab.course).lab_student_practices_correct(@lab).count*100/User.with_role(:student, @lab.course).lab_student_practices(@lab).count*100)/100 %>%</p>
 							<% else %>
