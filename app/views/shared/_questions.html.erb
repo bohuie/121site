@@ -17,11 +17,7 @@
 		<%if !questions.submitted %>
 			<td>
 				<%= link_to "Submit", {controller: "questions", action: "submit", id: questions.id}, class: "btn btn-mdall btn-success" %>
-			</td>
-			<td>
 				<%= link_to "Delete", {controller: "questions", action: "hide", id: questions.id}, class: "btn btn-mdall btn-danger" %>
-			</td>
-			<td>
 				<%= link_to "Edit", {controller: "questions", action: "edit", id: questions.id}, class: "btn btn-mdall btn-primary" %>
 			</td>
 		<% else %>
