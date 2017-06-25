@@ -3,14 +3,12 @@ class StaticPagesController < ApplicationController
   def home
     if user_signed_in?
       @user = current_user
-      if @user.instructor
-        @courses = Course.where(instructor_id: @user.id)
-      elsif @user.assistant
-        @courses = @user.courses
+      if @user.has_role?(:instructor)
+        @courses = Course.where(instructor_id: @user.id).order(year: :desc)
       else
         @courses = @user.courses
       end
-      @games = Game.where(:user_id => @user.user_id)
+      @games = Game.where(:user_id => @user.id)
       @count = @games.count
       @number = 0
       @percent = 0
@@ -27,9 +25,6 @@ class StaticPagesController < ApplicationController
         end
       end
     end
-    @topics = Topic.all
-    @created = Question.all.count
-    @submitted = Question.where(submitted: true).count
   end
 
   def terms
@@ -45,10 +40,10 @@ class StaticPagesController < ApplicationController
     @result = Result.new
     @topic = Topic.all
     @users = User.all
-    @lab = Array.new
+    @labs = Array.new
     @users.each do |u|
-      if !@lab.include?(u.lab)
-        @lab.push(u.lab)
+      if !@labs.include?(u.labs)
+        @labs.push(u.labs)
       end
     end
   end

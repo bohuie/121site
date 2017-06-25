@@ -1,21 +1,19 @@
+
 <div class = "row" style = "padding: 5px; margin-bottom: 5px;">	
-	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<p> <%= studentstats.course.title %> </p>
+	<div class = "col-md-3" style = "border-bottom: 1px solid black;">
+		<p> <%= studentstats.title %> - <%= studentstats.year %></p>
 	</div>
 	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<p> <%= studentstats.name %> </p>
+		<p> <%= studentstats.practices.where(user_id: @user.id).count %> </p>
 	</div>
 	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<p> <%= Practice.where(user_id: @user.user_id, :topic_id => studentstats.id).count %> </p>
+		<p> <%= studentstats.practices.where(correct: true, user_id: @user.id).count %> </p>
 	</div>
 	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<p> <%= Practice.where(user_id: @user.user_id, correct: true, :topic_id => studentstats.id).count %> </p>
-	</div>
-	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<% if !(Practice.where(user_id: @user.user_id, :topic_id => studentstats.id).count == 0) %>
-			<p> <%= (Practice.where(user_id: @user.user_id, correct: true, :topic_id => studentstats.id).count*100/Practice.where(:topic_id => studentstats.id, user_id: @user.user_id).count*100)/100 %> %</p>
+		<% if !(studentstats.practices.where(user_id: @user.id).count == 0) %>
+			<p> <%= (studentstats.practices.where(correct: true, user_id: @user.id).count*100/studentstats.practices.where(user_id: @user.id).count*100)/100 %> %</p>
 		<% else %>
-			<p> ~ N/A ~ </p>
+			<p>N/A</p>
 		<% end %>
 	</div>
 </div>

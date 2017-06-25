@@ -11,22 +11,36 @@
   </div>
 
   <!-- Collect the nav links, forms, and other content for toggling -->
-  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style = "background-color:black;">
-    <ul class="nav pull-left">
-       <%= link_to "Quiz Nova", root_path, id: "logo" %>
+  <div class="navbar collapse navbar-collapse" id="bs-example-navbar-collapse-1" style = "background-color:black;">
+    <ul class="nav navbar-nav pull-left">
+       <%= favicon_link_tag %><%= link_to "Quiz Nova", root_path, id: "logo" %>
     </ul>
-    <ul class="nav pull-right">
+    <ul class="nav navbar-nav pull-right">
       <% if user_signed_in? %>
-        <% if @user.instructor %>
-          <li ><%= link_to "Flag Questions", '/flag_questions', id: "brand"%></li>
-          <li><%= link_to "Mark Questions", '/find_questions', id: "brand"%></li>
+        <% if @user.has_role?(:instructor) %>
+          <% if defined?(@course) && !@course.id.nil? %>
+            <li><%= link_to "Manage TAs", manage_ta_path(@course), id: "brand" %></li>
+          <%elsif defined?(@lab) && !@lab.course.nil? %>
+            <li><%= link_to "Manage TAs", manage_ta_path(@lab.course), id: "brand" %></li>
+          <% end %>
+          <li ><%= link_to "Flag Questions", flag_questions_path, id: "brand"%></li>
+          <li><%= link_to "Mark Questions", mark_questions_path, id: "brand"%></li>
           <li><%= link_to "Topics", '/topics', id: "brand"%></li>
         <% end %>
-        <% if @user.assistant %>
-          <li><%= link_to "Mark Questions", '/find_questions', id: "brand"%></li>
-          <li><%= link_to "Topics", '/topics', id: "brand"%></li>
+        <% if defined?(@course) || defined?(@lab) %>
+          <% if defined?(@course) %>
+            <% if @user.has_role?(:assistant, @course) %>
+              <li><%= link_to "Mark Questions", mark_questions_path, id: "brand"%></li>
+              <li><%= link_to "Topics", '/topics', id: "brand"%></li>
+            <% end %>
+          <% else %>
+            <% if @user.has_role?(:assistant, @lab.course) %>
+              <li><%= link_to "Mark Questions", mark_questions_path, id: "brand"%></li>
+              <li><%= link_to "Topics", '/topics', id: "brand"%></li>
+            <% end %>
+          <% end %>
         <% end %>
-        <li><%= link_to "Practice", '/practices', id: "brand"%></li>
+        <li><%= link_to "Quiz", '/practices', id: "brand"%></li>
         <li><%= link_to "Your Questions", '/your_questions', id: "brand"%></li>
         <li><%= link_to "Account", edit_user_registration_path, id: "brand" %></li> 
         <li><%= link_to'Sign Out', destroy_user_session_path, :method => :delete, id:"brand" %>  </li>  

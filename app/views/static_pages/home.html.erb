@@ -48,18 +48,23 @@
 	<h1>Welcome</h1>
 	<% if user_signed_in? %>
 		<div class = "row">
-			<div class = "col-md-3">
+			<div class = "col-md-2">
 				<p> So far you have done <%= @count %> game<% if !(@count== 1) %>s<% end %>  </p>
 				<p> Your high score is <%= @percent %>% on <%= @number %> question<% if !(@number== 1) %>s<% end %> </p>
 				<hr>
 				<p><h3><b> My Courses</b></h3></p>
 				<p> <%= link_to 'All', root_path %></p>
 				<% @courses.each do |course| %>
-					<p><%= link_to course.title, show_course_path(course) %></p>
+					<p><%= link_to course.title + " - " + course.year, show_course_path(course) %></p>
+				<% end %>
+				<% if @user.has_role? :instructor %>
+					<p><%= link_to 'Add New Course', new_course_path %></p>
+				<% else %>
+					<p><%= link_to 'Register for Another Course', new_student_course_path %></p>
 				<% end %>
 			</div>
-			<div class = "col-md-9">
-				<% if @user.assistant || @user.instructor %>
+			<div class = "col-md-10">
+				<% if @user.has_role?(:instructor) %>
 					<div class = "row">
 						<h3 style = "margin: 5px;"> Creation </h3>
 					</div>
@@ -67,35 +72,30 @@
 						<div class = "col-md-3" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Course </h4>
 						</div>
-						<div class = "col-md-3" style = "border-bottom: 1px solid black;">
-							<h4 style = "margin: 5px;"> Topic </h4>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Created </h4>
 						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Submitted </h4>
 						</div>
-					</div>
-					<div class = "row" style = "padding: 5px; margin-bottom: 5px;">
-						<div class = "col-md-3" style = "border-bottom: 1px solid black;">
-							<p> All </p>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Incorrect </h4>
 						</div>
-						<div class = "col-md-3" style = "border-bottom: 1px solid black;">
-							<p> Overall </p>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Accepted </h4>
 						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= @created %> </p>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Revise </h4>
 						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= @submitted %> </p>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Pending </h4>
 						</div>
 					</div>
 					<div class = "btn btn-small btn-primary" id = "morebuttoncreate" onclick = "showcreate()" >
-						More
+						View All
 					</div>
 					<div id = "morecreate" style = "display: none">
-						<%= render partial: 'shared/creations', collection: @topics %>
+						<%= render partial: 'shared/creations', collection: @courses %>
 					</div>
 					<div class = "btn btn-small btn-danger" id = "lessbuttoncreate" onclick = "hidecreate()" style = "display: none">
 						Less
@@ -104,73 +104,38 @@
 						<h3 style = "margin: 5px;"> Practice </h3>
 					</div>
 					<div class = "row" style = "padding: 5px;">
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+						<div class = "col-xs-2 col-sm-2 col-md-3" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Course </h4>
 						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<h4 style = "margin: 5px;"> Topic </h4>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+						<div class = "col-xs-2 col-sm-2 col-md-1" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Attempted </h4>
 						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+						<div class = "col-xs-2 col-sm-2 col-md-1" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Correct </h4>
 						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+						<div class = "col-xs-2 col-sm-2 col-md-1" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Percent </h4>
 						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+						<div class = "col-xs-2 col-sm-2 col-md-2" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Average Time</h4>
 						</div>
 					</div>
-					<div class = "row" style = "padding: 5px; margin-bottom: 5px;">
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> All </p>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> Overall </p>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= Practice.all.count %> </p>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= Practice.where(correct: true).count %> </p>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<% if !(Practice.all.count == 0) %>
-								<p> <%= (Practice.where(correct: true).count*100/Practice.all.count*100)/100 %>%</p>
-							<% else %>
-								<p> ~ N/A ~ </p>
-							<% end %>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<% if !(Practice.all.count == 0) %>
-								<p> <%= (Practice.sum(:totaltime)*100/Practice.all.count*100)/10000 %> seconds</p>
-							<% else %>
-								<p> ~ N/A ~ </p>
-							<% end %>
-						</div>
-					</div>
 					<div class = "btn btn-small btn-primary" id = "morebuttonpractice" onclick = "showpractice()" >
-						More
+						View All
 					</div>
 					<div id = "morepractice" style = "display: none">
-						<%= render partial: 'shared/stats', collection: @topics %>
+						<%= render partial: 'shared/stats', collection: @courses %>
 					</div>
 					<div class = "btn btn-small btn-danger" id = "lessbuttonpractice" onclick = "hidepractice()" style = "display: none">
 						Less
 					</div>
-					<%= link_to "Detailed practice information", "/stats", class: "btn btn-primary btn-primary" %>
 				<% else %>
-					<div class = "row">
+					<div class = "row is">
 						<h3 style = "margin: 5px;"> Creation </h3>
 					</div>
 					<div class = "row" style = "padding: 5px;">
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+						<div class = "col-md-3" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Course </h4>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<h4 style = "margin: 5px;"> Topic </h4>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Created </h4>
@@ -182,38 +147,14 @@
 							<h4 style = "margin: 5px;"> Correct </h4>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<h4 style = "margin: 5px;"> Percent Correct </h4>
-						</div>
-					</div>
-					<div class = "row" style = "padding: 5px; margin-bottom: 5px;">
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> All </p>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> Overall </p>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= Question.where(user_id: @user.user_id).count %> </p>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= Question.where(user_id: @user.user_id, submitted: true).count%> </p>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= Question.where(user_id: @user.user_id, submitted: true, grade: "Correct").count%> </p>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<% if !(Question.where(user_id: @user.user_id, submitted: true).count == 0) %>
-								<p> <%= Question.where(user_id: @user.user_id, submitted: true, grade: "Correct").count*100/Question.where(user_id: @user.user_id, submitted: true).count*100/100%>% </p>
-							<% else %>
-								<p> ~ N/A ~ </p>
-							<% end %>
+							<h4 style = "margin: 5px;"> Percent </h4>
 						</div>
 					</div>
 					<div class = "btn btn-small btn-primary" id = "morebuttonstudentcreate" onclick = "showstudentcreate()" >
-						More
+						View All
 					</div>
 					<div id = "morestudentcreate" style = "display: none">
-						<%= render partial: 'shared/studentcreations', collection: @topics %>
+						<%= render partial: 'shared/studentcreations', collection: @courses %>
 					</div>
 					<div class = "btn btn-small btn-danger" id = "lessbuttonstudentcreate" onclick = "hidestudentcreate()" style = "display: none">
 						Less
@@ -222,11 +163,8 @@
 						<h3 style = "margin: 5px;"> Practice </h3>
 					</div>
 					<div class = "row" style = "padding: 5px;">
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+						<div class = "col-md-3" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Course </h4>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<h4 style = "margin: 5px;"> Topic </h4>
 						</div>
 						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
 							<h4 style = "margin: 5px;"> Attempted </h4>
@@ -238,32 +176,11 @@
 							<h4 style = "margin: 5px;"> Percent </h4>
 						</div>
 					</div>
-					<div class = "row" style = "padding: 5px; margin-bottom: 5px;">
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> All </p>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> Overall </p>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= Practice.where(user_id: @user.user_id).count %> </p>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<p> <%= Practice.where(correct: true, user_id: @user.user_id).count %> </p>
-						</div>
-						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-							<% if !(Practice.where(user_id: @user.user_id).count == 0) %>
-								<p> <%= (Practice.where(correct: true, user_id: @user.user_id).count*100/Practice.where(user_id: @user.user_id).count*100)/100 %>%</p>
-							<% else %>
-								<p> ~ N/A ~ </p>
-							<% end %>
-						</div>
-					</div>
 					<div class = "btn btn-small btn-primary" id = "morebuttonstudentpractice" onclick = "showstudentpractice()" >
-						More
+						View All
 					</div>
 					<div id = "morestudentpractice" style = "display: none">
-						<%= render partial: 'shared/studentstats', collection: @topics %>
+						<%= render partial: 'shared/studentstats', collection: @courses %>
 					</div>
 					<div class = "btn btn-small btn-danger" id = "lessbuttonstudentpractice" onclick = "hidestudentpractice()" style = "display: none">
 						Less

@@ -1,0 +1,20 @@
+<h3 style = "margin: 5px;"> Results </h3>
+<p>Below are the possible questions for flagging.  View a question, and if you choose to, you may flag it for exam use.</p>
+<table data-toggle="table" data-sort-order="desc" data-classes="table" data-sortable="true">
+	<thead>
+            <tr>
+      		<th data-sortable="true" class="col-md-2">Student Name</th>
+      		<th data-sortable="true" class="col-md-1">Number</th>
+      		<th data-sortable="true" class="col-md-1">Course</th>
+      		<th data-sortable="true" class="col-md-1">Lab</th>
+      		<th data-sortable="true" class="col-md-1">Topic</th>
+      		<th data-sortable="true" class="col-md-2">Date</th>
+      		<th data-sortable="true" class="col-md-1"></th>
+      		<th data-sortable="true" class="col-md-1">Flagged</th>
+      		<th data-sortable="true" class="col-md-2">Grade</th>
+      	</tr>
+	</thead>
+	<tbody>
+		<%= render partial: 'shared/flagquestions', collection: @questions %>
+	</tbody>
+</table>

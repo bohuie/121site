@@ -1,14 +1,23 @@
 <div class = "row" style = "padding: 5px; margin-bottom: 5px;">
 	<div class = "col-md-3" style = "border-bottom: 1px solid black;">
-		<p> <%= creations.course.title %> </p>
+		<p> <%= creations.title %> - <%= creations.year %></p>
 	</div>
-	<div class = "col-md-3" style = "border-bottom: 1px solid black;">
-		<p> <%= creations.name %> </p>
+	<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+		<p> <%= User.with_role(:student, creations).course_student_questions(creations).count %> </p>
 	</div>
-	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<p> <%= Question.where(topic_id: creations.id).count %> </p>
+	<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+		<p> <%= User.with_role(:student, creations).course_student_questions_submitted(creations).count %> </p>
 	</div>
-	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
-		<p> <%= Question.where(topic_id: creations.id, submitted: true).count %> </p>
+	<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+		<p> <%= User.with_role(:student, creations).course_student_questions_incorrect(creations).count %> </p>
+	</div>
+	<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+		<p> <%= User.with_role(:student, creations).course_student_questions_accept(creations).count %> </p>
+	</div>
+	<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+		<p> <%= User.with_role(:student, creations).course_student_questions_revise(creations).count %> </p>
+	</div>
+	<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+		<p> <%= User.with_role(:student, creations).course_student_questions_pending(creations).count %> </p>
 	</div>
 </div>

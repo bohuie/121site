@@ -1,12 +1,15 @@
 <br/>
 <br/>
 <br/>
-<%= simple_form_for @game, :url => { :action => "create" } do |f| %>
-	<div class = "row">
-		<div class = "col-sm-4">
+<div class="row">
+	<div class="col-xs-2 col-sm-3 col-md-4"></div>
+	<div class="col-xs-8 col-sm-6 col-md-4">
+		<%= simple_form_for @game, :url => { :action => "create" } do |f| %>
+			<%= f.input :course_id, collection: @courses, include_blank: false, prompt: "Please select a course", required: true %>
 			<%= f.label "Select a topic (leave blank for all topics)" %>
-      		<%= f.input :name, collection: @topics %>
-    	</div>
+      		<%= f.input :name, collection: @topics, label: "Topics" %>
+   			<%= f.submit "Start Studying", class: "btn btn-medium btn-success" %>
+		<% end %>
     </div>
-    <%= f.submit "Start Studying", class: "btn btn-medium btn-success" %>
-<% end %>
+	<div class="col-xs-2 col-sm-3 col-md-4"></div>
+</div>
