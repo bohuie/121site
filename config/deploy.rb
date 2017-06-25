@@ -4,7 +4,7 @@ lock "3.8.1"
 set :application, '121site'
 set :repo_url, 'https://github.com/bohuie/121site'
 set :deploy_to, '/srv/www/vhosts/ubc.ca/ok/quiznova/html/public'
-set :branch, "capistrano"
+set :branch, "master"
 
 set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/application.yml')
 
