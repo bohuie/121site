@@ -52,6 +52,7 @@ GEM
     bootstrap-sass (3.3.5)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.2.19)
+    bootstrap-table-rails (1.11.1.1)
     bootstrap-will_paginate (1.0.0)
       will_paginate
     builder (3.2.3)
@@ -317,8 +318,6 @@ GEM
     thor (0.19.4)
     thread_safe (0.3.6)
     tilt (1.4.1)
-    turbolinks (2.3.0)
-      coffee-rails
     twitter-bootstrap-rails (3.2.2)
       actionpack (>= 3.1)
       execjs (>= 2.2.2, >= 2.2)
@@ -342,6 +341,7 @@ PLATFORMS
 DEPENDENCIES
   bcrypt
   bootstrap-sass
+  bootstrap-table-rails
   bootstrap-will_paginate
   byebug
   capistrano
@@ -375,7 +375,6 @@ DEPENDENCIES
   simple_form
   spork-rails
   therubyracer
-  turbolinks (~> 2.3.0)
   twitter-bootstrap-rails
   uglifier (= 2.1.1)
   will_paginate

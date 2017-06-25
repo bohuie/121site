@@ -1,5 +1,6 @@
+
 <%if !@question.nil? %>
-	<%= render partial: 'shared/practices', collection: @question %>
+	<%= render partial: 'shared/practices', locals: {practices: @question} %>
 <% else %>
 	<p> There are no more questions!</p>
 	<p> You attempted <%= @game.number %> question<% if !(@game.number == 1) %>s<% end %> 

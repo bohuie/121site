@@ -1,0 +1,36 @@
+<div class = "row" style = "padding: 5px; margin-bottom: 5px;">
+	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+		<p> <%= studentcreations.name %> </p>
+	</div>
+	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+		<% unless User.with_role(:student, @course).count.to_f == 0 %>
+			<p style = "display: inline;"> <%= studentcreations.questions.where( user_id: @user.id).count %> <p class="average" style = "display: inline;">(<%= (User.with_role(:student, @course).course_student_questions(@course, studentcreations).count/User.with_role(:student, @course).count.to_f).round(1) %>)</p></p>
+		<% else %>
+			<p style = "display: inline;"> <p>N/A</p></p>
+		<% end %>
+	</div>
+	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+		<% unless User.with_role(:student, @course).count.to_f == 0 %>
+			<p style = "display: inline;"><%= studentcreations.questions.where(user_id: @user.id, submitted: true).count %> <p class="average" style = "display: inline;">(<%= (User.with_role(:student, @course).course_student_questions_submitted(@course, studentcreations).count/User.with_role(:student, @course).count.to_f).round(1) %>)</p></p>
+		<% else %>
+			<p style = "display: inline;"> <p>N/A</p></p>
+		<% end %>
+	</div>
+	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+		<% unless User.with_role(:student, @course).count.to_f == 0 %>
+			<p style = "display: inline;"><%= studentcreations.questions.where(user_id: @user.id, submitted: true, grade: "Correct").count %>
+			<p class="average" style = "display: inline;">(<%= (User.with_role(:student, @course).course_student_questions_accept(@course, studentcreations).count/User.with_role(:student, @course).count.to_f).round(1) %>)</p></p>
+		<% else %>
+			<p style = "display: inline;"> <p>N/A</p></p>
+		<% end %>
+	</div>
+	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+		<% if !(studentcreations.questions.where(user_id: @user.id, submitted: true).count == 0) %>
+			<p style = "display: inline;">  <%= studentcreations.questions.where(user_id: @user.id, submitted: true, grade: "Correct").count*100/studentcreations.questions.where(user_id: @user.id, submitted: true).count*100/100%>% <p class="average" style = "display: inline;">(<%= User.with_role(:student, @course).course_student_questions_accept(@course, studentcreations).count*100/User.with_role(:student, @course).course_student_questions_submitted(@course, studentcreations).count*100/100%>%)</p> </p>
+		<% elsif !(User.with_role(:student, @course).course_student_questions_submitted(@course, studentcreations).count == 0)%>
+			<p style = "display: inline;">N/A<p class="average" style = "display: inline;">(<%= User.with_role(:student, @course).course_student_questions_accept(@course, studentcreations).count*100/User.with_role(:student, @course).course_student_questions_submitted(@course, studentcreations).count*100/100%>%)</p></p>
+		<% else %>
+			<p style = "display: inline;"> <p>N/A</p></p>
+		<% end %>
+	</div>
+</div>

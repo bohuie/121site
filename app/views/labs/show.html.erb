@@ -1,0 +1,316 @@
+<html>
+<head>
+	<script type="text/javascript">
+		function hidecreate(){
+	          $("#morecreate").hide();
+	          $("#lessbuttoncreate").hide();
+	          $("#morebuttoncreate").show();
+	        }
+	    function showcreate(){
+	          $("#morecreate").show();
+	          $("#lessbuttoncreate").show();
+	          $("#morebuttoncreate").hide();
+	        }
+	    function hidestudentcreate(){
+	          $("#morestudentcreate").hide();
+	          $("#lessbuttonstudentcreate").hide();
+	          $("#morebuttonstudentcreate").show();
+	        }
+	    function showstudentcreate(){
+	          $("#morestudentcreate").show();
+	          $("#lessbuttonstudentcreate").show();
+	          $("#morebuttonstudentcreate").hide();
+	        }
+	    function hidepractice(){
+	          $("#morepractice").hide();
+	          $("#lessbuttonpractice").hide();
+	          $("#morebuttonpractice").show();
+	        }
+	    function showpractice(){
+	          $("#morepractice").show();
+	          $("#lessbuttonpractice").show();
+	          $("#morebuttonpractice").hide();
+	        }
+	    function hidestudentpractice(){
+	          $("#morestudentpractice").hide();
+	          $("#lessbuttonstudentpractice").hide();
+	          $("#morebuttonstudentpractice").show();
+	        }
+	    function showstudentpractice(){
+	          $("#morestudentpractice").show();
+	          $("#lessbuttonstudentpractice").show();
+	          $("#morebuttonstudentpractice").hide();
+	        }
+	</script>
+</head>
+<body class = "portfolio">
+<h1><%= @lab.course.title %> - <%= @lab.name %></h1>
+	<% if user_signed_in? %>
+		<div class = "row">
+			<div class = "col-md-2">
+				<p> So far you have done <%= @count %> game<% if !(@count== 1) %>s<% end %>  </p>
+				<p> Your high score is <%= @percent %>% on <%= @number %> question<% if !(@number== 1) %>s<% end %> </p>
+				<hr>
+				<p><h3><b> My Courses</b></h3></p>
+				<p> <%= link_to 'All', root_path %></p>
+				<% @courses.each do |course| %>
+					<p><%= link_to course.title + " - " + course.year, show_course_path(course) %></p>
+					<% if @lab.course_id == course.id %>
+						<ul>
+							<% if @user.has_role? :instructor %>
+								<% course.labs.each do |lab| %>
+									<% if lab.id == params[:id].to_i %>
+										<li><b><%= link_to lab.name, show_lab_path(lab) %></b></li>
+									<% else %>
+										<li><%= link_to lab.name, show_lab_path(lab) %></li>
+									<% end %>
+								<% end %>
+								<li><%= link_to 'Add New Lab', new_lab_path(course) %></li>
+							<% elsif @user.has_role?(:assistant, @lab.course) %>
+								<% @user.labs.where(course_id: @lab.course.id).each do |lab| %>
+									<% if lab.id == params[:id].to_i %>
+										<li><b><%= link_to lab.name, show_lab_path(lab) %></b></li>
+									<% else %>
+										<li><%= link_to lab.name, show_lab_path(lab) %></li>
+									<% end %>
+								<% end %>
+								<li><%= link_to 'Add Another Lab', new_student_lab_path(@lab.course) %></li>
+							<% else %>
+								<li><b><%= link_to @lab.name, show_lab_path(@lab) %></b></li>
+							<% end %>
+						</ul>
+					<% end %>
+				<% end %>
+				<% if @user.has_role? :instructor %>
+					<p><%= link_to 'Add New Course', new_course_path %></p>
+				<% else %>
+					<p><%= link_to 'Register for Another Course', new_student_course_path %></p>
+				<% end %>
+			</div>
+			<div class = "col-md-10">
+				<% if @user.has_role?(:assistant, @lab.course) || @user.has_role?(:instructor) %>
+					<h2 style="display:inline; "">Below you can view various stats based on topics and creations.  Total sums are in <p class="sum" style="display:inline;">green</p> and averages are in <p class="average" style="display:inline;">blue</p>.</h2>
+					<div class = "row">
+						<h3 style = "margin: 5px;"> Creation </h3>
+					</div>
+					<div class = "row" style = "padding: 5px;">
+						<div class = "col-md-3" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Topic </h4>
+						</div>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Created </h4>
+						</div>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Submitted </h4>
+						</div>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Incorrect </h4>
+						</div>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Accepted </h4>
+						</div>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Revise </h4>
+						</div>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Pending </h4>
+						</div>
+					</div>
+					<div class = "row" style = "padding: 5px; margin-bottom: 5px;">
+						<div class = "col-md-3" style = "border-bottom: 1px solid black;">
+							<p> All Topics </p>
+						</div>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<p><%= User.with_role(:student, @lab.course).lab_student_questions(@lab).count %></p>
+						</div>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<p><%= User.with_role(:student, @lab.course).lab_student_questions_submitted(@lab).count %></p>
+						</div>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<p><%= User.with_role(:student, @lab.course).lab_student_questions_incorrect(@lab).count %></p>
+						</div>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<p><%= User.with_role(:student, @lab.course).lab_student_questions_accept(@lab).count %></p>
+						</div>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<p><%= User.with_role(:student, @lab.course).lab_student_questions_revise(@lab).count %></p>
+						</div>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<p><%= User.with_role(:student, @lab.course).lab_student_questions_pending(@lab).count %></p>
+						</div>
+					</div>
+					<div class = "btn btn-small btn-primary" id = "morebuttoncreate" onclick = "showcreate()" >
+						More
+					</div>
+					<div id = "morecreate" style = "display: none">
+						<%= render partial: 'labs/shared/creations', collection: @topics %>
+					</div>
+					<div class = "btn btn-small btn-danger" id = "lessbuttoncreate" onclick = "hidecreate()" style = "display: none">
+						Less
+					</div>
+					<div class = "row">
+						<h3 style = "margin: 5px;"> Practice </h3>
+					</div>
+					<div class = "row" style = "padding: 5px;">
+						<div class = "col-md-3" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Topic </h4>
+						</div>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Attempted </h4>
+						</div>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Correct </h4>
+						</div>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Percent </h4>
+						</div>
+						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Average Time</h4>
+						</div>
+					</div>
+					<div class = "row" style = "padding: 5px; margin-bottom: 5px;">
+						<div class = "col-md-3" style = "border-bottom: 1px solid black;">
+							<p> Overall </p>
+						</div>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<p> <%= User.with_role(:student, @lab.course).lab_student_practices(@lab).count %> </p>
+						</div>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<p> <%= User.with_role(:student, @lab.course).lab_student_practices_correct(@lab).count %> </p>
+						</div>
+						<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+							<% if !(User.with_role(:student, @lab.course).lab_student_practices(@lab).count == 0) %>
+								<p> <%= (User.with_role(:student, @lab.course).lab_student_practices_correct(@lab).count*100/User.with_role(:student, @lab.course).lab_student_practices(@lab).count*100)/100 %>%</p>
+							<% else %>
+								<p>N/A </p>
+							<% end %>
+						</div>
+						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+							<% if !(@lab.practices.where(course_id: @lab.course_id).count == 0) %>
+								<p> <%= (@lab.practices.where(course_id: @lab.course_id).sum(:totaltime)*100/@lab.practices.where(course_id: @lab.course_id).count*100)/10000 %> seconds</p>
+							<% else %>
+								<p>N/A </p>
+							<% end %>
+						</div>
+					</div>
+					<div class = "btn btn-small btn-primary" id = "morebuttonpractice" onclick = "showpractice()" >
+						More
+					</div>
+					<div id = "morepractice" style = "display: none">
+						<%= render partial: 'labs/shared/stats', collection: @topics %>
+					</div>
+					<div class = "btn btn-small btn-danger" id = "lessbuttonpractice" onclick = "hidepractice()" style = "display: none">
+						Less
+					</div>
+				<% else %>
+					<h2 style="display:inline; "">Below you can view various stats based on topics and creations.  Total sums of the lab are in <p class="sum" style="display:inline;">green</p> and averages per student are in <p class="average" style="display:inline;">blue</p>.</h2>
+					<div class = "row">
+						<h3 style = "margin: 5px;"> Creation </h3>
+					</div>
+					<div class = "row" style = "padding: 5px;">
+						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Topic </h4>
+						</div>
+						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Created </h4>
+						</div>
+						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Submitted </h4>
+						</div>
+						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Accepted </h4>
+						</div>
+						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Percent </h4>
+						</div>
+					</div>
+					<div class = "row" style = "padding: 5px; margin-bottom: 5px;">
+						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+							<p> All Topics </p>
+						</div>
+						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+							<p style = "display: inline;"> <%= @lab.questions.includes(:user).where("users.id = ?", @user.id).references(:user).count %><p class="sum" style = "display: inline;"> (<%= User.with_role(:student, @lab.course).lab_student_questions(@lab).count %>)</p> </p>
+						</div>
+						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+							<p style = "display: inline;"> <%= @lab.questions.includes(:user).where("users.id = ? AND questions.submitted = TRUE", @user.id).references(:user).count %><p class="sum" style = "display: inline;"> (<%= User.with_role(:student, @lab.course).lab_student_questions_submitted(@lab).count %>)</p> </p>
+						</div>
+						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+							<p style = "display: inline;"> <%= @lab.questions.includes(:user).where("users.id = ? AND questions.submitted = TRUE AND questions.grade = \'Correct\'", @user.id).references(:user).count %><p class="sum" style = "display: inline;"> (<%= User.with_role(:student, @lab.course).lab_student_questions_accept(@lab).count %>)</p> </p>
+						</div>
+						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+							<% if !(@lab.questions.includes(:user).where("users.id = ? AND questions.submitted = TRUE", @user.id).references(:user).count == 0) %>
+								<p style = "display: inline;"> 
+									<%= @lab.questions.includes(:user).where("users.id = ? AND questions.submitted = TRUE AND questions.grade = \'Correct\'", @user.id).references(:user).count*100/@lab.questions.includes(:user).where("users.id = ? AND questions.submitted = TRUE", @user.id).references(:user).count*100/100%>% 
+									<p class="sum" style = "display: inline;"> (<%= User.with_role(:student, @lab.course).lab_student_questions_accept(@lab).count*100/User.with_role(:student, @lab.course).lab_student_questions_submitted(@lab).count*100/100 %>%)</p>
+								</p>
+							<% elsif !(User.with_role(:student, @lab.course).lab_student_questions_submitted(@lab).count == 0) %>
+								<p style = "display: inline;">N/A <p class="sum" style = "display: inline;"> (<%= User.with_role(:student, @lab.course).lab_student_questions_accept(@lab).count*100/User.with_role(:student, @lab.course).lab_student_questions_submitted(@lab).count*100/100 %>%)</p></p>
+							<% else %>
+								<p>N/A </p>
+							<% end %>
+						</div>
+					</div>
+					<div class = "btn btn-small btn-primary" id = "morebuttonstudentcreate" onclick = "showstudentcreate()" >
+						More
+					</div>
+					<div id = "morestudentcreate" style = "display: none">
+						<%= render partial: 'labs/shared/studentcreations', collection: @topics %>
+					</div>
+					<div class = "btn btn-small btn-danger" id = "lessbuttonstudentcreate" onclick = "hidestudentcreate()" style = "display: none">
+						Less
+					</div>
+					<div class = "row">
+						<h3 style = "margin: 5px;"> Practice </h3>
+					</div>
+					<div class = "row" style = "padding: 5px;">
+						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Topic </h4>
+						</div>
+						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Attempted </h4>
+						</div>
+						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Correct </h4>
+						</div>
+						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+							<h4 style = "margin: 5px;"> Percent </h4>
+						</div>
+					</div>
+					<div class = "row" style = "padding: 5px; margin-bottom: 5px;">
+						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+							<p style = "display: inline;"> <p>All Topics</p> </p>
+						</div>
+						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+							<p style = "display: inline;"><%= @user.practices.where(lab_id: @lab.id).count %> <p class="sum" style = "display: inline;">(<%= User.with_role(:student, @lab.course).lab_student_practices(@lab).count %>)</p></p>
+						</div>
+						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+							<p style = "display: inline;"><%= @user.practices.where(lab_id: @lab.id, correct: true).count %> <p class="sum" style = "display: inline;">(<%= User.with_role(:student, @lab.course).lab_student_practices_correct(@lab).count %>)</p></p>
+						</div>
+						<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+							<% if !(@user.practices.where(lab_id: @lab.id).count == 0) %>
+								<p style = "display: inline;">
+									<%= (@user.practices.where(lab_id: @lab.id, correct: true).count*100/@user.practices.where(lab_id: @lab.id).count*100)/100 %>%
+									<p class="sum" style = "display: inline;">(<%= (User.with_role(:student, @lab.course).lab_student_practices_correct(@lab).count*100/User.with_role(:student, @lab.course).lab_student_practices(@lab).count*100)/100 %>%)</p>
+								</p>
+							<% elsif !(User.with_role(:student, @lab.course).lab_student_practices(@lab).count == 0) %>
+								<p style = "display: inline;">N/A <p class="sum" style = "display: inline;">(<%= (User.with_role(:student, @lab.course).lab_student_practices_correct(@lab).count*100/User.with_role(:student, @lab.course).lab_student_practices(@lab).count*100)/100 %>%)</p></p>
+							<% else %>
+								<p style = "display: inline;">N/A <p class="sum" style = "display: inline;">(N/A)</p></p>
+							<% end %>
+						</div>
+					</div>
+					<div class = "btn btn-small btn-primary" id = "morebuttonstudentpractice" onclick = "showstudentpractice()" >
+						More
+					</div>
+					<div id = "morestudentpractice" style = "display: none">
+						<%= render partial: 'labs/shared/studentstats', collection: @topics %>
+					</div>
+					<div class = "btn btn-small btn-danger" id = "lessbuttonstudentpractice" onclick = "hidestudentpractice()" style = "display: none">
+						Less
+					</div>
+				<% end %>
+			</div>
+		</div>
+	<% end %>
+</body>
+</html>

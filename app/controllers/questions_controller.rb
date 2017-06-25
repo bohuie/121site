@@ -1,137 +1,191 @@
 class QuestionsController < ApplicationController
 
-  def correct
-    @user = current_user
-    if @user.assistant || @user.instructor
-      @question = Question.find_by(id: params[:id])
-      @question.update_attribute(:grade, "Correct")
-      @questions = Question.where(:topic_id => @question.topic_id, :lab => @question.lab)
-      @result = Result.create(:name => @question.topic_id, :lab => @question.lab)
-    else
-      @questions = nil
-    end
-  end
+  before_action :authenticate_user!
+  before_action :check_instructor, only: [:flag_questions, :set_flag_questions, :display_flag_questions, :flag, :unflag]
+  before_action :instructor_or_assistant, only: [:display_mark_questions]
 
   def view
     @user = current_user
-    @question = Question.find_by(id: params[:id])
+    @question = Question.find(params[:id])
   end
 
   def mark
     @user = current_user
-    @question = Question.find_by(id: params[:id])
+    @question = Question.find(params[:id])
   end
 
   def flagview
     @user = current_user
-    @question = Question.find_by(id: params[:id])
-  end
-
-  def incorrect
-    @user = current_user
-    if @user.assistant || @user.instructor
-      @question = Question.find_by(id: params[:id])
-      @question.update_attribute(:grade, "Incorrect")
-      @questions = Question.where(:topic_id => @question.topic_id, :lab => @question.lab)
-      @result = Result.create(:name => @question.topic_id, :lab => @question.lab)
-    else
-      @questions = nil
-    end
+    @question = Question.find(params[:id])
   end
 
   def changes
     @user = current_user
-    @question = Question.find_by(id: params[:id])
-  end
-
-  def comment
-    @user = current_user
-    if @user.assistant || @user.instructor
-      @question = Question.find_by(id_params)
-      @question.update_attributes(grade_params)
-      @question.grade = "Marker comment: " + @question.grade.to_s
-      @question.save
-      @questions = Question.where(:topic_id => @question.topic_id, :lab => @question.lab)
-      @result = Result.create(:name => @question.topic_id, :lab => @question.lab)
-    else
-      @questions = nil
-    end
+    @question = Question.find(params[:id])
   end
 
   def your_questions
     @user = current_user
-    @questions = Question.where(user_id: current_user.user_id)
+    @questions = Question.where(user_id: current_user.id)
   end
 
-  def flag_questions
+  def flag
     @user = current_user
-    $name = false
-    $number = false
-    $topic = false
-    $lab = false
-    $time = false
-    $flagged = false
-    $grade = false
-    if @user.instructor
-      @questions = Question.where(submitted: true).paginate(page: params[:page])  
+    @question = Question.find(params[:id])
+    if @user.has_role?(:instructor)
+      @question.update_attribute(:exam, true)
+    end
+
+    redirect_to display_flag_questions_path
+  end
+
+  def unflag
+    @user = current_user
+    @question = Question.find(params[:id])
+    if @user.has_role?(:instructor)
+      @question.update_attribute(:exam, false)
+    end
+
+    redirect_to display_flag_questions_path
+  end
+
+  def correct
+    @user = current_user
+    @question = Question.find(params[:id])
+    if @user.has_role?(:instructor) || @user.has_role?(:assistant, @question.course_created_in)
+      @question.update_attribute(:grade, "Correct")
+      params[:result][:course_id] = session[:mark_questions_course_id]
+      params[:result][:name] = session[:mark_questions_topic]
+      params[:result][:lab] = session[:mark_questions_lab]
+      redirect_to display_mark_questions_path
     else
       @questions = nil
     end
   end
 
-  def flag
+  def incorrect
     @user = current_user
-    if @user.instructor
-      @question = Question.find_by(id: params[:id])
-      @question.update_attribute(:exam, true)
-    end
-    if $name
-      redirect_to '/flagname'
-    elsif $number
-      redirect_to '/flagnumber'
-    elsif $topic
-      redirect_to '/flagtopic'
-    elsif $lab
-      redirect_to '/flaglab'
-    elsif $flagged
-      redirect_to '/flagexam'
-    elsif $time
-      redirect_to '/flagtime'
-    elsif $grade
-      redirect_to '/flaggrade'
+    @question = Question.find(params[:id])
+    if @user.has_role?(:instructor) || @user.has_role?(:assistant, @question.course_created_in)
+      @question.update_attribute(:grade, "Incorrect")
+      params[:result][:course_id] = session[:mark_questions_course_id]
+      params[:result][:name] = session[:mark_questions_topic]
+      params[:result][:lab] = session[:mark_questions_lab]
+      redirect_to display_mark_questions_path
     else
-      redirect_to '/flag_questions'
+      @questions = nil
     end
   end
 
-   def unflag
+  def comment
     @user = current_user
-    if @user.instructor
-      @question = Question.find_by(id: params[:id])
-      @question.update_attribute(:exam, false)
-    end
-    if $name
-      redirect_to '/flagname'
-    elsif $number
-      redirect_to '/flagnumber'
-    elsif $topic
-      redirect_to '/flagtopic'
-    elsif $lab
-      redirect_to '/flaglab'
-    elsif $flagged
-      redirect_to '/flagexam'
-    elsif $time
-      redirect_to '/flagtime'
-    elsif $grade
-      redirect_to '/flaggrade'
+      @question = Question.find(params[:question][:id])
+    if @user.has_role?(:instructor) || @user.has_role?(:assistant, @question.course_created_in)
+      @question.update_attributes(grade_params)
+      @question.grade = "Marker comment: " + @question.grade.to_s
+      @question.save
+      params[:result][:course_id] = session[:mark_questions_course_id]
+      params[:result][:name] = session[:mark_questions_topic]
+      params[:result][:lab] = session[:mark_questions_lab]
+      redirect_to display_mark_questions_path
     else
-      redirect_to '/flag_questions'
+      @questions = nil
+    end
+  end
+
+  def flag_questions
+    @user = current_user
+    @result = Result.new
+    @courses = Hash.new
+    course = Course.where(instructor_id: @user.id).order(year: :desc)
+    course.each  do |course|
+      @courses[course.title + " - " + course.year] = course.id
+    end
+     if defined?(session[:flag_questions_course_id]) && !session[:flag_questions_course_id].blank?
+      if course.find(session[:flag_questions_course_id]).nil?
+        @topics = course.first.topics
+        @labs = course.first.labs
+      else
+        @topics = course.find(session[:flag_questions_course_id]).topics
+        @labs = course.find(session[:flag_questions_course_id]).labs
+      end
+    else
+      @topics = course.first.topics
+      @labs = course.first.labs
+    end
+  end
+
+  def set_flag_questions
+    @result = Result.new(result_params)
+    session[:flag_questions_course_id] = @result.course_id
+    session[:flag_questions_lab] = @result.lab
+    session[:flag_questions_topic] = @result.name
+    redirect_to display_flag_questions_path
+  end
+
+  def display_flag_questions
+    @user = current_user
+    if (session[:flag_questions_topic].eql?("") && session[:flag_questions_lab].eql?(""))
+      @questions = Question.where(course_created_in: session[:flag_questions_course_id], submitted: true).order(user_id: :desc)
+    elsif session[:flag_questions_topic].eql?("")
+      @questions = Question.where(:lab => session[:flag_questions_lab], course_created_in: session[:flag_questions_course_id], submitted: true).order(user_id: :desc)
+    elsif session[:flag_questions_lab].eql?("")
+      @questions = Question.where(:topic_id => session[:flag_questions_topic], course_created_in: session[:flag_questions_course_id], submitted: true).order(user_id: :desc)
+    else
+      @questions = Question.where(:topic_id => session[:flag_questions_topic], :lab => session[:flag_questions_lab], course_created_in: session[:flag_questions_course_id], submitted: true).order(user_id: :desc)
+    end
+  end
+
+  def mark_questions
+    @user = current_user
+    @result = Result.new
+    @courses = Hash.new
+    if @user.has_role?(:instructor)
+      course = Course.where(instructor_id: @user.id).order(year: :desc)
+    else
+      course = @user.courses
+    end
+    course.each  do |course|
+      @courses[course.title + " - " + course.year] = course.id
+    end
+    if defined?(session[:mark_questions_course_id]) && !session[:mark_questions_course_id].blank?
+      if course.find(session[:mark_questions_course_id]).nil?
+        @topics = course.first.topics
+        @labs = course.first.labs
+      else
+        @topics = course.find(session[:mark_questions_course_id]).topics
+        @labs = course.find(session[:mark_questions_course_id]).labs
+      end
+    else
+      @topics = course.first.topics
+      @labs = course.first.labs
+    end
+  end
+
+  def set_mark_questions
+    @result = Result.new(result_params)
+    session[:mark_questions_course_id] = @result.course_id
+    session[:mark_questions_lab] = @result.lab
+    session[:mark_questions_topic] = @result.name
+    redirect_to display_mark_questions_path
+  end
+
+  def display_mark_questions
+    @user = current_user
+    if (session[:mark_questions_topic].eql?("") && session[:mark_questions_lab].eql?(""))
+      @questions = Question.where(course_created_in: session[:mark_questions_course_id]).order(user_id: :desc)
+    elsif session[:mark_questions_topic].eql?("")
+      @questions = Question.where(:lab => session[:mark_questions_lab], course_created_in: session[:mark_questions_course_id]).order(user_id: :desc)
+    elsif session[:mark_questions_lab].eql?("")
+      @questions = Question.where(:topic_id => session[:mark_questions_topic], course_created_in: session[:mark_questions_course_id]).order(user_id: :desc)
+    else
+      @questions = Question.where(:topic_id => session[:mark_questions_topic], :lab => session[:mark_questions_lab], course_created_in: session[:mark_questions_course_id]).order(user_id: :desc)
     end
   end
 
   def submit
     @user = current_user
-    @question = Question.find_by(id: params[:id])
+    @question = Question.find(params[:id])
     @question.update_attribute(:submitted, true)
     @question.update_attribute(:grade, "Review Pending")
     @question.update_attribute(:date_submitted, (DateTime.now.to_time - 8.hours).to_datetime)
@@ -140,7 +194,7 @@ class QuestionsController < ApplicationController
 
   def hide
     @user = current_user
-    @question = Question.find_by(id: params[:id])
+    @question = Question.find(params[:id])
     @question.update_attribute(:visible, false)
     redirect_to "/your_questions"
   end
@@ -174,8 +228,18 @@ class QuestionsController < ApplicationController
 
   def new
     @user = current_user
-    @userID = current_user.user_id
+    @userID = current_user.id
     @question = Question.new
+    @courses = Hash.new
+    if @user.has_role?(:instructor)
+      course = Course.where(instructor_id: @user.id).order(year: :desc)
+    else
+      course = @user.courses
+    end
+    course.each  do |course|
+      @courses[course.title + " - " + course.year] = course.id
+    end
+    @topics = []
     @topic = Topic.all
     @answer = ['a', 'b', 'c', 'd', 'e']
   end
@@ -184,8 +248,18 @@ class QuestionsController < ApplicationController
     @user = current_user
 	  if user_signed_in?
 	    @question = Question.new(question_params)
-	    @question.user_id = current_user.user_id
-      @question.lab = current_user.lab
+	    @question.user_id = current_user.id
+      unless @user.labs.where('labs.course_id = ?',params[:question][:course_created_in]).count == 0 
+        @question.lab = @user.labs.where('labs.course_id = ?',params[:question][:course_created_in]).first
+        @question.course_created_in = Course.find(params[:question][:course_created_in])
+      else
+        if @user.has_role?(:instructor)
+          @question.course_created_in = Course.find(params[:question][:course_created_in])
+        else
+          flash[:warning] = "Please select a valid lab"
+          redirect_to new_questions_path and return
+        end
+      end
       @answer = answer_params.to_s
       if @answer[12, @answer.length - 14] == "a"
         @question.answer = 1
@@ -216,112 +290,71 @@ class QuestionsController < ApplicationController
 	  end
   end
 
-  def name
-    @user = current_user
-    @questions = Question.all.order(lname: :asc, fname: :asc).paginate(page: params[:page])
-    $name = false
-    $number = false
-    $topic = false
-    $lab = false
-    $time = false
-    $flagged = false
-    $grade = false
-    $name = true
+  def update_question_topics
+    @topics = Course.find(params[:course_id]).topics
+    respond_to do |format|
+        format.js
+    end
   end
 
-  def number
-    @user = current_user
-    @questions = Question.all.order(studentnumber: :asc).paginate(page: params[:page])
-    $name = false
-    $number = false
-    $topic = false
-    $lab = false
-    $time = false
-    $flagged = false
-    $grade = false
-    $number = true
+  def update_question_labs
+    @labs = Course.find(params[:course_id]).labs
+    respond_to do |format|
+      format.js
+    end
   end
 
-  def lab
-    @user = current_user
-    @questions = Question.all.order(lab: :desc).paginate(page: params[:page])
-    $name = false
-    $number = false
-    $topic = false
-    $lab = false
-    $time = false
-    $flagged = false
-    $grade = false
-    $lab = true
-  end
-  
-  def topic
-    @user = current_user
-    @questions = Question.all.order(topic_id: :desc).paginate(page: params[:page])
-    $name = false
-    $number = false
-    $topic = false
-    $lab = false
-    $time = false
-    $flagged = false
-    $grade = false
-    $topic = true
+  def update_search_topics
+    @topics = Course.find(params[:course_id]).topics
+    respond_to do |format|
+      format.js
+    end
   end
 
-  def time
-    @user = current_user
-    @questions = Question.all.order(date_submitted: :desc).paginate(page: params[:page])
-    $name = false
-    $number = false
-    $topic = false
-    $lab = false
-    $time = false
-    $flagged = false
-    $grade = false
-    $time = true
+  def update_search_labs
+    @labs = Course.find(params[:course_id]).labs
+    respond_to do |format|
+      format.js
+    end
   end
 
-  def flagged
-    @user = current_user
-    @questions = Question.all.order(exam: :desc).paginate(page: params[:page])
-    $name = false
-    $number = false
-    $topic = false
-    $lab = false
-    $time = false
-    $flagged = false
-    $grade = false
-    $flagged = true
-  end
-
-  def grade
-    @user = current_user
-    @questions = Question.all.order(grade: :asc).paginate(page: params[:page])
-    $name = false
-    $number = false
-    $topic = false
-    $lab = false
-    $time = false
-    $flagged = false
-    $grade = false
-    $grade = true
-  end
-
-   private
+  private
     
-    def question_params
-      params.require(:question).permit(:qtext, :a1text, :a2text, :a3text, :a4text, :a5text, :topic_id, :submitted)
-    end
+  def result_params
+    params.require(:result).permit(:name, :lab, :course_id)
+  end
 
-    def answer_params
-      params.require(:question).permit(:answer)
-    end
+  def question_params
+    params.require(:question).permit(:qtext, :a1text, :a2text, :a3text, :a4text, :a5text, :topic_id, :submitted)
+  end
 
-    def id_params
-      params.require(:question).permit(:question_id)
-    end
+  def answer_params
+    params.require(:question).permit(:answer)
+  end
 
-    def grade_params
-      params.require(:question).permit(:grade)
+  def id_params
+    params.require(:question).permit(:question_id)
+  end
+
+  def grade_params
+    params.require(:question).permit(:grade)
+  end
+
+  def instructor_or_assistant
+    unless current_user.has_role?(:instructor)
+      if session[:mark_questions_course_id].nil?
+        flash[:warning] = "Your query could not be handled.  Please contact your instructor or try again later."
+        redirect_to root_path and return
+      end
+      course = Course.find(session[:mark_questions_course_id])
+      if course.nil?
+        flash[:warning] = "Your course-query could not be handled.  Please contact your instructor or try again later."
+        redirect_to root_path and return
+      end
+      unless current_user.has_role?(:assistant, course)
+        flash[:warning] = "You must be an instructor or TA to do this."
+        redirect_to root_path and return
+      end
     end
+  end
 end

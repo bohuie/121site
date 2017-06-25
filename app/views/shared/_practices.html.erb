@@ -1,5 +1,4 @@
-	
-<% @question = Question.find_by(:question_id => practices.question_id) %>
+<% @question = Question.find(practices.question_id) %>
 <div class = "row" style = "padding: 8px;">
 	<%= @question.qtext.html_safe %>
 </div>
@@ -44,7 +43,7 @@
 			<%= @question.a5text.html_safe %>
 		</div>
 	</div>
-	<%= f.hidden_field :practice_id, value: practices.practice_id %>
+	<%= f.hidden_field :id, value: practices.id %>
 	<%= f.hidden_field :starttime, value: DateTime.now %>
 	<%= f.submit "Submit", class: "btn btn-medium btn-success" %>
 <% end %>

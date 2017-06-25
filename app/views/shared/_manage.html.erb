@@ -1,0 +1,43 @@
+<tr>
+	<td>
+		<%=manage.lname %>, <%= manage.fname %>
+	</td>
+	<td>
+		<% unless manage.has_role?(:instructor) %>
+			<%= manage.studentnumber %>
+		<% end %>
+	</td>
+	<td>
+		<% unless manage.has_role?(:instructor) %>
+			<% count = manage.labs.where(course_id: @course.id).count %>
+			<% if count == 0 %>
+				No Lab Yet
+			<% elsif count > 1 %>
+				<% manage.labs.where(course_id: @course.id).each do |lab| %>
+					<% if manage.labs.where(course_id: @course.id).last.id == lab.id %>
+						<%= lab.name %>
+					<% else %>
+						<%= lab.name + ", " %>
+					<% end %>
+				<% end %>
+			<% else %>
+				<%= manage.labs.where(course_id: @course.id).first.name %>
+			<% end %>
+		<% end %>
+	</td>
+	<% if manage.has_role?(:assistant, @course) %>
+		<td>
+			TA
+		</td>
+		<td>
+			<%= link_to 'Remove TA', remove_ta_path(@course, manage), data: {confirm: "Are you sure you want to remove this TA?  They will become a student for this class."}, method: :delete, class: "btn btn-danger" %>
+		</td>
+	<% else %>
+		<td>
+			Student
+		</td>
+		<td>
+			<%= link_to 'Add TA', add_ta_path(@course, manage), method: :post, class: "btn btn-success" %>
+		</td>
+	<% end %>
+</tr>

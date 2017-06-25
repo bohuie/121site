@@ -1,0 +1,44 @@
+
+<div class = "row" style = "padding: 5px; margin-bottom: 5px;">	
+	<div class = "col-md-3" style = "border-bottom: 1px solid black;">
+		<p> <%= stats.name %> </p>
+	</div>
+	<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+		<p style = "display: inline;" class="sum">
+			<%= User.with_role(:student, @course).course_student_practices(@course, stats).count %>
+			<% unless User.with_role(:student, @course).count == 0 %>
+				<p class="average" style = "display: inline;">(<%= (User.with_role(:student, @course).course_student_practices(@course, stats).count.to_f/User.with_role(:student, @course).count).round(1) %>)</p>
+			<% else %>
+				<p class="average" style = "display: inline;">(N/A)</p>
+			<% end %>
+		</p>
+	</div>
+	<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+		<p style = "display: inline;" class="sum">
+			<%= User.with_role(:student, @course).course_student_practices_correct(@course, stats).count %>
+			<% unless User.with_role(:student, @course).count == 0 %>
+				<p class="average" style = "display: inline;">(<%= (User.with_role(:student, @course).course_student_practices_correct(@course, stats).count.to_f/User.with_role(:student, @course).count).round(1) %>)</p>
+			<% else %>
+				<p class="average" style = "display: inline;">(N/A)</p>
+			<% end %>
+		</p>
+	</div>
+	<div class = "col-md-1" style = "border-bottom: 1px solid black;">
+		<p style = "display: inline;" class="sum">
+			<% if !(User.with_role(:student, @course).course_student_practices(@course, stats).count == 0) %>
+				<p class="average" style = "display: inline;">( <%= (User.with_role(:student, @course).course_student_practices_correct(@course, stats).count*100/User.with_role(:student, @course).course_student_practices(@course, stats).count*100)/100 %>%)</p>
+			<% else %>
+				<p class="average" style = "display: inline;">(N/A)</p>
+			<% end %>
+		</p>
+	</div>
+	<div class = "col-md-2" style = "border-bottom: 1px solid black;">
+		<p style = "display: inline;" class="sum">
+			<% if !(User.with_role(:student, @course).course_student_practices(@course, stats).count == 0) %>
+				<p class="average" style = "display: inline;">( <%= (User.with_role(:student, @course).course_student_practices(@course, stats).sum(:totaltime)*100/User.with_role(:student, @course).course_student_practices(@course, stats).count*100)/10000 %> seconds)</p>
+			<% else %>
+				<p class="average" style = "display: inline;">(N/A)</p>
+			<% end %>
+		</p>
+	</div>
+</div>

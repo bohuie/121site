@@ -4,6 +4,7 @@ gem 'rails_admin', '~> 1.1.1'
 gem "rolify"
 gem 'rails', '4.2.0'
 gem 'bootstrap-sass'
+gem "bootstrap-table-rails"
 gem 'bcrypt'
 gem 'faker'
 gem 'will_paginate'
@@ -57,7 +58,6 @@ gem 'sass-rails', '~> 4.0.0'
 gem 'uglifier', '2.1.1'
 gem 'coffee-rails', '4.0.0'
 #gem 'jquery-rails', '3.0.4'
-gem 'turbolinks', '~> 2.3.0'
 gem 'jbuilder', '1.0.2'
 
 group :doc do

@@ -1,5 +1,9 @@
 <%= simple_form_for @question, :url => { :action => "create" } do |f| %>
   <p>All multiple choice questions must have one question and 5 possible responses. If you include Java code in your question, use the "Courier New" font to make it clear that it is code.</p>
+    <div class = "col-sm-4">
+      <%= f.input :course_created_in, :required => true, collection: @courses, label: "Course" %>
+      <%= f.input :topic_id, :label => "Select a Topic", :required => true,collection: @topics %>
+    </div>
   <div class = "row">
     <div class = "col-sm-12">
       <%= f.input :qtext, :label => "Question", :required => false, :as => :ckeditor%>
@@ -33,9 +37,6 @@
   <div class = "row">
     <div class = "col-sm-3">
       <%= f.input :answer, :label => "Select the Correct Answer", :required => false, collection: @answer %>
-    </div>
-    <div class = "col-sm-4">
-      <%= f.input :topic_id, :label => "Select a Topic", :required => false,collection: @topic %>
     </div>
   </div>
   <br/>
